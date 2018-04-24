@@ -4,7 +4,7 @@ const bodyParser     = require('body-parser');
 
 const app = express();
 
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 function routes(app, db) {
     app.post('/api/team', (req, res) => {
