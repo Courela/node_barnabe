@@ -1,0 +1,27 @@
+{
+  "name": "node_barnabe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+	  "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Courela/node_barnabe.git"
+  },
+  "author": "Nuno Courela",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Courela/node_barnabe/issues"
+  },
+  "homepage": "https://github.com/Courela/node_barnabe#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
