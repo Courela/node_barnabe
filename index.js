@@ -70,7 +70,8 @@ function authenticate(req, res) {
                 res.statusCode = 403;
             }
             res.send(response);
-        });
+        })
+        .catch(err => { console.error(err); res.statusCode = 500; });
 }
 
 function logout(req, res) {
