@@ -12,7 +12,7 @@ const SQL_MAX_INT = 2147483647;
 const config = {
     user: 'barnabe',
     password: 'barnabe2000',
-    server: 'barnabe-mysql.cgc1hxotsbuf.eu-west-1.rds.amazonaws.com',
+    server: 'barnabe-mssqlinstance.cgc1hxotsbuf.eu-west-1.rds.amazonaws.com',
     database: 'Barnabe'
 }
 
