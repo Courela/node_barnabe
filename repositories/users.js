@@ -16,7 +16,7 @@ function getUser(username, password) {
         type: db.sql_string,
         value: password
     }];
-    return db.selectQuery(query, parameters);
+    return db.statementQuery(query, parameters);
 }
 
 module.exports = {

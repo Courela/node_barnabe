@@ -61,12 +61,12 @@ async function getMultiple(entity, page = 0, pageSize = SQL_MAX_INT) {
     }
 }
 
-async function selectQuery(query, parameters) {
+async function statementQuery(query, parameters) {
     try {
         await initDb();
         let result = pool.request();
         parameters.forEach(p => {
-            result = result.input(p.name, p.type, p.value)    
+            result = result.input(p.name, p.type, p.value);
         });
         return result.query(query);
     } catch (err) {
@@ -76,29 +76,21 @@ async function selectQuery(query, parameters) {
     }
 }
 
-async function updateQuery(query, parameters) {
-    try {
-        await initDb();
-        let result = pool.request();
-        parameters.forEach(p => {
-            result = result.input(p.name, p.type, p.value)    
-        });
-        return result.query(query);
-    } catch (err) {
-        console.error('DbAdapter: ' + err);
-        return { error: "Unexpected error!" };
-    }
-}
-
 const sql_int = require('mssql').Int;
 const sql_smallint = require('mssql').SmallInt;
 const sql_string = require('mssql').VarChar;
+const sql_bit = require('mssql').Bit;
+const sql_char = require('mssql').Char;
+const sql_date = require('mssql').Date;
 
 module.exports = {
     getSingle,
     getMultiple,
-    selectQuery,
+    statementQuery,
     sql_smallint,
     sql_int,
-    sql_string
+    sql_string,
+    sql_bit,
+    sql_char,
+    sql_date
 };

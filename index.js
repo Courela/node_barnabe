@@ -7,7 +7,9 @@ const session = require('client-sessions');
 
 const authentication = require('./authentication/authentication');
 const usersMgr = require('./managers/users');
+const personMgr = require('./managers/person');
 const teamsMgr = require('./managers/teams');
+const playersMgr = require('./managers/players');
 
 
 const app = express();
@@ -25,7 +27,13 @@ app.use(setCors)
     }))
     .use(handleUserSession)
     .get('/api/team', getTeams)
+    .get('/api/step/:stepId', getStep)
+    .get('/api/person', getPerson)
+    .get('/api/season/:season/team/:teamId/signsteps', getSignSteps)
     .get('/api/season/:season/team/:teamId/steps', getTeamSteps)
+    //.route('/api/season/:season/team/:teamId/step/:stepId/player')
+    .get('/api/season/:season/team/:teamId/step/:stepId/player',getTeamPlayers)
+    .post('/api/season/:season/team/:teamId/step/:stepId/player',addPlayer)
     .post('/api/authenticate', authenticate)
     .post('/api/logout', logout)
     .post('/api/season/:season/team/:teamId/addstep', addTeamStep)
@@ -100,11 +108,42 @@ async function getTeams(req, res) {
     res.send(results);
 }
 
+async function getStep(req, res) {
+    const stepId = req.params.stepId;
+    const results = await teamsMgr.getStep(stepId);
+    res.send(results);
+}
+
+async function getSignSteps(req, res) {
+    let response = '';
+    //console.log('Route params:' + JSON.stringify(req.params));
+    if (req.params.season && req.params.teamId) {
+        response = await teamsMgr.getTeamSteps(req.params.season, req.params.teamId, true);
+    }
+    else {
+        res.statusCode = 400;
+    }
+    res.send(response);
+}
+
 async function getTeamSteps(req, res) {
     let response = '';
     //console.log('Route params:' + JSON.stringify(req.params));
     if (req.params.season && req.params.teamId) {
         response = await teamsMgr.getTeamSteps(req.params.season, req.params.teamId);
+    }
+    else {
+        res.statusCode = 400;
+    }
+    res.send(response);
+}
+
+async function getTeamPlayers(req, res) {
+    let response = '';
+    console.log('Route params:' + JSON.stringify(req.params));
+    const { season, teamId, stepId } = req.params;
+    if (season && teamId && stepId) {
+        response = await playersMgr.getPlayers(season, teamId, stepId);
     }
     else {
         res.statusCode = 400;
@@ -126,4 +165,35 @@ async function addTeamStep(req, res) {
         res.statusCode = 400;
     }
     res.send();
+}
+
+async function getPerson (req, res) {
+    let result;
+    const docId = req.query.docId;
+    if (docId) {
+        result = await personMgr.getPersonByIdCardNr(docId);
+    } else {
+        res.statusCode = 400;
+    }
+    res.send(result);
+}
+
+async function addPlayer(req, res) {
+    let response = '';
+    console.log('AddPlayer body: ' + JSON.stringify(req.body));
+    const { teamId, stepId, season, name, gender, birth, docId, voterNr, phoneNr, email } = req.body;
+    if (teamId && stepId && season && name && gender && birth && docId) {
+        const playerId = await playersMgr.addPlayer(teamId, stepId, season, name, gender, birth, docId, voterNr, phoneNr, email);
+        if (playerId > 0) {
+            res.statusCode = 201;
+            response = { Id: playerId };
+         }
+         else {
+            res.statusCode = playerId == 0 ? 200 : 500;
+         }
+    }
+    else {
+        res.statusCode = 400;
+    }
+    res.send(response);
 }

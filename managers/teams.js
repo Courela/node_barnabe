@@ -13,11 +13,23 @@ function getTeams(season) {
         });
 }
 
-function getTeamSteps(season, teamId) {
-    return teamsRepo.getTeamSteps(season, teamId)
+function getTeamSteps(season, teamId, invert = false) {
+    return teamsRepo.getTeamSteps(season, teamId, invert)
         .then((results) => {
-            console.log(results);
+            //console.log(results);
             return results.recordset;
+        })
+        .catch((err) => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
+function getStep(stepId) {
+    return teamsRepo.getStep(stepId)
+        .then(result => {
+            console.log('GetStep '+ stepId + ': ' + JSON.stringify(result)); 
+            return result.rowsAffected[0] > 0 ? result.recordset[0] : null; 
         })
         .catch((err) => {
             console.error(err);
@@ -36,6 +48,7 @@ function addStep(season, teamId, stepId) {
 }
 
 module.exports = {
+    getStep,
     addStep,
     getTeams,
     getTeamSteps
