@@ -17,7 +17,7 @@ function getPlayers(season, teamId, stepId) {
 async function addPlayer(teamId, stepId, season, name, gender, birth, docId, voterNr, phone, email) {
     let person = await personMgr.getPersonByIdCardNr(docId);
     //const step = await teamsMgr.getStep(stepId);
-    console.log('Person: ' + JSON.stringify(person));
+    //console.log('Person: ' + JSON.stringify(person));
     if (!person) {
         person = await personMgr.addPerson(name, gender, birth, docId, voterNr, email, phone);
     }
@@ -26,8 +26,8 @@ async function addPlayer(teamId, stepId, season, name, gender, birth, docId, vot
     const roleId = 1;
     return playersRepo.addPlayer(teamId, stepId, season, resident, person.Id, roleId, null)
         .then(result => {
-            console.log('Add Player result:');
-            console.log(result);
+            //console.log('Add Player result:');
+            //console.log(result);
             if (result.recordset && result.recordset.length > 0) {
                 return result.recordset[0].Id;
             }

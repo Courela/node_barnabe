@@ -11,6 +11,7 @@ const personMgr = require('./managers/person');
 const teamsMgr = require('./managers/teams');
 const playersMgr = require('./managers/players');
 
+const mysqlAdapter = require('./db/mysql');
 
 const app = express();
 
@@ -26,6 +27,10 @@ app.use(setCors)
         activeDuration: 5 * 60 * 1000,
     }))
     .use(handleUserSession)
+    .get('/api/ping', (req, res) => {
+        mysqlAdapter.ping();
+        res.send();
+    })
     .get('/api/team', getTeams)
     .get('/api/step/:stepId', getStep)
     .get('/api/person', getPerson)
@@ -180,7 +185,7 @@ async function getPerson (req, res) {
 
 async function addPlayer(req, res) {
     let response = '';
-    console.log('AddPlayer body: ' + JSON.stringify(req.body));
+    //console.log('AddPlayer body: ' + JSON.stringify(req.body));
     const { teamId, stepId, season, name, gender, birth, docId, voterNr, phoneNr, email } = req.body;
     if (teamId && stepId && season && name && gender && birth && docId) {
         const playerId = await playersMgr.addPlayer(teamId, stepId, season, name, gender, birth, docId, voterNr, phoneNr, email);
