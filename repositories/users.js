@@ -22,6 +22,7 @@ function getUserById(id) {
 
 function getUser(username, password) {
     const query = function (users) {
+        console.log("Logging in with: "+username+" "+password);
         return users.get('User')
             .find({ Username: username, Password: password })
             .value();
@@ -29,6 +30,8 @@ function getUser(username, password) {
     return new Promise((resolve, reject) => {
         try {
             const user = storage.usersStatementQuery(query);
+            console.log("User found:");
+            console.log(user);
             let result = [];
             if (user) { result.push(user); }
             resolve({ recordset: result });
