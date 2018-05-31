@@ -24,6 +24,7 @@ function getUser(username, password) {
     const query = function (users) {
         console.log("Logging in with: "+username+" "+password);
         return users.get('User')
+            .cloneDeep()
             .find({ Username: username, Password: password })
             .value();
     };
