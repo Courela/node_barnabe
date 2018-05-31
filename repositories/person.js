@@ -54,7 +54,37 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email) {
     return db.statementQuery(query, parameters);
 }
 
+function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email) {
+    console.log('Person to update: ' + id + name + gender + birthdate + docId + voterNr + phone + email);
+    const query = ' UPDATE dbo.Person ' + 
+        ' SET Name = @name, VoterNr = @voterNr, Phone = phone, Email = @email ' +
+        ' WHERE Id = @id;';
+    const parameters = [{
+        name: 'name',
+        type: db.sql_string,
+        value: name
+    },{
+        name: 'voterNr',
+        type: db.sql_string,
+        value: voterNr
+    },{
+        name: 'phone',
+        type: db.sql_string,
+        value: phone
+    },{
+        name: 'email',
+        type: db.sql_string,
+        value: email
+    },{
+        name: 'id',
+        type: db.sql_int,
+        value: id
+    }];
+    return db.statementQuery(query, parameters);
+}
+
 module.exports = {
     getPersonByIdCardNr,
-    addPerson
+    addPerson,
+    updatePerson
 }

@@ -26,7 +26,23 @@ function addPerson (name, gender, birthdate, docId, voterNr, phone, email) {
     });
 }
 
+function updatePerson(person) {
+    return personRepo.updatePerson(person.id, person.name, person.gender, person.birth, 
+            person.docId, person.voterNr, person.email, person.phoneNr)
+        .then((results) => {
+            console.log(results);
+            return results.recordset && results.recordset.length > 0 ? 
+                results.recordset[0] : null;
+        })
+        .catch((err) => {
+            console.error(err);
+            const res = err.name == 'RequestError' ? 0 : -1;
+            return res;
+    });
+}
+
 module.exports = {
     getPersonByIdCardNr,
-    addPerson
+    addPerson,
+    updatePerson
 }

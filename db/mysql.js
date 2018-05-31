@@ -11,7 +11,9 @@ function ping() {
         if (err) {
             console.log(err);
         }
-        console.log("Connected!");
+        else {
+            console.log("Connected!");
+        }
     });
 }
 

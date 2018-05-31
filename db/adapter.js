@@ -2,19 +2,19 @@ const sql = require('mssql')
 
 const SQL_MAX_INT = 2147483647;
 
-// const config = {
-//     user: 'barnabe',
-//     password: 'barnabe',
-//     server: 'localhost\\SQLEXPRESS', // You can use 'localhost\\instance' to connect to named instance
-//     database: 'Barnabe'
-// }
-
 const config = {
     user: 'barnabe',
-    password: 'barnabe2000',
-    server: 'barnabe-mssqlinstance.cgc1hxotsbuf.eu-west-1.rds.amazonaws.com',
+    password: 'barnabe',
+    server: 'localhost\\SQLEXPRESS', // You can use 'localhost\\instance' to connect to named instance
     database: 'Barnabe'
 }
+
+// const config = {
+//     user: 'barnabe',
+//     password: 'barnabe2000',
+//     server: 'barnabe-mssqlinstance.cgc1hxotsbuf.eu-west-1.rds.amazonaws.com',
+//     database: 'Barnabe'
+// }
 
 let pool = null;
 
@@ -33,8 +33,7 @@ async function getSingle(entity, value) {
         
         return result;
     } catch (err) {
-        console.error('DbAdapter: ' + err);
-        return { error: "Unexpected error!" };
+        handleError(err);
     }
 }
 
@@ -56,8 +55,7 @@ async function getMultiple(entity, page = 0, pageSize = SQL_MAX_INT) {
         
         return results;
     } catch (err) {
-        console.error('DbAdapter: ' + err);
-        return { error: "Unexpected error!" };
+        handleError(err);
     }
 }
 
@@ -70,10 +68,15 @@ async function statementQuery(query, parameters) {
         });
         return result.query(query);
     } catch (err) {
-        sql.close();
-        console.error('DbAdapter: ' + err);
-        throw "Unexpected error!";
+        handleError(err);
     }
+}
+
+function handleError(err) {
+    sql.close();
+    pool = null;
+    console.error('DbAdapter: ' + err);
+    throw "Unexpected error!";
 }
 
 const sql_int = require('mssql').Int;
