@@ -3,7 +3,7 @@ const personRepo = require('../repositories/person');
 function getPersonByIdCardNr(docId){
     return personRepo.getPersonByIdCardNr(docId)
         .then((results) => {
-            console.log(results);
+            //console.log(results);
             return results.rowsAffected[0] > 0 ? results.recordset[0] : null;
         })
         .catch((err) => {
@@ -15,7 +15,7 @@ function getPersonByIdCardNr(docId){
 function addPerson (name, gender, birthdate, docId, voterNr, phone, email) {
     return personRepo.addPerson(name, gender, birthdate, docId, voterNr, email, phone)
         .then((results) => {
-            console.log(results);
+            //console.log(results);
             return results.recordset && results.recordset.length > 0 ? 
                 results.recordset[0] : null;
         })
@@ -30,7 +30,7 @@ function updatePerson(person) {
     return personRepo.updatePerson(person.id, person.name, person.gender, person.birth, 
             person.docId, person.voterNr, person.email, person.phoneNr)
         .then((results) => {
-            console.log(results);
+            //console.log(results);
             return results.recordset && results.recordset.length > 0 ? 
                 results.recordset[0] : null;
         })

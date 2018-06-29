@@ -3,27 +3,42 @@
     {
       "Id": 1,
       "Description": "Escalão I",
-      "Gender": null
+      "Gender": null,
+      "StepId": 1,
+      "TeamId": 2,
+      "Season": 2018
     },
     {
       "Id": 2,
       "Description": "Escalão II",
-      "Gender": "M"
+      "Gender": "M",
+      "StepId": 2,
+      "TeamId": "2",
+      "Season": "2018"
     },
     {
       "Id": 3,
       "Description": "Escalão III",
-      "Gender": "M"
+      "Gender": "M",
+      "StepId": 3,
+      "TeamId": 2,
+      "Season": 2018
     },
     {
       "Id": 4,
       "Description": "Escolinhas",
-      "Gender": null
+      "Gender": null,
+      "StepId": 4,
+      "TeamId": 2,
+      "Season": 2018
     },
     {
       "Id": 5,
       "Description": "Feminino",
-      "Gender": "F"
+      "Gender": "F",
+      "StepId": 5,
+      "TeamId": "2",
+      "Season": "2018"
     }
   ],
   "Role": [
@@ -111,39 +126,198 @@
   ],
   "Person": [
     {
-	  "Id": 1,
-	  "Name": "Puto1",
-	  "Gender": "M",
-	  "Birthdate": "1990-01-01",
-	  "IdCardNr": "11864030",
-	  "IdCardExpireDate": "2019-12-31",
-	  "VoterNr": null,
-	  "Phone": null,
-	  "Email": null
-	},
-	{
-	  "Id": 2,
-	  "Name": "EncEduPuto1",
-	  "Gender": "F",
-	  "Birthdate": "1970-01-01",
-	  "IdCardNr": "99999999",
-	  "IdCardExpireDate": "2019-12-31",
-	  "VoterNr": "AD999",
-	  "Phone": "910000000",
-	  "Email": "encedu@gmail.com"
-	}
+      "Id": 1,
+      "Name": "Puto1",
+      "Gender": "M",
+      "Birthdate": "1990-01-01",
+      "IdCardNr": "11864030",
+      "IdCardExpireDate": "2019-12-31",
+      "VoterNr": null,
+      "Phone": null,
+      "Email": null
+    },
+    {
+      "Id": 2,
+      "Name": "EncEduPuto1",
+      "Gender": "F",
+      "Birthdate": "1970-01-01",
+      "IdCardNr": "99999999",
+      "IdCardExpireDate": "2019-12-31",
+      "VoterNr": "AD999",
+      "Phone": "910000000",
+      "Email": "encedu@gmail.com"
+    },
+    {
+      "Id": 3,
+      "Name": "Puto2",
+      "Gender": "F",
+      "Birthdate": "1990-01-01",
+      "IdCardNr": "321654987",
+      "IdCardExpireDate": null,
+      "VoterNr": "AD22",
+      "Phone": "55555",
+      "Email": "a@b.pt"
+    },
+    {
+      "Id": 4,
+      "Name": "Puto1",
+      "Gender": "M",
+      "Birthdate": "1990-01-01",
+      "IdCardNr": "11864031",
+      "IdCardExpireDate": null,
+      "VoterNr": null,
+      "Phone": "",
+      "Email": ""
+    },
+    {
+      "Id": 5,
+      "Name": "AAA",
+      "Gender": "M",
+      "Birthdate": "1990-01-01",
+      "IdCardNr": "45646556",
+      "IdCardExpireDate": null,
+      "VoterNr": "AD123",
+      "Phone": "916749874",
+      "Email": "courela@gmail.com"
+    },
+    {
+      "Id": 6,
+      "Name": "Treinador Role",
+      "Gender": "M",
+      "Birthdate": "1990-01-01",
+      "IdCardNr": "46486",
+      "IdCardExpireDate": null,
+      "VoterNr": "",
+      "Phone": "",
+      "Email": ""
+    },
+    {
+      "Id": 7,
+      "Name": "Teste Role",
+      "Gender": "M",
+      "Birthdate": "1990-01-01",
+      "IdCardNr": "489488",
+      "IdCardExpireDate": null,
+      "VoterNr": "AD232",
+      "Phone": "",
+      "Email": ""
+    },
+    {
+      "Id": 8,
+      "Name": "TAdj",
+      "Gender": "M",
+      "Birthdate": "1990-01-01",
+      "IdCardNr": "8789879",
+      "IdCardExpireDate": null,
+      "VoterNr": "",
+      "Phone": "",
+      "Email": ""
+    },
+    {
+      "Id": 9,
+      "Name": "Jogador Roles",
+      "Gender": "F",
+      "Birthdate": "1990-01-01",
+      "IdCardNr": "465486",
+      "IdCardExpireDate": null,
+      "VoterNr": "AD-1040",
+      "Phone": "",
+      "Email": ""
+    },
+    {
+      "Id": 10,
+      "Name": "Graudo1",
+      "Gender": "M",
+      "Birthdate": "1990-01-01",
+      "IdCardNr": "244234",
+      "IdCardExpireDate": null,
+      "VoterNr": "",
+      "Phone": "",
+      "Email": ""
+    }
   ],
   "Player": [
     {
-	  "Id": 1,
-	  "Season": 2018,
-	  "Resident": 1,
-	  "PersonId": 1,
-	  "TeamId": 2,
-	  "StepId": 4,
-	  "RoleId": 1,
-	  "CaretakerId": 2
-	}
+      "Id": 1,
+      "Season": 2018,
+      "Resident": 1,
+      "PersonId": 1,
+      "TeamId": 2,
+      "StepId": 4,
+      "RoleId": 1,
+      "CaretakerId": 2
+    },
+    {
+      "Id": 2,
+      "Season": 2018,
+      "TeamId": 2,
+      "StepId": 4,
+      "PersonId": 3,
+      "Resident": 1,
+      "RoleId": 1,
+      "CaretakerId": null
+    },
+    {
+      "Id": 3,
+      "Season": 2018,
+      "TeamId": 2,
+      "StepId": 4,
+      "PersonId": 4,
+      "Resident": 0,
+      "RoleId": 1,
+      "CaretakerId": null
+    },
+    {
+      "Id": 4,
+      "Season": 2018,
+      "TeamId": 2,
+      "StepId": 4,
+      "PersonId": 6,
+      "Resident": 1,
+      "RoleId": 2,
+      "CaretakerId": null
+    },
+    {
+      "Id": 5,
+      "Season": 2018,
+      "TeamId": 2,
+      "StepId": 4,
+      "PersonId": 7,
+      "Resident": 1,
+      "RoleId": 1,
+      "CaretakerId": null
+    },
+    {
+      "Id": 6,
+      "Season": 2018,
+      "TeamId": 2,
+      "StepId": 4,
+      "PersonId": 8,
+      "Resident": 1,
+      "RoleId": 3,
+      "CaretakerId": null
+    },
+    {
+      "Id": 7,
+      "Season": 2018,
+      "TeamId": 2,
+      "StepId": 4,
+      "PersonId": 9,
+      "Resident": 1,
+      "RoleId": 1,
+      "CaretakerId": null
+    },
+    {
+      "Id": 8,
+      "Season": 2018,
+      "TeamId": 2,
+      "StepId": 1,
+      "PersonId": 10,
+      "Resident": 1,
+      "RoleId": 1,
+      "CaretakerId": null,
+      "Comments": "Comentário excusado"
+    }
   ],
   "TeamStep": [
     {
@@ -156,6 +330,12 @@
       "Id": 2,
       "TeamId": 2,
       "StepId": 1,
+      "Season": 2018
+    },
+    {
+      "Id": 3,
+      "TeamId": 2,
+      "StepId": 3,
       "Season": 2018
     }
   ]

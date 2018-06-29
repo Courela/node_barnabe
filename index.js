@@ -8,9 +8,10 @@ const session = require('client-sessions');
 const serverController = require('./controllers/server');
 const teamsController = require('./controllers/teams');
 const playersController = require('./controllers/players');
+const exportController = require('./controllers/export');
+const utilsController = require('./controllers/utils');
 
 const authentication = require('./authentication/authentication');
-const usersMgr = require('./managers/users');
 const personMgr = require('./managers/person');
 
 serverController.setup();
@@ -18,6 +19,30 @@ serverController.setup();
 const app = express();
 
 const port = process.env.PORT || 8000;
+
+const adminRouter = express.Router();
+adminRouter.get('/export-players', exportController.exportPlayers);
+
+const apiRouter = express.Router();
+apiRouter.get('/ping', serverController.ping)
+    .get('/storagedb', serverController.initStorage)
+    .get('/teams', teamsController.getTeams)
+    .get('/steps/:stepId', teamsController.getStep)
+    .get('/persons', getPerson)
+    .get('/roles', utilsController.getRoles)
+    .get('/seasons/:season/ teams/:teamId/signsteps', teamsController.getSignSteps)
+    .get('/seasons/:season/teams/:teamId/steps', teamsController.getTeamSteps)
+    //.route('/season/:season/team/:teamId/step/:stepId/player')
+    .get('/seasons/:season/teams/:teamId/steps/:stepId/players/:playerId', playersController.getPlayer)
+    .get('/seasons/:season/teams/:teamId/steps/:stepId/players', playersController.getTeamPlayers)
+    .get('/seasons/:season/teams/:teamId/steps/:stepId/staff', playersController.getStaff)
+    //.get('/season/:season/team/:teamId/step/:stepId/export-players', exportController.exportPlayers)
+    //.post('/season/:season/team/:teamId/step/:stepId/player', playersController.addPlayer)
+    .put('/seasons/:season/teams/:teamId/steps/:stepId/players', playersController.addPlayer)
+    .post('/authenticate', authenticate)
+    .post('/logout', logout)
+    .put('/seasons/:season/teams/:teamId/steps', teamsController.addTeamStep)
+    .use('/admin', adminRouter);
 
 app.use(serverController.setCors)
     .use(bodyParser.json({limit: '3mb'}))
@@ -29,21 +54,7 @@ app.use(serverController.setCors)
         activeDuration: 5 * 60 * 1000,
     }))
     .use(serverController.handleUserSession)
-    .get('/api/ping', serverController.ping)
-    .get('/api/storagedb', serverController.initStorage)
-    .get('/api/team', teamsController.getTeams)
-    .get('/api/step/:stepId', teamsController.getStep)
-    .get('/api/person', getPerson)
-    .get('/api/season/:season/team/:teamId/signsteps', teamsController.getSignSteps)
-    .get('/api/season/:season/team/:teamId/steps', teamsController.getTeamSteps)
-    //.route('/api/season/:season/team/:teamId/step/:stepId/player')
-    .get('/api/season/:season/team/:teamId/step/:stepId/player/:playerId', playersController.getPlayer)
-    .get('/api/season/:season/team/:teamId/step/:stepId/player', playersController.getTeamPlayers)
-    //.post('/api/season/:season/team/:teamId/step/:stepId/player', playersController.addPlayer)
-    .put('/api/season/:season/team/:teamId/step/:stepId/player', playersController.addPlayer)
-    .post('/api/authenticate', authenticate)
-    .post('/api/logout', logout)
-    .post('/api/season/:season/team/:teamId/addstep', teamsController.addTeamStep)
+    .use('/api', apiRouter)
     .use(express.static('public'))
     .listen(port, () => {
         console.log('We are live on ' + port);

@@ -4,6 +4,7 @@ const storage = require('../db/storage');
 function getUserById(id) {
     const query = function (users) {
         return users.get('User')
+            .cloneDeep()
             .find({ Id: id })
             .value();
     };

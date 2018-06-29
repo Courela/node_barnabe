@@ -2,8 +2,8 @@ const playersRepo = require('../repositories/players');
 const personMgr = require('../managers/person');
 const teamsMgr = require('../managers/teams');
 
-function getPlayers(season, teamId, stepId) {
-    return playersRepo.getPlayers(season, teamId, stepId)
+function getPlayers(season, teamId, stepId, roles) {
+    return playersRepo.getPlayers(season, teamId, stepId, roles)
         .then((results) => {
             //console.log(results);
             return results.recordset;
@@ -19,8 +19,10 @@ function getPlayer(season, teamId, stepId, playerId) {
         .then((results) => {
             //console.log(results);
             var fs = require('fs');
-            let photo = fs.readFileSync('./data/storage/' + [season, teamId, stepId, results.recordset[0].Id].join('_'));
-            console.log('Photo: ' + photo.length);
+            var url = './data/storage/' + [season, teamId, stepId, results.recordset[0].Id].join('_');
+            let photo = [];
+            if (fs.existsSync(url)) { photo = fs.readFileSync(url); }
+            //console.log('Photo: ' + photo.length);
             return { data: results.recordset, photo: photo.toString() };
         })
         .catch((err) => {
@@ -29,7 +31,19 @@ function getPlayer(season, teamId, stepId, playerId) {
         });
 }
 
-async function addPlayer(teamId, stepId, season, person, caretaker) {
+async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comments) {
+    let personEntity = await personMgr.getPersonByIdCardNr(person.docId);
+    console.log('Person: ' + JSON.stringify(personEntity));
+    if (personEntity) {
+        if (await playersRepo.existsPlayer(teamId, stepId, season, personEntity.Id)) { 
+            console.warn('Player already exists!');
+            return -409; 
+        }
+        await personMgr.updatePerson(person);
+    } else {
+        personEntity = await personMgr.addPerson(person.name, person.gender, person.birth, person.docId, person.voterNr, person.email, person.phoneNr);
+    }
+
     let caretakerEntity = null;
     if (caretaker && caretaker.docId) {
         caretakerEntity = await personMgr.getPersonByIdCardNr(caretaker.docId);
@@ -40,36 +54,30 @@ async function addPlayer(teamId, stepId, season, person, caretaker) {
             caretakerEntity = await personMgr.addPerson(caretaker.name, null, null, caretaker.docId, caretaker.voterNr, caretaker.email, caretaker.phoneNr);    
         }
     }
-        
-    let personEntity = await personMgr.getPersonByIdCardNr(person.docId);
-    console.log('Person: ' + JSON.stringify(personEntity));
-    if (personEntity !== null) {
-        await personMgr.updatePerson(person);
-    } else {
-        personEntity = await personMgr.addPerson(person.name, person.gender, person.birth, person.docId, person.voterNr, person.email, person.phoneNr);
-    }
 
     const resident = person.voterNr !== null ? 1 : 0;
-    const roleId = 1;
-    return playersRepo.addPlayer(teamId, stepId, season, resident, personEntity.Id, roleId, caretakerEntity ? caretakerEntity.id : null)
+    //const roleId = 1;
+    return playersRepo.addPlayer(teamId, stepId, season, resident, personEntity.Id, roleId, caretakerEntity ? caretakerEntity.id : null, comments)
         .then(result => {
             console.log('Add Player result:');
             console.log(result);
-            // if (result.recordset && result.recordset.length > 0) {
-            //     savePhoto([season, teamId, stepId, result.recordset[0].Id].join('_'), person.photo);
-            //     return result.recordset[0].Id;
-            // }
-            // else return result.rowsAffected[0];
-            return 0;
+            if (result.recordset && result.recordset.length > 0) {
+                if(person.photo) {
+                    savePhoto([season, teamId, stepId, result.recordset[0].Id].join('_'), person.photo);
+                }
+                return result.recordset[0].Id;
+            }
+            else { return result.rowsAffected[0]; }
         })
         .catch((err) => {
             console.error(err);
-            const res = err.name == 'RequestError' ? 0 : -1;
+            const res = err.name == 'RequestError' ? -409 : -500;
             return res;
         });
 }
 
 function savePhoto(filename, photoSrc) {
+    console.log('Saving file ' + filename)
     var fs = require('fs');
     fs.writeFile("./data/storage/" + filename, photoSrc, function(err) {
         if(err) {
