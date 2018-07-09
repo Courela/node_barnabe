@@ -21,7 +21,12 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 const adminRouter = express.Router();
-adminRouter.get('/export-players', exportController.exportPlayers);
+adminRouter.get('/export-players', exportController.exportPlayers)
+    .post('/client-secret', serverController.setClientSecret)
+    .post('/auth-code', serverController.setAccessToken)
+    .post('/reset-auth', serverController.resetAuth)
+    .get('/save-data', serverController.saveData)
+    .get('/drive', serverController.testDrive);
 
 const apiRouter = express.Router();
 apiRouter.get('/ping', serverController.ping)
@@ -39,6 +44,7 @@ apiRouter.get('/ping', serverController.ping)
     //.get('/season/:season/team/:teamId/step/:stepId/export-players', exportController.exportPlayers)
     //.post('/season/:season/team/:teamId/step/:stepId/player', playersController.addPlayer)
     .put('/seasons/:season/teams/:teamId/steps/:stepId/players', playersController.addPlayer)
+    .delete('/seasons/:season/teams/:teamId/steps/:stepId/players/:playerId', playersController.removePlayer)
     .post('/authenticate', authenticate)
     .post('/logout', logout)
     .put('/seasons/:season/teams/:teamId/steps', teamsController.addTeamStep)

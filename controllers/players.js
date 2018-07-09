@@ -104,9 +104,28 @@ async function addPlayer(req, res) {
     res.send(response);
 }
 
+async function removePlayer(req, res) {
+    const { season, teamId, stepId, playerId } = req.params;
+    if (teamId && stepId && season && playerId) {
+        await playersMgr.removePlayer(
+            parseInt(teamId), 
+            parseInt(stepId), 
+            parseInt(season), 
+            parseInt(playerId)
+        );
+    }
+    else 
+    {
+        res.statusCode = 400;
+    }
+
+    res.send();
+}
+    
 module.exports = {
     getTeamPlayers,
     getStaff,
     addPlayer,
-    getPlayer
+    getPlayer,
+    removePlayer
 }

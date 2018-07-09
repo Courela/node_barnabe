@@ -126,6 +126,24 @@ function addPlayer(teamId, stepId, season, resident, personId, roleId, caretaker
     });
 }
 
+function removePlayer(teamId, stepId, season, playerId) {
+    const query = function (db) {
+        const player = db.get('Player')
+            .remove({ Id: playerId, Season: season, TeamId: teamId, StepId: stepId })
+            .write();
+    };
+
+    return new Promise((resolve, reject) => {
+        try {
+            const result = storage.statementQuery(query);
+            resolve(result);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 // function getPlayers(season, teamId, stepId) {
 //     const query = ' SELECT plr.Id, prs.[Name],prs.Gender,prs.Birthdate,prs.IdCardNr,prs.IdCardExpireDate,prs.VoterNr,prs.Phone,prs.Email, r.[Description] FROM dbo.Player plr ' +
 // 	    '   INNER JOIN dbo.Person prs ON prs.Id = plr.PersonId ' +
@@ -216,5 +234,6 @@ module.exports = {
     addPlayer,
     existsPlayer,
     getPlayer,
-    getPlayers
+    getPlayers,
+    removePlayer
 }

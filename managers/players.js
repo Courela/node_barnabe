@@ -87,8 +87,20 @@ function savePhoto(filename, photoSrc) {
     }); 
 }
 
+function removePlayer(teamId, stepId, season, playerId) {
+    return playersRepo.removePlayer(teamId, stepId, season, playerId)
+        .then(result => {
+
+        })
+        .catch(err => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
 module.exports = {
     addPlayer,
     getPlayer,
-    getPlayers
+    getPlayers,
+    removePlayer
 }
