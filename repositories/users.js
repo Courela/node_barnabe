@@ -1,4 +1,3 @@
-const db = require('../db/adapter');
 const storage = require('../db/storage');
 
 function getUserById(id) {
@@ -13,7 +12,7 @@ function getUserById(id) {
             const user = storage.usersStatementQuery(query);
             let result = [];
             if (user) { result.push(user); }
-            resolve({ recordset: result });
+            resolve({ recordset: result, rowsAffected: [result.length] });
         }
         catch(err) {
             reject(err);
@@ -32,36 +31,16 @@ function getUser(username, password) {
     return new Promise((resolve, reject) => {
         try {
             const user = storage.usersStatementQuery(query);
-            console.log("User found:");
-            console.log(user);
+            console.log("User found:", user);
             let result = [];
             if (user) { result.push(user); }
-            resolve({ recordset: result });
+            resolve({ recordset: result, rowsAffected: [result.length] });
         }
         catch(err) {
             reject(err);
         }
     });
 }
-
-// function getUserById(id) {
-//     return db.getSingle('auth.[User]', id);
-// }
-
-// function getUser(username, password) {
-//     const query = ' SELECT * FROM auth.[User] ' +
-//         ' WHERE Username = @user AND Password = @pass';
-//     const parameters = [{
-//         name: 'user',
-//         type: db.sql_string,
-//         value: username
-//     },{
-//         name: 'pass',
-//         type: db.sql_string,
-//         value: password
-//     }];
-//     return db.statementQuery(query, parameters);
-// }
 
 module.exports = {
     getUserById,

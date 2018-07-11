@@ -14,11 +14,11 @@ function ping(req, res) {
 }
 
 function initStorage(req, res) {
-    res.send(JSON.stringify(storageAdapter.init()));
+    res.json(storageAdapter.init());
 }
 
 function setClientSecret(req, res) {
-    console.log('Client Secret: ' + JSON.stringify(req.body));
+    console.log('Client Secret: ', req.body);
     const file = req.body.file;
     if (file) {
         oAuth2.saveClientSecret(file);
@@ -51,6 +51,18 @@ function saveData(req, res) {
     googleApi.saveData((result) => res.json(result));
 }
 
+function restoreData(req, res) {
+    googleApi.restoreData((result) => res.json(result));
+}
+
+function saveUsers(req, res) {
+    googleApi.saveUsers((result) => res.json(result));
+}
+
+function restoreUsers(req, res) {
+    googleApi.restoreUsers((result) => res.json(result));
+}
+
 function testDrive(req, res) {
     res.json(oAuth2.isDriveAuthEnabled());
 }
@@ -64,7 +76,7 @@ function setCors(req, res, next) {
 
 async function handleUserSession(req, res, next) {
     if (req.session && req.session.user) {
-        console.log('User in session: ' + JSON.stringify(req.session.user));
+        console.log('User in session: ', req.session.user);
         let user = await usersMgr.getUserById(req.session.user.Id);
         if (user != null) {
             req.user = user;
@@ -79,7 +91,13 @@ async function handleUserSession(req, res, next) {
     }
 }
 
+function logRequest(req, res, next) {
+    console.log('Request: ', req.url, ' | Method: ', req.method);
+    next();
+}
+
 module.exports = {
+    logRequest,
     setup,
     ping,
     initStorage,
@@ -89,5 +107,8 @@ module.exports = {
     setAccessToken,
     resetAuth,
     saveData,
+    restoreData,
+    saveUsers,
+    restoreUsers,
     testDrive
 }

@@ -5,7 +5,7 @@ function getRoles() {
         const roles = db.get('Role')
             .cloneDeep()
             .value();
-        return { recordset: roles };
+        return { recordset: roles, rowsAffected: [roles.length] };
     };
     return new Promise((resolve, reject) => {
         try {

@@ -56,9 +56,20 @@ function init() {
     return db.getState();
 }
 
+function restoreDb(data) {
+    db.setState(data)
+        .write();
+}
+
+function restoreUsers(data) {
+    users.setState(data)
+        .write();
+}
+
 function getSingle(entity, value) {
     try {
         const result = db.get(entity)
+            .cloneDeep()
             .find({ Id: value})
             .value();
         
@@ -76,6 +87,7 @@ function handleError(err) {
 function getMultiple(entity, page = 0, pageSize = SQL_MAX_INT) {
     try {
         const results = db.get(entity)
+            .cloneDeep()
             //.slice(page * pageSize, Math.min())
             .value();
         return results;
@@ -97,5 +109,7 @@ module.exports = {
     getSingle,
     getMultiple,
     statementQuery,
-    usersStatementQuery
+    usersStatementQuery,
+    restoreDb,
+    restoreUsers
 }

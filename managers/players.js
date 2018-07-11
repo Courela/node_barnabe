@@ -33,7 +33,7 @@ function getPlayer(season, teamId, stepId, playerId) {
 
 async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comments) {
     let personEntity = await personMgr.getPersonByIdCardNr(person.docId);
-    console.log('Person: ' + JSON.stringify(personEntity));
+    console.log('Person: ', personEntity);
     if (personEntity) {
         if (await playersRepo.existsPlayer(teamId, stepId, season, personEntity.Id)) { 
             console.warn('Player already exists!');
@@ -47,7 +47,7 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
     let caretakerEntity = null;
     if (caretaker && caretaker.docId) {
         caretakerEntity = await personMgr.getPersonByIdCardNr(caretaker.docId);
-        console.log('Caretaker: ' + JSON.stringify(caretakerEntity));
+        console.log('Caretaker: ', caretakerEntity);
         if (caretakerEntity !== null) {
             personMgr.updatePerson(caretaker);
         } else {

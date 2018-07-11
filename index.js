@@ -26,6 +26,9 @@ adminRouter.get('/export-players', exportController.exportPlayers)
     .post('/auth-code', serverController.setAccessToken)
     .post('/reset-auth', serverController.resetAuth)
     .get('/save-data', serverController.saveData)
+    .get('/restore-data', serverController.restoreData)
+    .get('/save-users', serverController.saveUsers)
+    .get('/restore-users', serverController.restoreUsers)
     .get('/drive', serverController.testDrive);
 
 const apiRouter = express.Router();
@@ -60,6 +63,7 @@ app.use(serverController.setCors)
         activeDuration: 5 * 60 * 1000,
     }))
     .use(serverController.handleUserSession)
+    .use(serverController.logRequest)
     .use('/api', apiRouter)
     .use(express.static('public'))
     .listen(port, () => {

@@ -1,8 +1,27 @@
 const fs = require('fs');
 const { google } = require('googleapis');
 const oAuth2 = require('./oAuth2');
+const storage = require('../db/storage');
 
-const DATA_PATH = './data/db.json';
+const DATA_FOLDER = './data/';
+const DB_FILE = 'db.json';
+const USERS_FILE = 'users.json';
+
+function saveData(responseCallback) {
+    saveFile(DB_FILE, 'application/json', responseCallback);
+}
+
+function restoreData(responseCallback) {
+    getFile(DB_FILE, 'application/json', storage.restoreDb, responseCallback);
+}
+
+function saveUsers(responseCallback) {
+    saveFile(USERS_FILE, 'application/json', responseCallback);
+}
+
+function restoreUsers(responseCallback) {
+    getFile(USERS_FILE, 'application/json', storage.restoreUsers, responseCallback);
+}
 
 function getAppFolder(driveClient, callback, responseCallback) {
     const res = driveClient.files.list({
@@ -21,60 +40,110 @@ function getAppFolder(driveClient, callback, responseCallback) {
     return null;
 }
 
-function saveData(responseCallback) {
+function saveFile(filename, mimeType, responseCallback) {
     const oAuth2Client = oAuth2.authorize();
     if (oAuth2Client) {
+        console.log('Saving file ' + filename + ' to Drive...');
         const driveClient = google.drive({ version: 'v3', auth: oAuth2Client });
-        const folder = getAppFolder(driveClient,
+        getAppFolder(driveClient,
             (folder) => {
                 var fileMetadata = {
-                    'name': 'data.json',
+                    'name': filename,
                     parents: [folder.id]
                 };
                 var media = {
-                    mimeType: 'application/json',
-                    body: fs.createReadStream(DATA_PATH)
+                    mimeType: mimeType,
+                    body: fs.createReadStream(DATA_FOLDER + filename)
                 };
                 driveClient.files.create({
                     resource: fileMetadata,
                     media: media,
                     fields: 'id'
                 }, (err, res) => {
-                    console.log(res.id);
-                    console.log(res.data.id);
+                    if (err) {
+                        console.log(err);
+                        responseCallback({ isSuccess: false });
+                        return;
+                    }
+                    console.log('File id: ', res.data.id);
                     responseCallback({ isSuccess: true });
                 });
             },
             responseCallback);
     }
     else {
-        responseCallback({ isSuccess: false, error: 'Failed to save data!' });
+        responseCallback({ isSuccess: false, error: 'Failed to save file ' + filename + '!' });
     }
 }
 
-/**
- * Lists the names and IDs of up to 10 files.
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- */
-function listFiles(auth) {
-    const drive = google.drive({ version: 'v3', auth });
-    drive.files.list({
-        pageSize: 10,
-        fields: 'nextPageToken, files(id, name)',
-    }, (err, res) => {
-        if (err) return console.log('The API returned an error: ' + err);
-        const files = res.data.files;
-        if (files.length) {
-            console.log('Files:');
-            files.map((file) => {
-                console.log(`${file.name} (${file.id})`);
-            });
-        } else {
-            console.log('No files found.');
-        }
-    });
+function getFile(filename, mimeType, callback, responseCallback) {
+    const oAuth2Client = oAuth2.authorize();
+    if (oAuth2Client) {
+        console.log('Getting file ' + filename + ' from Drive...');
+        const driveClient = google.drive({ version: 'v3', auth: oAuth2Client });
+        getAppFolder(driveClient,
+            (folder) => {
+                driveClient.files.list({
+                    q: "'" + folder.id + "' in parents and mimeType='" + mimeType + "' and name = '" + filename + "'",
+                    fields: 'files(id, name)',
+                    spaces: 'drive',
+                    orderBy: 'createdTime desc'
+                }, (err, res) => {
+                    if (err) {
+                        console.log(err);
+                        responseCallback({ isSuccess: false });
+                        return;
+                    }
+                    console.log('Files: ', res.data.files);
+
+                    if (res.data.files && res.data.files.length > 0) {
+                        var fileId = res.data.files[0].id;
+                        responseCallback({ isSuccess: true });
+                        driveClient.files.get({
+                            fileId: fileId,
+                            alt: 'media'
+                        }, (err, res) => {
+                            if (err) { 
+                                console.log(err); 
+                                responseCallback({ isSuccess: false}); 
+                            }
+
+                            console.log(res.data);
+                            try {
+                                callback(res.data);
+                                responseCallback({ isSuccess: true });
+                            }
+                            catch(err) {
+                                console.log(err);
+                                responseCallback({ isSuccess: false }); 
+                            }
+                        });
+                            // .on('end', function () {
+                            //     console.log('Restore of' + filename + ' done.');
+                            //     responseCallback({ isSuccess: true });
+                            // })
+                            // .on('error', function (err) {
+                            //     console.log('Error during download file ' + filename + ': ', err);
+                            //     responseCallback({ isSuccess: false });
+                            // })
+                            // .pipe(dest);
+                    }
+                    else {
+                        console.log('No file found to restore!');
+                        responseCallback({ isSuccess: false, error: 'No file found to restore!' });
+                    }
+                });
+            },
+            responseCallback);
+    }
+    else {
+        responseCallback({ isSuccess: false, error: 'Failed to restore file ' + filename + '!' });
+    }
 }
 
 module.exports = {
-    saveData
+    saveData,
+    restoreData,
+    saveUsers,
+    restoreUsers
 }

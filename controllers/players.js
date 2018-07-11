@@ -4,7 +4,7 @@ const playersMgr = require('../managers/players');
 async function getTeamPlayers(req, res) {
     let response = '';
     try {
-        //console.log('Route params:' + JSON.stringify(req.params));
+        //console.log('Route params: ', req.params);
         const { season, teamId, stepId } = req.params;
         if (season && teamId && stepId) {
             response = await playersMgr.getPlayers(
@@ -27,7 +27,7 @@ async function getTeamPlayers(req, res) {
 async function getStaff(req, res) {
     let response = '';
     try {
-        //console.log('Route params:' + JSON.stringify(req.params));
+        //console.log('Route params: ', req.params);
         const { season, teamId, stepId } = req.params;
         if (season && teamId && stepId) {
             response = await playersMgr.getPlayers(
@@ -48,7 +48,7 @@ async function getStaff(req, res) {
 }
 
 async function getPlayer(req, res) {
-    console.log('GetPlayer: ' + JSON.stringify(req.params));
+    console.log('GetPlayer: ', req.params);
     let response = '';
     try {
         const { teamId, stepId, season, playerId } = req.params;
@@ -69,8 +69,8 @@ async function getPlayer(req, res) {
 async function addPlayer(req, res) {
     let response = '';
     try {
-        console.log('AddPlayer params: ' + JSON.stringify(req.params));
-        console.log('AddPlayer: ' + JSON.stringify(req.body));
+        console.log('AddPlayer params: ', req.params);
+        console.log('AddPlayer: ', req.body);
         const { teamId, stepId, season } = req.params;
         const { name, gender, birth, docId, voterNr, phoneNr, email } = req.body.person;
         if (teamId && stepId && season && name && gender && birth && docId) {

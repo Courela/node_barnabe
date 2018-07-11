@@ -7,16 +7,28 @@ async function getTeams(req, res) {
 }
 
 async function getStep(req, res) {
+    let result = '';
     const stepId = req.params.stepId;
-    const results = await teamsMgr.getStep(stepId);
-    res.send(results);
+    if (stepId) {
+        try {
+            result = await teamsMgr.getStep(parseInt(stepId));
+        }
+        catch(err) {
+            result = err;
+            res.statusCode = 400;
+        }
+    }
+    else {
+        res.statusCode = 400;
+    }
+    res.json(result);
 }
 
 async function getSignSteps(req, res) {
     let response = '';
-    //console.log('Route params:' + JSON.stringify(req.params));
+    //console.log('Route params: ', req.params);
     if (req.params.season && req.params.teamId) {
-        response = await teamsMgr.getTeamSteps(req.params.season, req.params.teamId, true);
+        response = await teamsMgr.getTeamSteps(parseInt(req.params.season), parseInt(req.params.teamId), true);
     }
     else {
         res.statusCode = 400;
@@ -26,7 +38,7 @@ async function getSignSteps(req, res) {
 
 async function getTeamSteps(req, res) {
     let response = '';
-    //console.log('Route params:' + JSON.stringify(req.params));
+    //console.log('Route params: ', req.params);
     if (req.params.season && req.params.teamId) {
         response = await teamsMgr.getTeamSteps(parseInt(req.params.season), parseInt(req.params.teamId));
     }

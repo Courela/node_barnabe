@@ -28,7 +28,7 @@ function getTeamSteps(season, teamId, invert = false) {
 function getStep(stepId) {
     return teamsRepo.getStep(stepId)
         .then(result => {
-            console.log('GetStep '+ stepId + ': ' + JSON.stringify(result)); 
+            console.log('GetStep '+ stepId + ': ', result); 
             return result.rowsAffected[0] > 0 ? result.recordset[0] : null; 
         })
         .catch((err) => {
@@ -39,7 +39,7 @@ function getStep(stepId) {
 
 function addStep(season, teamId, stepId) {
     return teamsRepo.addStep(season, teamId, stepId)
-        .then(result => result.rowsAffected)
+        .then(result => result.rowsAffected[0])
         .catch((err) => {
             console.error(err);
             const res = err.name == 'RequestError' ? 0 : -1;
