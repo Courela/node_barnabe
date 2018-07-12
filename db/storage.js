@@ -48,7 +48,7 @@ function init() {
     if (!users.has('User').value()) {
         users.defaults({
             User: [
-                { Id: 1, Username: 'Aruil', Password: 'Aruil', TeamId: 2 }
+                { Id: 1, Username: 'Admin', Password: 'Barnabe2018', TeamId: null }
             ]
         }).write();
     }
