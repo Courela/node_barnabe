@@ -55,6 +55,7 @@ async function getPlayer(req, res) {
         if (teamId && stepId && season && playerId) {
             response = await playersMgr.getPlayer(parseInt(season), parseInt(teamId), parseInt(stepId), parseInt(playerId));
             console.log(response);
+            if (!response) { res.statusCode = 404 }
         } else {
             res.statusCode = 400;
         }
@@ -69,8 +70,8 @@ async function getPlayer(req, res) {
 async function addPlayer(req, res) {
     let response = '';
     try {
-        console.log('AddPlayer params: ', req.params);
-        console.log('AddPlayer: ', req.body);
+        //console.log('AddPlayer params: ', req.params);
+        //console.log('AddPlayer: ', req.body);
         const { teamId, stepId, season } = req.params;
         const { name, gender, birth, docId, voterNr, phoneNr, email } = req.body.person;
         if (teamId && stepId && season && name && gender && birth && docId) {

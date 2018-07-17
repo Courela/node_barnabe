@@ -13,10 +13,6 @@ function ping(req, res) {
     res.send();
 }
 
-function initStorage(req, res) {
-    res.json(storageAdapter.init());
-}
-
 function setClientSecret(req, res) {
     console.log('Client Secret: ', req.body);
     const file = req.body.file;
@@ -63,8 +59,33 @@ function restoreUsers(req, res) {
     googleApi.restoreUsers((result) => res.json(result));
 }
 
+function saveDocuments(req, res) {
+    googleApi.saveDocuments((result) => res.json(result));
+}
+
+function restoreDocuments(req, res) {
+    googleApi.restoreDocuments((result) => res.json(result));
+}
+
 function testDrive(req, res) {
     res.json(oAuth2.isDriveAuthEnabled());
+}
+
+async function addUser(req, res) {
+    const { username, password, teamId } = req.body;
+    if (username && password && teamId) {
+        const exists = await usersMgr.existsUser(username);
+        if (!exists) {
+            await usersMgr.addUser(username, password, parseInt(teamId));
+        }
+        else {
+            res.statusCode = 409;
+        }
+    }
+    else {
+        res.statusCode = 400;
+    }
+    res.send();
 }
 
 function setCors(req, res, next) {
@@ -100,7 +121,6 @@ module.exports = {
     logRequest,
     setup,
     ping,
-    initStorage,
     setCors,
     handleUserSession,
     setClientSecret,
@@ -110,5 +130,8 @@ module.exports = {
     restoreData,
     saveUsers,
     restoreUsers,
-    testDrive
+    saveDocuments,
+    restoreDocuments,
+    testDrive,
+    addUser
 }

@@ -18,6 +18,26 @@ function getRoles() {
     });
 }
 
+function getSeasons() {
+    const query = function (db) {
+        const seasons = db.get('Season')
+            .cloneDeep()
+            .orderBy('Year', 'desc')
+            .value();
+        return { recordset: seasons, rowsAffected: [seasons.length] };
+    };
+    return new Promise((resolve, reject) => {
+        try {
+            const result = storage.statementQuery(query);
+            resolve(result);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
-    getRoles
+    getRoles,
+    getSeasons
 }

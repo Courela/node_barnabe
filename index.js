@@ -21,7 +21,8 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 const adminRouter = express.Router();
-adminRouter.get('/export-players', exportController.exportPlayers)
+adminRouter.get('/ping', serverController.ping)
+    .get('/export-players', exportController.exportPlayers)
     .post('/client-secret', serverController.setClientSecret)
     .post('/auth-code', serverController.setAccessToken)
     .post('/reset-auth', serverController.resetAuth)
@@ -29,11 +30,13 @@ adminRouter.get('/export-players', exportController.exportPlayers)
     .get('/restore-data', serverController.restoreData)
     .get('/save-users', serverController.saveUsers)
     .get('/restore-users', serverController.restoreUsers)
-    .get('/drive', serverController.testDrive);
+    .get('/save-documents', serverController.saveDocuments)
+    .get('/restore-documents', serverController.restoreDocuments)
+    .get('/drive', serverController.testDrive)
+    .put('/users', serverController.addUser);
 
 const apiRouter = express.Router();
-apiRouter.get('/ping', serverController.ping)
-    .get('/storagedb', serverController.initStorage)
+apiRouter.use('/admin', adminRouter)
     .get('/teams', teamsController.getTeams)
     .get('/steps/:stepId', teamsController.getStep)
     .get('/persons', getPerson)
@@ -44,14 +47,14 @@ apiRouter.get('/ping', serverController.ping)
     .get('/seasons/:season/teams/:teamId/steps/:stepId/players/:playerId', playersController.getPlayer)
     .get('/seasons/:season/teams/:teamId/steps/:stepId/players', playersController.getTeamPlayers)
     .get('/seasons/:season/teams/:teamId/steps/:stepId/staff', playersController.getStaff)
+    .get('/seasons', utilsController.getSeasons)
     //.get('/season/:season/team/:teamId/step/:stepId/export-players', exportController.exportPlayers)
     //.post('/season/:season/team/:teamId/step/:stepId/player', playersController.addPlayer)
     .put('/seasons/:season/teams/:teamId/steps/:stepId/players', playersController.addPlayer)
     .delete('/seasons/:season/teams/:teamId/steps/:stepId/players/:playerId', playersController.removePlayer)
     .post('/authenticate', authenticate)
     .post('/logout', logout)
-    .put('/seasons/:season/teams/:teamId/steps', teamsController.addTeamStep)
-    .use('/admin', adminRouter);
+    .put('/seasons/:season/teams/:teamId/steps', teamsController.addTeamStep);
 
 app.use(serverController.setCors)
     .use(bodyParser.json({limit: '3mb'}))

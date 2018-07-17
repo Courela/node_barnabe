@@ -8,7 +8,7 @@ const usersAdapter = new FileSync('./data/users.json');
 const users = low(usersAdapter);
 
 function init() {
-    if (!db.has('Step').value()) {
+    if (!db.has('Season').value()) {
         // Set some defaults (required if your JSON file is empty)
         db.defaults({
             Step: [
@@ -38,6 +38,10 @@ function init() {
                 { Id: 9, Name: 'Clube Recreativo Almornense', ShortDescription: 'Almornos' },
                 { Id: 10, Name: 'Liga dos Amigos de Covas de Ferro', ShortDescription: 'Covas de Ferro' },
                 { Id: 11, Name: 'Grupo Recreativo e Desportivo de Camarões', ShortDescription: 'Camarões' }
+            ],
+            Season: [
+                { Year: 2017, IsActive: false },
+                { Year: 2018, IsActive: true }
             ],
             Person: [],
             Player: [],

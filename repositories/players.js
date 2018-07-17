@@ -65,18 +65,29 @@ function getPlayer(season, teamId, stepId, playerId) {
             .find({ Id: playerId, TeamId: teamId, StepId: stepId, Season: season })
             .value();
         
-            const person = db.get('Person')
+        if (!player) {
+            return { recordset: [ ], rowsAffected: [0] }; 
+        }
+        
+        const person = db.get('Person')
             .cloneDeep()
             .find({ Id: player.PersonId })
             .value();
-        delete person.Id;
         
         const step = db.get('Step')
             .cloneDeep()
             .find({ Id: player.StepId })
             .value();
         
-        const result = Object.assign({ Description: step.Description }, player, person);
+        let caretaker = null;
+        if (player.CaretakerId) {
+            caretaker = db.get('Person')
+            .cloneDeep()
+            .find({ Id: player.CaretakerId })
+            .value();
+        }
+        
+        const result = Object.assign({ step: step }, player, { person: person }, { caretaker: caretaker });
         //console.log("Get Player: ", result);
         return { recordset: [ result ], rowsAffected: [1] };
     };
