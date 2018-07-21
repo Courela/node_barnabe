@@ -78,7 +78,12 @@ function getPlayer(season, teamId, stepId, playerId) {
             .cloneDeep()
             .find({ Id: player.StepId })
             .value();
-        
+
+        const birthStepLimit = db.get('BirthStepLimit')
+            .cloneDeep()
+            .find({ Season: player.Season, StepId: player.StepId })
+            .value();
+
         let caretaker = null;
         if (player.CaretakerId) {
             caretaker = db.get('Person')
@@ -87,8 +92,8 @@ function getPlayer(season, teamId, stepId, playerId) {
             .value();
         }
         
-        const result = Object.assign({ step: step }, player, { person: person }, { caretaker: caretaker });
-        //console.log("Get Player: ", result);
+        const result = Object.assign({ step: Object.assign(step, birthStepLimit) }, player, { person: person }, { caretaker: caretaker });
+        console.log("Get Player: ", result);
         return { recordset: [ result ], rowsAffected: [1] };
     };
     return new Promise((resolve, reject) => {
@@ -136,6 +141,26 @@ function addPlayer(teamId, stepId, season, resident, personId, roleId, caretaker
     });
 }
 
+function updatePlayer(id, caretakerId, comments){
+    const query = function (db) {
+        const person = db.get('Player')
+            .find({ Id: id })
+            .assign({ CaretakerId: caretakerId, Comments: comments })
+            .write();
+        console.log('Storage person: ', person);
+        return { rowsAffected: [1] };
+    };
+    return new Promise((resolve, reject) => {
+        try {
+            const result = storage.statementQuery(query);
+            resolve(result);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 function removePlayer(teamId, stepId, season, playerId) {
     const query = function (db) {
         db.get('Player')
@@ -159,5 +184,6 @@ module.exports = {
     existsPlayer,
     getPlayer,
     getPlayers,
+    updatePlayer,
     removePlayer
 }

@@ -7,11 +7,13 @@ async function getTeams(req, res) {
 }
 
 async function getStep(req, res) {
+    console.log('GetStep request params: ', req.params);
     let result = '';
     const stepId = req.params.stepId;
+    const season = req.params.season ? req.params.season : null;
     if (stepId) {
         try {
-            result = await teamsMgr.getStep(parseInt(stepId));
+            result = await teamsMgr.getStep(parseInt(stepId), parseInt(season));
         }
         catch(err) {
             result = err;

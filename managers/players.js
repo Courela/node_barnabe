@@ -38,7 +38,7 @@ function getPlayer(season, teamId, stepId, playerId) {
 
 async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comments) {
     let personEntity = await personMgr.getPersonByIdCardNr(person.docId);
-    console.log('Person: ', personEntity);
+    //console.log('Person: ', personEntity);
     if (personEntity) {
         if (await playersRepo.existsPlayer(teamId, stepId, season, personEntity.Id)) {
             console.warn('Player already exists!');
@@ -46,17 +46,17 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
         }
         await personMgr.updatePerson(person);
     } else {
-        personEntity = await personMgr.addPerson(person.name, person.gender, person.birth, person.docId, person.voterNr, person.email, person.phoneNr);
+        personEntity = await personMgr.addPerson(person.name, person.gender, person.birth, person.docId, person.voterNr, person.phoneNr, person.email);
     }
 
     let caretakerEntity = null;
     if (caretaker && caretaker.docId) {
         caretakerEntity = await personMgr.getPersonByIdCardNr(caretaker.docId);
-        console.log('Caretaker: ', caretakerEntity);
+        //console.log('Caretaker: ', caretakerEntity);
         if (caretakerEntity !== null) {
             personMgr.updatePerson(caretaker);
         } else {
-            caretakerEntity = await personMgr.addPerson(caretaker.name, null, null, caretaker.docId, caretaker.voterNr, caretaker.email, caretaker.phoneNr);
+            caretakerEntity = await personMgr.addPerson(caretaker.name, null, null, caretaker.docId, caretaker.voterNr, caretaker.phoneNr, caretaker.email);
         }
     }
 
@@ -64,7 +64,7 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
     //const roleId = 1;
     return playersRepo.addPlayer(teamId, stepId, season, resident, personEntity.Id, roleId, caretakerEntity ? caretakerEntity.id : null, comments)
         .then(result => {
-            console.log('Add Player result:');
+            //console.log('Add Player result:');
             console.log(result);
             if (result.recordset && result.recordset.length > 0) {
                 if (person.photo) {
@@ -79,6 +79,43 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
             const res = err.name == 'RequestError' ? -409 : -500;
             return res;
         });
+}
+
+async function updatePlayer(teamId, stepId, season, playerId, person, roleId, caretaker, comments) {
+    try {
+        //console.log('Person: ', person);
+        //console.log('Caretaker: ', caretaker);
+        
+        let newCaretaker = null;
+        await personMgr.updatePerson(person);
+        const caretakerPerson = await personMgr.getPersonByIdCardNr(caretaker.docId);
+        if (caretakerPerson) {
+            const merge = {
+                id: caretaker.id,
+                name: caretaker.name,
+                voterNr: caretaker.voterNr,
+                phoneNr: caretaker.phoneNr,
+                email: caretaker.email,
+
+                gender: caretakerPerson.Gender,
+                birth: caretakerPerson.Birthdate,
+                docId: caretakerPerson.IdCardNr
+            };
+            await personMgr.updatePerson(merge);
+        }
+        else {
+            newCaretaker = await personMgr.addPerson(caretaker.name, null, null, caretaker.docId, caretaker.voterNr, caretaker.phoneNr, caretaker.email);
+        }
+
+        if (comments) {
+            const caretakerId = newCaretaker ? newCaretaker.Id : caretaker.id;
+            await playersRepo.updatePlayer(playerId, caretakerId, comments);
+        }
+    }
+    catch (err) {
+        console.log(err);
+        throw 'Error';
+    }
 }
 
 function savePhoto(filename, photoSrc) {
@@ -106,6 +143,7 @@ function removePlayer(teamId, stepId, season, playerId) {
 module.exports = {
     addPlayer,
     getPlayer,
+    updatePlayer,
     getPlayers,
     removePlayer
 }

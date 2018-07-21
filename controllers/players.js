@@ -54,7 +54,7 @@ async function getPlayer(req, res) {
         const { teamId, stepId, season, playerId } = req.params;
         if (teamId && stepId && season && playerId) {
             response = await playersMgr.getPlayer(parseInt(season), parseInt(teamId), parseInt(stepId), parseInt(playerId));
-            console.log(response);
+            //console.log(response);
             if (!response) { res.statusCode = 404 }
         } else {
             res.statusCode = 400;
@@ -73,7 +73,7 @@ async function addPlayer(req, res) {
         //console.log('AddPlayer params: ', req.params);
         //console.log('AddPlayer: ', req.body);
         const { teamId, stepId, season } = req.params;
-        const { name, gender, birth, docId, voterNr, phoneNr, email } = req.body.person;
+        const { name, gender, birth, docId } = req.body.person;
         if (teamId && stepId && season && name && gender && birth && docId) {
             const playerId = await playersMgr.addPlayer(
                 parseInt(teamId), 
@@ -86,6 +86,46 @@ async function addPlayer(req, res) {
             );
             if (playerId > 0) {
                 res.statusCode = 201;
+                console.log('PlayerId: ' + playerId);
+                response = { Id: playerId };
+            } else {
+                const result = Math.abs(playerId);
+                console.log('Status code result: ' + result);
+                res.statusCode = result;
+            }
+        } else {
+            console.log('Bad request!');
+            res.statusCode = 400;
+        }
+    }
+    catch (err) {
+        errors.handleErrors(res);
+        response = err;
+    }
+    res.send(response);
+}
+
+async function updatePlayer(req, res) {
+    let response = '';
+    try {
+        //console.log('updatePlayer params: ', req.params);
+        //console.log('updatePlayer: ', req.body.player);
+        const { teamId, stepId, season, playerId } = req.params;
+        const { roleId, comments } = req.body.player;
+        const { id, name, gender, birth, docId } = req.body.person;
+        if (id && teamId && stepId && season && name && gender && birth && docId) {
+            await playersMgr.updatePlayer(
+                parseInt(teamId),
+                parseInt(stepId), 
+                parseInt(season),
+                parseInt(playerId), 
+                req.body.person, 
+                parseInt(roleId), 
+                req.body.caretaker,
+                comments
+            );
+            if (playerId > 0) {
+                res.statusCode = 200;
                 console.log('PlayerId: ' + playerId);
                 response = { Id: playerId };
             } else {
@@ -128,5 +168,6 @@ module.exports = {
     getStaff,
     addPlayer,
     getPlayer,
+    updatePlayer,
     removePlayer
 }

@@ -12,11 +12,11 @@ function init() {
         // Set some defaults (required if your JSON file is empty)
         db.defaults({
             Step: [
-                { Id: 1, Description: 'Escalão I', Gender: null },
-                { Id: 2, Description: 'Escalão II', Gender: 'M' },
-                { Id: 3, Description: 'Escalão III', Gender: 'M' },
-                { Id: 4, Description: 'Escolinhas', Gender: null },
-                { Id: 5, Description: 'Feminino', Gender: 'F' }
+                { Id: 1, Description: 'Escalão I', Gender: null, IsCaretakerRequired: true },
+                { Id: 2, Description: 'Escalão II', Gender: 'M', IsCaretakerRequired: true },
+                { Id: 3, Description: 'Escalão III', Gender: 'M', IsCaretakerRequired: false },
+                { Id: 4, Description: 'Escolinhas', Gender: null, IsCaretakerRequired: true },
+                { Id: 5, Description: 'Feminino', Gender: 'F', IsCaretakerRequired: false }
             ],
             Role: [
                 { Id: 1, Description: 'Jogador' },
@@ -42,6 +42,38 @@ function init() {
             Season: [
                 { Year: 2017, IsActive: false },
                 { Year: 2018, IsActive: true }
+            ],
+            BirthStepLimit: [
+                {
+                    Season: 2018,
+                    StepId: 1,
+                    MinDate: "2005-11-25T00:00:00.000Z",
+                    MaxDate: "2009-11-24T00:00:00.000Z"
+                },
+                {
+                    Season: 2018,
+                    StepId: 2,
+                    MinDate: "2000-11-25T00:00:00.000Z",
+                    MaxDate: "2005-11-24T00:00:00.000Z"
+                },
+                {
+                    Season: 2018,
+                    StepId: 3,
+                    MinDate: "1900-01-01T00:00:00.000Z",
+                    MaxDate: "2000-11-24T00:00:00.000Z"
+                },
+                {
+                    Season: 2018,
+                    StepId: 4,
+                    MinDate: "2009-11-25T00:00:00.000Z",
+                    MaxDate: "2013-12-31T00:00:00.000Z"
+                },
+                {
+                    Season: 2018,
+                    StepId: 1,
+                    MinDate: "1900-01-01T00:00:00.000Z",
+                    MaxDate: "2005-11-24T00:00:00.000Z"
+                }
             ],
             Person: [],
             Player: [],

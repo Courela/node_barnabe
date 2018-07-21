@@ -25,8 +25,8 @@ function getTeamSteps(season, teamId, invert = false) {
         });
 }
 
-function getStep(stepId) {
-    return teamsRepo.getStep(stepId)
+function getStep(stepId, season = null) {
+    return teamsRepo.getStep(stepId, season)
         .then(result => {
             console.log('GetStep '+ stepId + ': ', result); 
             return result.rowsAffected[0] > 0 ? result.recordset[0] : null; 

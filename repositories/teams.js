@@ -83,12 +83,24 @@ function getTeams() {
     });
 }
 
-function getStep(stepId) {
+function getStep(stepId, season = null) {
     const query = function (db) {
-        return db.get('Step')
+        let step = db.get('Step')
             .cloneDeep()
             .find({ Id: stepId })
             .value();
+        
+        if (season) {
+            const birthStepLimit = db.get('BirthStepLimit')
+                .cloneDeep()
+                .find({ Season: season, StepId: stepId })
+                .value();
+
+            if (birthStepLimit) {
+                step = Object.assign(step, birthStepLimit);
+            }
+        }
+        return step;
     };
     return new Promise((resolve, reject) => {
         try {

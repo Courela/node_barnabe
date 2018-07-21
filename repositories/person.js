@@ -1,7 +1,11 @@
 const storage = require('../db/storage');
 
+function getPersonById(id) {
+    return storage.getSingle('Person', id);
+}
+
 function getPersonByIdCardNr(idCardNr) {
-    console.log('Search DocId: ' + idCardNr);
+    //console.log('Search DocId: ' + idCardNr);
     const query = function (db) {
         const person = db.get('Person')
             .cloneDeep()
@@ -22,7 +26,7 @@ function getPersonByIdCardNr(idCardNr) {
 }
 
 function addPerson(name, gender, birthdate, docId, voterNr, phone, email) {
-    console.log('Person to insert: ' + name + gender + birthdate + docId + voterNr + phone + email);
+    //console.log('Person to insert: ' + name + gender + birthdate + docId + voterNr + phone + email);
     const query = function (db) {
         const last = db.get('Person')
             .cloneDeep()
@@ -57,11 +61,11 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email) {
 }
 
 function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email) {
-    console.log('Person to update: ' + id + name + gender + birthdate + docId + voterNr + phone + email);
+    //console.log('Person to update: ', id, name, gender, birthdate, docId, voterNr, phone, email);
     const query = function (db) {
         const person = db.get('Person')
             .find({ Id: id })
-            .assign({ Name: name, VoterNr: voterNr, Phone: phone, Email: email })
+            .assign({ Name: name, Gender: gender, Birthdate: birthdate, VoterNr: voterNr, Phone: phone, Email: email })
             .write();
         //console.log('Storage person:'); console.log(person);
         return { rowsAffected: [1] };
@@ -78,6 +82,7 @@ function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email)
 }
 
 module.exports = {
+    getPersonById,
     getPersonByIdCardNr,
     addPerson,
     updatePerson

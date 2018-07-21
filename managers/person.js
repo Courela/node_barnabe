@@ -1,5 +1,9 @@
 const personRepo = require('../repositories/person');
 
+function getPersonById(id) {
+    return personRepo.getPersonById(id);
+}
+
 function getPersonByIdCardNr(docId){
     return personRepo.getPersonByIdCardNr(docId)
         .then((results) => {
@@ -13,7 +17,7 @@ function getPersonByIdCardNr(docId){
 }
 
 function addPerson (name, gender, birthdate, docId, voterNr, phone, email) {
-    return personRepo.addPerson(name, gender, birthdate, docId, voterNr, email, phone)
+    return personRepo.addPerson(name, gender, birthdate, docId, voterNr, phone, email)
         .then((results) => {
             //console.log(results);
             return results.recordset && results.recordset.length > 0 ? 
@@ -28,7 +32,7 @@ function addPerson (name, gender, birthdate, docId, voterNr, phone, email) {
 
 function updatePerson(person) {
     return personRepo.updatePerson(person.id, person.name, person.gender, person.birth, 
-            person.docId, person.voterNr, person.email, person.phoneNr)
+            person.docId, person.voterNr, person.phoneNr, person.email)
         .then((results) => {
             //console.log(results);
             return results.recordset && results.recordset.length > 0 ? 
@@ -42,6 +46,7 @@ function updatePerson(person) {
 }
 
 module.exports = {
+    getPersonById,
     getPersonByIdCardNr,
     addPerson,
     updatePerson
