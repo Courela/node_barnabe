@@ -3,6 +3,8 @@ const { google } = require('googleapis');
 const oAuth2 = require('./oAuth2');
 const storage = require('../db/storage');
 
+//const DRIVE_FOLDER = process.env.DRIVE_FOLDER || 'TacaBarnabe';
+const DRIVE_FOLDER = process.env.NODE_ENV == 'production' ? 'TacaBarnabe' : 'TacaBarnabeDev';
 const DATA_FOLDER = './data/';
 const STORAGE_FOLDER = './data/storage/';
 const DB_FILE = 'db.json';
@@ -79,7 +81,7 @@ function restoreDocuments(responseCallback) {
 
 function getAppFolder(driveClient, callback, responseCallback) {
     driveClient.files.list({
-        q: "mimeType = 'application/vnd.google-apps.folder' and name = 'TacaBarnabe'",
+        q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + DRIVE_FOLDER + "'",
         fields: 'files(id, name)',
         spaces: 'drive'
     }, (err, res) => {

@@ -27,8 +27,20 @@ function getPlayer(season, teamId, stepId, playerId) {
                 let photo = [];
                 if (player.PhotoFilename) {
                     var photoPath = STORAGE_FOLDER + player.PhotoFilename;
-                    if (fs.existsSync(photoPath)) { photo = fs.readFileSync(photoPath); }
+                    if (fs.existsSync(photoPath)) { 
+                        photo = fs.readFileSync(photoPath); 
+                    }
+                    else {
+                        console.warn('Missing file: ', player.PhotoFilename);
+                    }
                     //console.log('Photo: ' + photo.length);
+                }
+                if (player.DocFilename) {
+                    var docPath = STORAGE_FOLDER + player.DocFilename;
+                    if (!fs.existsSync(docPath)) { 
+                        console.warn('Missing file: ', player.DocFilename);
+                        player.DocFilename = null;
+                    }
                 }
                 return { player: player, photo: photo.toString() };
             }

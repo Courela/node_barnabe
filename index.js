@@ -17,10 +17,6 @@ const personMgr = require('./managers/person');
 serverController.setup();
 
 const app = express();
-
-const dotenv = require('dotenv');
-if (dotenv) { dotenv.config() }
-
 const port = process.env.PORT || 8000;
 
 const adminRouter = express.Router();
