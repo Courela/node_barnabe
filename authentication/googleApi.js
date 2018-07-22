@@ -9,7 +9,7 @@ const DB_FILE = 'db.json';
 const USERS_FILE = 'users.json';
 
 function saveData(responseCallback) {
-    saveFile(DATA_FOLDER, DB_FILE, 'application/json', responseCallback);
+    saveFile(DATA_FOLDER, DB_FILE, responseCallback);
 }
 
 function restoreData(responseCallback) {
@@ -17,7 +17,7 @@ function restoreData(responseCallback) {
 }
 
 function saveUsers(responseCallback) {
-    saveFile(DATA_FOLDER, USERS_FILE, 'application/json', responseCallback);
+    saveFile(DATA_FOLDER, USERS_FILE, responseCallback);
 }
 
 function restoreUsers(responseCallback) {
@@ -30,7 +30,7 @@ function saveDocuments(responseCallback) {
         for(let i = 0; i < files.length; i++) {
             const filename = files[i];
             if (filename === '.' || filename === '..') { continue; }
-            saveFile(STORAGE_FOLDER, filename, 'application/json');
+            saveFile(STORAGE_FOLDER, filename);
         }
         if (responseCallback) { responseCallback({ isSuccess: true }); return; }
     }
@@ -44,7 +44,8 @@ function restoreDocuments(responseCallback) {
     try {
         const oAuth2Client = oAuth2.authorize();
         if (oAuth2Client) {
-            getAppFolder(oAuth2Client, (folder) => {
+            const driveClient = google.drive({ version: 'v3', auth: oAuth2Client });
+            getAppFolder(driveClient, (folder) => {
                 listFiles(folder, driveClient, (files) => {
                     for(let i = 0; i < files.length; i++) {
                         const fileId = files[i].id;
@@ -59,6 +60,8 @@ function restoreDocuments(responseCallback) {
                             }
                         }, responseCallback);
                     }
+
+                    if (responseCallback) { responseCallback({ isSuccess: true }); return; }
                 }, 
                 responseCallback);
             },
@@ -94,23 +97,22 @@ function getAppFolder(driveClient, callback, responseCallback) {
 
 function listFiles(folder, driveClient, callback, responseCallback) {
     driveClient.files.list({
-        q: "mimeType = 'image/*'",
+        q: "'" + folder.id + "' in parents and (mimeType contains 'image/' or mimeType = 'application/pdf')",
         fields: 'files(id, name)',
-        spaces: 'drive',
-        parents: [folder.id]
+        spaces: 'drive'
     }, (err, res) => {
         if (err || !res || res.data.files.length < 1) {
             console.log(err);
             if (responseCallback) { responseCallback({ isSuccess: false }); }
             return;
         }
-        console.log(res.data.files);
+        console.log('Files from Drive: ', res.data.files);
         if (callback) { callback(res.data.files); }
     });
     return;
 }
 
-function saveFile(filePath, filename, mimeType, responseCallback) {
+function saveFile(filePath, filename, responseCallback) {
     const oAuth2Client = oAuth2.authorize();
     if (oAuth2Client) {
         console.log('Saving file ' + filename + ' to Drive...');
@@ -122,9 +124,10 @@ function saveFile(filePath, filename, mimeType, responseCallback) {
                     parents: [folder.id]
                 };
                 var media = {
-                    mimeType: mimeType,
                     body: fs.createReadStream(filePath + filename)
                 };
+                var mimeType = getMimeType(filename);
+                if (mimeType) { media.mimeType = mimeType }
                 driveClient.files.create({
                     resource: fileMetadata,
                     media: media,
@@ -145,6 +148,30 @@ function saveFile(filePath, filename, mimeType, responseCallback) {
     else {
         if (responseCallback) { responseCallback({ isSuccess: false, error: 'Failed to save file ' + filename + '!' }); }
     }
+}
+
+function getMimeType(filename) {
+    let result = null;
+    const fileType = filename.match(/.+\.(.+)$/);
+    if (fileType && fileType.length > 1) {
+        switch(fileType[1]) {
+            case 'pdf':
+            case 'json':
+                result = 'application/' + fileType[1];
+                break;
+            case 'png':
+            case 'gif':
+            case 'jpeg':
+                result = 'image/' + fileType[1];
+                break;
+            case 'jpg':
+                result = 'image/jpeg';
+                break;
+            default:
+                break;
+        }
+    }
+    return result;
 }
 
 function getFile(filename, mimeType, callback, responseCallback) {
@@ -197,7 +224,7 @@ function getFileById(driveClient, fileId, callback, responseCallback) {
             return; 
         }
 
-        console.log(res.data);
+        console.log('FileId successfully returned: ', fileId);
         try {
             if (callback) { callback(res.data, responseCallback); return; }
             if (responseCallback) { responseCallback({ isSuccess: true }); }
