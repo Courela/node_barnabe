@@ -1,5 +1,6 @@
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
+const STORAGE_FOLDER = './data/storage/';
 
 const dbAdapter = new FileSync('./data/db.json');
 const db = low(dbAdapter);
@@ -8,6 +9,17 @@ const usersAdapter = new FileSync('./data/users.json');
 const users = low(usersAdapter);
 
 function init() {
+    var fs = require('fs');
+    if (!fs.existsSync(STORAGE_FOLDER)) {
+        fs.mkdir(STORAGE_FOLDER, (err) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log('Storage folder created: ', STORAGE_FOLDER );
+        })
+    }
+
     if (!db.has('Season').value()) {
         // Set some defaults (required if your JSON file is empty)
         db.defaults({
