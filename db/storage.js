@@ -70,7 +70,7 @@ function init() {
                 },
                 {
                     Season: 2018,
-                    StepId: 1,
+                    StepId: 5,
                     MinDate: "1900-01-01T00:00:00.000Z",
                     MaxDate: "2005-11-24T00:00:00.000Z"
                 }

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Courela/node_barnabe#readme",
   "dependencies": {
+    "atob": "^2.1.1",
     "base-64": "^0.1.0",
     "body-parser": "^1.18.3",
     "client-sessions": "^0.8.0",

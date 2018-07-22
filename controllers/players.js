@@ -74,15 +74,18 @@ async function addPlayer(req, res) {
         //console.log('AddPlayer: ', req.body);
         const { teamId, stepId, season } = req.params;
         const { name, gender, birth, docId } = req.body.person;
+        const { role, photo, doc } = req.body;
         if (teamId && stepId && season && name && gender && birth && docId) {
             const playerId = await playersMgr.addPlayer(
                 parseInt(teamId), 
                 parseInt(stepId), 
                 parseInt(season), 
                 req.body.person, 
-                parseInt(req.body.role), 
+                parseInt(role), 
                 req.body.caretaker,
-                req.body.comments
+                req.body.comments,
+                photo,
+                doc
             );
             if (playerId > 0) {
                 res.statusCode = 201;
@@ -111,7 +114,7 @@ async function updatePlayer(req, res) {
         //console.log('updatePlayer params: ', req.params);
         //console.log('updatePlayer: ', req.body.player);
         const { teamId, stepId, season, playerId } = req.params;
-        const { roleId, comments } = req.body.player;
+        const { roleId, comments, doc, photo } = req.body.player;
         const { id, name, gender, birth, docId } = req.body.person;
         if (id && teamId && stepId && season && name && gender && birth && docId) {
             await playersMgr.updatePlayer(
@@ -122,7 +125,9 @@ async function updatePlayer(req, res) {
                 req.body.person, 
                 parseInt(roleId), 
                 req.body.caretaker,
-                comments
+                comments,
+                photo,
+                doc
             );
             if (playerId > 0) {
                 res.statusCode = 200;

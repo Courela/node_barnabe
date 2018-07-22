@@ -93,7 +93,7 @@ function getPlayer(season, teamId, stepId, playerId) {
         }
         
         const result = Object.assign({ step: Object.assign(step, birthStepLimit) }, player, { person: person }, { caretaker: caretaker });
-        console.log("Get Player: ", result);
+        //console.log("Get Player: ", result);
         return { recordset: [ result ], rowsAffected: [1] };
     };
     return new Promise((resolve, reject) => {
@@ -123,7 +123,9 @@ function addPlayer(teamId, stepId, season, resident, personId, roleId, caretaker
             Resident: resident, 
             RoleId: roleId, 
             CaretakerId: caretakerId,
-            Comments: comments
+            Comments: comments,
+            PhotoFilename: null,
+            DocFilename: null
         };
         db.get('Player')
             .push(player)
@@ -147,7 +149,7 @@ function updatePlayer(id, caretakerId, comments){
             .find({ Id: id })
             .assign({ CaretakerId: caretakerId, Comments: comments })
             .write();
-        console.log('Storage person: ', person);
+        //console.log('Storage person: ', person);
         return { rowsAffected: [1] };
     };
     return new Promise((resolve, reject) => {
@@ -163,11 +165,63 @@ function updatePlayer(id, caretakerId, comments){
 
 function removePlayer(teamId, stepId, season, playerId) {
     const query = function (db) {
+        let result = [];
+        const player = db.get('Player')
+            .find({ Id: playerId })
+            .value();
+        
+        if (player) {
+            if (player.PhotoFilename) { result.push(player.PhotoFilename); }
+            if (player.DocFilename) { result.push(player.DocFilename); }
+        }
+
         db.get('Player')
-            .remove({ Id: playerId, Season: season, TeamId: teamId, StepId: stepId })
+            .remove(player)
             .write();
+        
+        return result;
     };
 
+    return new Promise((resolve, reject) => {
+        try {
+            const result = storage.statementQuery(query);
+            resolve(result);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
+function addDocFile(playerId, filename) {
+    const query = function (db) {
+        const player = db.get('Player')
+            .find({ Id: playerId })
+            .assign({ DocFilename: filename })
+            .write();
+        //console.log('Storage person: ', player);
+        return { rowsAffected: [1] };
+    };
+    return new Promise((resolve, reject) => {
+        try {
+            const result = storage.statementQuery(query);
+            resolve(result);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
+function addPhotoFile(playerId, filename) {
+    const query = function (db) {
+        const player = db.get('Player')
+            .find({ Id: playerId })
+            .assign({ PhotoFilename: filename })
+            .write();
+        //console.log('Storage person: ', player);
+        return { rowsAffected: [1] };
+    };
     return new Promise((resolve, reject) => {
         try {
             const result = storage.statementQuery(query);
@@ -185,5 +239,7 @@ module.exports = {
     getPlayer,
     getPlayers,
     updatePlayer,
-    removePlayer
+    removePlayer,
+    addDocFile,
+    addPhotoFile
 }

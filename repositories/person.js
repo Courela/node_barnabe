@@ -11,8 +11,13 @@ function getPersonByIdCardNr(idCardNr) {
             .cloneDeep()
             .find({ IdCardNr: idCardNr })
             .value();
-        console.log('Storage person:',person);
-        return { recordset: [ person ], rowsAffected: [ 1 ] };
+        //console.log('Get storage person:',person);
+        if (person) {
+            return { recordset: [ person ], rowsAffected: [ 1 ] };
+        }
+        else {
+            return { recordset: [], rowsAffected: [ 0 ] };
+        }
     };
     return new Promise((resolve, reject) => {
         try {
@@ -27,6 +32,7 @@ function getPersonByIdCardNr(idCardNr) {
 
 function addPerson(name, gender, birthdate, docId, voterNr, phone, email) {
     //console.log('Person to insert: ' + name + gender + birthdate + docId + voterNr + phone + email);
+    console.log('New Person: ', docId);
     const query = function (db) {
         const last = db.get('Person')
             .cloneDeep()
@@ -46,7 +52,7 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email) {
         db.get('Person')
             .push(person)
             .write();
-        //console.log('Storage person:'); console.log(person);
+        //console.log('Add storage person:'); console.log(person);
         return { recordset: [ person ], rowsAffected: [1] };
     };
     return new Promise((resolve, reject) => {
@@ -62,6 +68,7 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email) {
 
 function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email) {
     //console.log('Person to update: ', id, name, gender, birthdate, docId, voterNr, phone, email);
+    console.log('Updating Person: ', docId);
     const query = function (db) {
         const person = db.get('Person')
             .find({ Id: id })
