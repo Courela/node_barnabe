@@ -56,7 +56,8 @@ apiRouter.use('/admin', adminRouter)
     .delete('/seasons/:season/teams/:teamId/steps/:stepId/players/:playerId', playersController.removePlayer)
     .post('/authenticate', authenticate)
     .post('/logout', logout)
-    .put('/seasons/:season/teams/:teamId/steps', teamsController.addTeamStep);
+    .put('/seasons/:season/teams/:teamId/steps', teamsController.addTeamStep)
+    .delete('/seasons/:season/teams/:teamId/steps/:stepId', teamsController.deleteTeamStep);
 
 app.use(serverController.setCors)
     .use(bodyParser.json({limit: '3mb'}))

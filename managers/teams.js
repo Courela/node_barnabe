@@ -47,9 +47,20 @@ function addStep(season, teamId, stepId) {
         });
 }
 
+function deleteStep(season, teamId, stepId) {
+    return teamsRepo.deleteStep(season, teamId, stepId)
+        .then(result => result.rowsAffected[0])
+        .catch((err) => {
+            console.error(err);
+            const res = err.name == 'RequestError' ? 0 : -1;
+            return res;
+        });
+}
+
 module.exports = {
     getStep,
     addStep,
     getTeams,
-    getTeamSteps
+    getTeamSteps,
+    deleteStep
 }

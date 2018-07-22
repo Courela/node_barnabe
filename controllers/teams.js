@@ -66,10 +66,27 @@ async function addTeamStep(req, res) {
     res.send();
 }
 
+async function deleteTeamStep(req, res) {
+    const season = req.params.season;
+    const teamId = req.params.teamId;
+    const stepId = req.params.stepId;
+    if (season && teamId && stepId) {
+        const affectedRows = await teamsMgr.deleteStep(parseInt(season), parseInt(teamId), parseInt(stepId))
+            .catch(() => -1);
+        console.log('DeleteTeamStep rows affected: ' + affectedRows);
+        res.statusCode = affectedRows >= 0 ? 200 : 500;
+    }
+    else {
+        res.statusCode = 400;
+    }
+    res.send();
+}
+
 module.exports = {
     getTeams,
     getStep,
     getSignSteps,
     getTeamSteps,
-    addTeamStep
+    addTeamStep,
+    deleteTeamStep
 }

@@ -66,6 +66,24 @@ function addStep(season, teamId, stepId) {
     });
 }
 
+function deleteStep(season, teamId, stepId) {
+    const query = function (db) {
+        db.get('TeamStep')
+            .remove({ TeamId: teamId, StepId: stepId, Season: season })
+            .write();
+        return 1;
+    };
+    return new Promise((resolve, reject) => {
+        try {
+            const result = storage.statementQuery(query);
+            resolve({ rowsAffected: [result] });
+        }
+        catch (err) {
+            reject(err);
+        }
+    });
+}
+
 function getTeams() {
     const query = function (db) {
         return db.get('Team')
@@ -146,5 +164,6 @@ module.exports = {
     getStep,
     getTeams,
     getTeamsBySeason,
-    getTeamSteps
+    getTeamSteps,
+    deleteStep
 }
