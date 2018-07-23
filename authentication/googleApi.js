@@ -1,9 +1,9 @@
 const fs = require('fs');
 const { google } = require('googleapis');
+const atob = require('atob');
 const oAuth2 = require('./oAuth2');
 const storage = require('../db/storage');
 
-//const DRIVE_FOLDER = process.env.DRIVE_FOLDER || 'TacaBarnabe';
 const DRIVE_FOLDER = process.env.NODE_ENV == 'production' ? 'TacaBarnabe' : 'TacaBarnabeDev';
 const DATA_FOLDER = './data/';
 const STORAGE_FOLDER = './data/storage/';
@@ -29,7 +29,7 @@ function restoreUsers(responseCallback) {
 function saveDocuments(responseCallback) {
     try {
         const files = fs.readdirSync(STORAGE_FOLDER);
-        for(let i = 0; i < files.length; i++) {
+        for (let i = 0; i < files.length; i++) {
             const filename = files[i];
             if (filename === '.' || filename === '..') { continue; }
             saveFile(STORAGE_FOLDER, filename);
@@ -49,28 +49,55 @@ function restoreDocuments(responseCallback) {
             const driveClient = google.drive({ version: 'v3', auth: oAuth2Client });
             getAppFolder(driveClient, (folder) => {
                 listFiles(folder, driveClient, (files) => {
-                    for(let i = 0; i < files.length; i++) {
+                    for (let i = 0; i < files.length; i++) {
                         const fileId = files[i].id;
                         const filename = files[i].name;
                         if (filename === '.' || filename === '..') { continue; }
-                        getFileById(driveClient, fileId, (data) => {
-                            try {
-                                fs.writeFileSync(STORAGE_FOLDER + filename, data);
-                            }
-                            catch(err) {
-                                console.error(err);
-                            }
-                        }, responseCallback);
+
+                        
+                        const binary = filename.match(/^.*_doc\..+$/);
+                        /* console.log('Binary file: ', binary)
+                        if (binary) {
+                            let client = google.drive({
+                                version: 'v3',
+                                auth: oAuth2Client
+                                //,responseType: 'arrayBuffer'
+                            });
+                            //getBinaryFileById(client, filename, fileId);
+                            getFileById(client, fileId, (data) => {
+                                try {
+                                    fs.writeFileSync(STORAGE_FOLDER + filename, data);
+                                }
+                                catch (err) {
+                                    console.error(err);
+                                }
+                            }, responseCallback);
+                        }
+                        else {*/
+                            getFileById(driveClient, fileId, (data) => {
+                                try {
+                                    if (binary) {
+                                        saveAsBinary(data, filename);
+                                    }
+                                    else {
+                                        fs.writeFileSync(STORAGE_FOLDER + filename, data);
+                                    }
+                                }
+                                catch (err) {
+                                    console.error(err);
+                                }
+                            }, responseCallback);
+                        //}
                     }
 
                     if (responseCallback) { responseCallback({ isSuccess: true }); return; }
-                }, 
-                responseCallback);
+                },
+                    responseCallback);
             },
-            responseCallback);
+                responseCallback);
         }
         else {
-            if (responseCallback) { responseCallback({ isSuccess: false }); return; }    
+            if (responseCallback) { responseCallback({ isSuccess: false }); return; }
         }
     }
     catch (err) {
@@ -91,8 +118,8 @@ function getAppFolder(driveClient, callback, responseCallback) {
             return;
         }
         console.log(res.data.files);
-        if (callback) { 
-            callback(res.data.files[0], responseCallback); 
+        if (callback) {
+            callback(res.data.files[0], responseCallback);
         }
     });
 }
@@ -156,7 +183,7 @@ function getMimeType(filename) {
     let result = null;
     const fileType = filename.match(/.+\.(.+)$/);
     if (fileType && fileType.length > 1) {
-        switch(fileType[1]) {
+        switch (fileType[1]) {
             case 'pdf':
             case 'json':
                 result = 'application/' + fileType[1];
@@ -180,7 +207,8 @@ function getFile(filename, mimeType, callback, responseCallback) {
     const oAuth2Client = oAuth2.authorize();
     if (oAuth2Client) {
         console.log('Getting file ' + filename + ' from Drive...');
-        const driveClient = google.drive({ version: 'v3', auth: oAuth2Client });
+        var options = { version: 'v3', auth: oAuth2Client };
+        const driveClient = google.drive(options);
         getAppFolder(driveClient,
             (folder) => {
                 driveClient.files.list({
@@ -215,38 +243,93 @@ function getFile(filename, mimeType, callback, responseCallback) {
     }
 }
 
+async function getBinaryFileById(driveClient, filename, fileId, callback, responseCallback) {
+    const res = await driveClient.files.get(
+        { fileId: fileId, alt: 'media' },
+        { responseType: 'stream' }
+    );
+
+    const dest = fs.createWriteStream(STORAGE_FOLDER + filename);
+
+    // var obj = {};
+    //         Object.assign(obj, res);
+    //         delete obj.data;
+    //         console.log('Response: ', obj);
+
+    res.data
+        .on('end', () => {
+            console.log('Done downloading file: ', filename);
+            if (callback) { callback(res.data, responseCallback); return; }
+            if (responseCallback) { responseCallback({ isSuccess: true }); }
+            return;
+        })
+        .on('error', err => {
+            console.error('Error downloading file: ', filename);
+            if (responseCallback) { responseCallback({ isSuccess: false }); }
+        })
+        // .on('data', d => {
+        //     progress += d.length;
+        //     process.stdout.clearLine();
+        //     process.stdout.cursorTo(0);
+        //     process.stdout.write(`Downloaded ${progress} bytes`);
+        // })
+        .pipe(dest);
+}
+
 function getFileById(driveClient, fileId, callback, responseCallback) {
     driveClient.files.get({
         fileId: fileId,
         alt: 'media'
     }, (err, res) => {
-        if (err) { 
-            console.log(err); 
-            if (responseCallback) { responseCallback({ isSuccess: false}); }
-            return; 
+        if (err) {
+            console.log(err);
+            if (responseCallback) { responseCallback({ isSuccess: false }); }
+            return;
         }
 
         console.log('FileId successfully returned: ', fileId);
         try {
+            // var obj = {};
+            // Object.assign(obj, res);
+            // delete obj.data;
+            // console.log('Response: ', obj);
             if (callback) { callback(res.data, responseCallback); return; }
             if (responseCallback) { responseCallback({ isSuccess: true }); }
             return;
         }
-        catch(err) {
+        catch (err) {
             console.log(err);
             if (responseCallback) { responseCallback({ isSuccess: false }); }
-            return; 
+            return;
         }
     });
 }
 
-function invokeCallbacks(callbacks, parameters) {
-    if (callbacks && callbacks.length > 0) {
-        const callbackParams = parameters && parameters.length > 0 ? parameters[0] : null; 
-        const remainingParams = parameters && parameters.length > 1 ? parameters.slice(1) : null;
-        callbacks[0].apply(null, callbackParams, callbacks.slice(1), remainingParams);
-    }
+function saveAsBinary(doc, filename) {
+    //console.log('Base64 len: ', doc.length);
+    var byteCharacters = atob(doc);
+    //console.log('Binary len:', byteCharacters.length);
+    saveBinaryFile(filename, byteCharacters);
+    return filename;
 }
+
+function saveBinaryFile(filename, data) {
+    console.log('Saving file ' + filename)
+    fs.writeFile(STORAGE_FOLDER + filename, str2ab(data), function (err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("The file was saved!");
+    });
+}
+
+function str2ab(str) {
+    var idx, len = str.length, arr = new Array(len);
+    for (idx = 0; idx < len; ++idx) {
+        arr[idx] = str.charCodeAt(idx) & 0xFF;
+    }
+    return new Uint8Array(arr);
+};
 
 module.exports = {
     saveData,

@@ -233,6 +233,48 @@ function addPhotoFile(playerId, filename) {
     });
 }
 
+function importPlayers(teamId, stepId, season, selectedSeason, playerIds) {
+    const query = function (db) {
+        var newPlayers = 0;
+        playerIds.forEach(id => {
+            const player = db.get('Player')
+                .cloneDeep()
+                .find({ Id: id, Season: selectedSeason })
+                .value();
+            
+            if (player) {
+                const last = db.get('Player')
+                    .cloneDeep()
+                    .last()
+                    .value();
+                const id = last && last.Id ? last.Id + 1 : 1;
+                
+                player.Id = id;
+                player.Season = season;
+                player.DocFilename = null;
+                player.PhotoFilename = null;
+                
+                db.get('Player')
+                    .push(player)
+                    .write();
+
+                newPlayers++;
+            }
+        });
+
+        return { rowsAffected: [newPlayers] };
+    };
+    return new Promise((resolve, reject) => {
+        try {
+            const result = storage.statementQuery(query);
+            resolve(result);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     addPlayer,
     existsPlayer,
@@ -240,6 +282,7 @@ module.exports = {
     getPlayers,
     updatePlayer,
     removePlayer,
+    importPlayers,
     addDocFile,
     addPhotoFile
 }

@@ -8,8 +8,8 @@ async function getTeamPlayers(req, res) {
         const { season, teamId, stepId } = req.params;
         if (season && teamId && stepId) {
             response = await playersMgr.getPlayers(
-                parseInt(season), 
-                parseInt(teamId), 
+                parseInt(season),
+                parseInt(teamId),
                 parseInt(stepId),
                 [1]);
         }
@@ -31,10 +31,10 @@ async function getStaff(req, res) {
         const { season, teamId, stepId } = req.params;
         if (season && teamId && stepId) {
             response = await playersMgr.getPlayers(
-                parseInt(season), 
-                parseInt(teamId), 
+                parseInt(season),
+                parseInt(teamId),
                 parseInt(stepId),
-                [2,3,4,5,6]);
+                [2, 3, 4, 5, 6]);
         }
         else {
             res.statusCode = 400;
@@ -77,11 +77,11 @@ async function addPlayer(req, res) {
         const { role, photo, doc } = req.body;
         if (teamId && stepId && season && name && gender && birth && docId) {
             const playerId = await playersMgr.addPlayer(
-                parseInt(teamId), 
-                parseInt(stepId), 
-                parseInt(season), 
-                req.body.person, 
-                parseInt(role), 
+                parseInt(teamId),
+                parseInt(stepId),
+                parseInt(season),
+                req.body.person,
+                parseInt(role),
                 req.body.caretaker,
                 req.body.comments,
                 photo,
@@ -119,11 +119,11 @@ async function updatePlayer(req, res) {
         if (id && teamId && stepId && season && name && gender && birth && docId) {
             await playersMgr.updatePlayer(
                 parseInt(teamId),
-                parseInt(stepId), 
+                parseInt(stepId),
                 parseInt(season),
-                parseInt(playerId), 
-                req.body.person, 
-                parseInt(roleId), 
+                parseInt(playerId),
+                req.body.person,
+                parseInt(roleId),
                 req.body.caretaker,
                 comments,
                 photo,
@@ -154,25 +154,46 @@ async function removePlayer(req, res) {
     const { season, teamId, stepId, playerId } = req.params;
     if (teamId && stepId && season && playerId) {
         await playersMgr.removePlayer(
-            parseInt(teamId), 
-            parseInt(stepId), 
-            parseInt(season), 
+            parseInt(teamId),
+            parseInt(stepId),
+            parseInt(season),
             parseInt(playerId)
         );
     }
-    else 
-    {
+    else {
         res.statusCode = 400;
     }
 
     res.send();
 }
-    
+
+async function importPlayers(req, res) {
+    const { season, teamId, stepId } = req.params;
+    const { selectedSeason, playerIds } = req.body;
+    if (teamId && stepId && season && selectedSeason && playerIds) {
+        if (playerIds.length > 0) {
+            await playersMgr.importPlayers(
+                parseInt(teamId),
+                parseInt(stepId),
+                parseInt(season),
+                parseInt(selectedSeason),
+                playerIds
+            );
+        }
+    }
+    else {
+        res.statusCode = 400;
+    }
+
+    res.send();
+}
+
 module.exports = {
     getTeamPlayers,
     getStaff,
     addPlayer,
     getPlayer,
     updatePlayer,
-    removePlayer
+    removePlayer,
+    importPlayers
 }

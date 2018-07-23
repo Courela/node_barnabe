@@ -78,7 +78,7 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
         }
     }
 
-    const resident = person.voterNr !== null ? 1 : 0;
+    const resident = person.voterNr && person.voterNr != '' ? 1 : 0;
     return playersRepo.addPlayer(teamId, stepId, season, resident, personEntity.Id, roleId, caretakerEntity ? caretakerEntity.Id : null, comments)
         .then(result => {
             //console.log('Add Player result:');
@@ -226,10 +226,24 @@ function deleteFile(filename) {
     }
 }
 
+function importPlayers(teamId, stepId, season, selectedSeason, playerIds) {
+    return playersRepo.importPlayers(teamId, stepId, season, selectedSeason, playerIds)
+        .then(result => {
+            if (result.rowsAffected && result.rowsAffected.length > 0) {
+                
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
 module.exports = {
     addPlayer,
     getPlayer,
     updatePlayer,
     getPlayers,
-    removePlayer
+    removePlayer,
+    importPlayers
 }
