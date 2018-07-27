@@ -4,6 +4,7 @@ const mysqlAdapter = require('../db/mysql');
 const storageAdapter = require('../db/storage');
 const oAuth2 = require('../authentication/oAuth2');
 const googleApi = require('../authentication/googleApi');
+const { settings } = require('../settings');
 
 function setup() {
     storageAdapter.init();
@@ -101,7 +102,7 @@ async function activateSeason(req, res) {
 }
 
 function setCors(req, res, next) {
-    res.append('Access-Control-Allow-Origin', ['*']);
+    res.append('Access-Control-Allow-Origin', [ settings.CORS_HOST ]);
     res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH');
     res.append('Access-Control-Allow-Headers', 'Content-Type');
     next();
