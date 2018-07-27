@@ -7,8 +7,7 @@ function getTeamSteps(season, teamId, invert = false) {
             .cloneDeep()
             .filter({ TeamId: teamId, Season: season })
             .value();
-        // console.log('Team steps for ' + season + ' [' + teamId + ']:');
-        // console.log(teamSteps);
+        console.log('Team steps for ' + season + ' [' + teamId + ']: ', teamSteps);
         if (!teamSteps) { teamSteps = [] };
         let result = [];
         if (!invert) {
@@ -51,7 +50,13 @@ function addStep(season, teamId, stepId) {
         const id = last && last.Id ? last.Id + 1 : 1;
 
         db.get('TeamStep')
-            .push({ Id: id, TeamId: teamId, StepId: stepId, Season: season })
+            .push({ 
+                Id: id, 
+                TeamId: teamId, 
+                StepId: stepId, 
+                Season: season,
+                CreatedAt: new Date()
+            })
             .write();
         return 1;
     };

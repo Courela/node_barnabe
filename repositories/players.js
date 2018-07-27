@@ -125,7 +125,8 @@ function addPlayer(teamId, stepId, season, resident, personId, roleId, caretaker
             CaretakerId: caretakerId,
             Comments: comments,
             PhotoFilename: null,
-            DocFilename: null
+            DocFilename: null,
+            CreatedAt: new Date()
         };
         db.get('Player')
             .push(player)
@@ -147,7 +148,7 @@ function updatePlayer(id, caretakerId, comments){
     const query = function (db) {
         const person = db.get('Player')
             .find({ Id: id })
-            .assign({ CaretakerId: caretakerId, Comments: comments })
+            .assign({ CaretakerId: caretakerId, Comments: comments, LastUpdatedAt: new Date() })
             .write();
         //console.log('Storage person: ', person);
         return { rowsAffected: [1] };
@@ -197,7 +198,7 @@ function addDocFile(playerId, filename) {
     const query = function (db) {
         const player = db.get('Player')
             .find({ Id: playerId })
-            .assign({ DocFilename: filename })
+            .assign({ DocFilename: filename, LastUpdatedAt: new Date() })
             .write();
         //console.log('Storage person: ', player);
         return { rowsAffected: [1] };
@@ -217,7 +218,7 @@ function addPhotoFile(playerId, filename) {
     const query = function (db) {
         const player = db.get('Player')
             .find({ Id: playerId })
-            .assign({ PhotoFilename: filename })
+            .assign({ PhotoFilename: filename, LastUpdatedAt: new Date() })
             .write();
         //console.log('Storage person: ', player);
         return { rowsAffected: [1] };
@@ -253,6 +254,7 @@ function importPlayers(teamId, stepId, season, selectedSeason, playerIds) {
                 player.Season = season;
                 player.DocFilename = null;
                 player.PhotoFilename = null;
+                player.CreatedAt = new Date()
                 
                 db.get('Player')
                     .push(player)

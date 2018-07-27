@@ -27,7 +27,13 @@ function addUser(username, password, teamId) {
         if (id < 11) { id = 11; }
 
         return users.get('User')
-            .push({ Id: id, Username: username, Password: password, TeamId: teamId })
+            .push({
+                Id: id, 
+                Username: username, 
+                Password: password, 
+                TeamId: teamId,
+                CreatedAt: new Date()
+            })
             .write();
     };
     return new Promise((resolve, reject) => {

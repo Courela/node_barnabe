@@ -49,7 +49,8 @@ function init() {
                 { Id: 8, Name: 'Grupo Desportivo Almargense', ShortDescription: 'Almargense' },
                 { Id: 9, Name: 'Clube Recreativo Almornense', ShortDescription: 'Almornos' },
                 { Id: 10, Name: 'Liga dos Amigos de Covas de Ferro', ShortDescription: 'Covas de Ferro' },
-                { Id: 11, Name: 'Grupo Recreativo e Desportivo de Camarões', ShortDescription: 'Camarões' }
+                { Id: 11, Name: 'Grupo Recreativo e Desportivo de Camarões', ShortDescription: 'Camarões' },
+                { Id: 99, Name: 'Test Team', ShortDescription: 'Test Team' }
             ],
             Season: [
                 { Year: 2017, IsActive: false },
@@ -126,10 +127,10 @@ function init() {
     if (!users.has('User').value()) {
         users.defaults({
             User: [
-                { Id: 1, Username: 'Admin', Password: 'Barnabe2018', TeamId: null },
-                { Id: 11, Username: 'Aruil', Password: 'Aruil', TeamId: 2 },
-                { Id: 12, Username: 'Negrais', Password: 'Srdn#1973', TeamId: 5 },
-                { Id: 13, Username: 'Saloios Dª Maria', Password: '141035', TeamId: 6 }
+                { Id: 1, Username: 'Admin', Password: 'Barnabe2018', TeamId: null, CreatedAt: new Date() },
+                { Id: 2, Username: 'TestUser', Password: 'TestPass', TeamId: 99, CreatedAt: new Date() },
+                { Id: 11, Username: 'Negrais', Password: 'Srdn#1973', TeamId: 5, CreatedAt: new Date("2018-07-27T16:15:00.000Z") },
+                { Id: 12, Username: 'Saloios Dª Maria', Password: '141035', TeamId: 6, CreatedAt: new Date("2018-07-27T16:15:00.000Z") }
             ]
         }).write();
     }

@@ -48,7 +48,9 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email) {
             IdCardExpireDate: null,
             VoterNr: voterNr, 
             Phone: phone, 
-            Email: email };
+            Email: email,
+            CreatedAt: new Date()
+        };
         db.get('Person')
             .push(person)
             .write();
@@ -72,7 +74,15 @@ function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email)
     const query = function (db) {
         const person = db.get('Person')
             .find({ Id: id })
-            .assign({ Name: name, Gender: gender, Birthdate: birthdate, VoterNr: voterNr, Phone: phone, Email: email })
+            .assign({ 
+                Name: name, 
+                Gender: gender,
+                Birthdate: birthdate, 
+                VoterNr: voterNr, 
+                Phone: phone, 
+                Email: email,
+                LastUpdatedAt: new Date()
+            })
             .write();
         //console.log('Storage person:'); console.log(person);
         return { rowsAffected: [1] };
