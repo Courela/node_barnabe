@@ -32,7 +32,8 @@ adminRouter.get('/ping', serverController.ping)
     .get('/save-documents', serverController.saveDocuments)
     .get('/restore-documents', serverController.restoreDocuments)
     .get('/drive', serverController.testDrive)
-    .put('/users', serverController.addUser);
+    .put('/users', serverController.addUser)
+    .post('/seasons/activate', serverController.activateSeason);
 
 const apiRouter = express.Router();
 apiRouter.use('/admin', adminRouter)
@@ -57,7 +58,8 @@ apiRouter.use('/admin', adminRouter)
     .post('/authenticate', authenticate)
     .post('/logout', logout)
     .put('/seasons/:season/teams/:teamId/steps', teamsController.addTeamStep)
-    .delete('/seasons/:season/teams/:teamId/steps/:stepId', teamsController.deleteTeamStep);
+    .delete('/seasons/:season/teams/:teamId/steps/:stepId', teamsController.deleteTeamStep)
+    .get('/seasons/:season', utilsController.getSeason);
 
 app.use(serverController.setCors)
     .use(bodyParser.json({limit: '3mb'}))

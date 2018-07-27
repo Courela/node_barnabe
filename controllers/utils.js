@@ -10,7 +10,16 @@ async function getSeasons (req, res) {
     res.send(result);
 }
 
+async function getSeason (req, res) {
+    const season = parseInt(req.params.season);
+    const seasons = await utilsMgr.getSeasons();
+    const result = seasons.find(s => s.Year == season);
+    console.log('Season: ', result);
+    res.send(result);
+}
+
 module.exports = {
     getRoles,
-    getSeasons
+    getSeasons,
+    getSeason
 }

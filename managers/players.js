@@ -1,10 +1,13 @@
+const atob = require('atob');
+const fs = require('fs');
+
 const playersRepo = require('../repositories/players');
 const personMgr = require('../managers/person');
 //const teamsMgr = require('../managers/teams');
-const atob = require('atob');
+const googleApi = require('../authentication/googleApi');
+
 const STORAGE_FOLDER = './data/storage/';
 const FILE_REGEX = /^data:(.+)\/(.+);base64,/;
-const fs = require('fs');
 
 function getPlayers(season, teamId, stepId, roles) {
     return playersRepo.getPlayers(season, teamId, stepId, roles)
@@ -167,7 +170,9 @@ function savePlayerDoc(doc, season, teamId, stepId, playerId) {
     var byteCharacters = atob(doc);
     //console.log('Binary len:', byteCharacters.length);
     const filename = [season, teamId, stepId, playerId, 'doc' + fileExtension].join('_');
-    saveBinaryFile(filename, byteCharacters);
+    
+    //saveBinaryFile(filename, byteCharacters);
+    googleApi.saveBinaryFile(byteCharacters, filename);
     return filename;
 }
 

@@ -1,4 +1,5 @@
 const usersMgr = require('../managers/users');
+const serverMgr = require('../managers/server');
 const mysqlAdapter = require('../db/mysql');
 const storageAdapter = require('../db/storage');
 const oAuth2 = require('../authentication/oAuth2');
@@ -29,7 +30,7 @@ function setAccessToken(req, res) {
     const code = req.body.authCode;
     console.log('Code: ' + code);
     if (code) {
-        oAuth2.setAccessToken(code, (result) => { 
+        oAuth2.setAccessToken(code, (result) => {
             res.json(result);
         });
     }
@@ -88,6 +89,17 @@ async function addUser(req, res) {
     res.send();
 }
 
+async function activateSeason(req, res) {
+    const { season } = req.body;
+    if (season) {
+        await serverMgr.activateSeason(parseInt(season));
+    }
+    else {
+        res.statusCode = 400;
+    }
+    res.send();
+}
+
 function setCors(req, res, next) {
     res.append('Access-Control-Allow-Origin', ['*']);
     res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH');
@@ -133,5 +145,6 @@ module.exports = {
     saveDocuments,
     restoreDocuments,
     testDrive,
-    addUser
+    addUser,
+    activateSeason
 }

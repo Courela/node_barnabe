@@ -74,7 +74,7 @@ function restoreDocuments(responseCallback) {
                             }, responseCallback);
                         }
                         else {*/
-                            getFileById(driveClient, fileId, (data) => {
+                            getFileById(driveClient, fileId, binary, (data) => {
                                 try {
                                     if (binary) {
                                         saveAsBinary(data, filename);
@@ -179,6 +179,44 @@ function saveFile(filePath, filename, responseCallback) {
     }
 }
 
+function saveBinaryFile(data, filename, responseCallback) {
+    const oAuth2Client = oAuth2.authorize();
+    if (oAuth2Client) {
+        console.log('Saving file ' + filename + ' to Drive...');
+        const driveClient = google.drive({ version: 'v3', auth: oAuth2Client });
+        getAppFolder(driveClient,
+            (folder) => {
+                var fileMetadata = {
+                    'name': filename,
+                    parents: [folder.id]
+                };
+                var media = {
+                    body: data
+                };
+                var mimeType = getMimeType(filename);
+                if (mimeType) { media.mimeType = mimeType }
+                driveClient.files.create({
+                    resource: fileMetadata,
+                    media: media,
+                    fields: 'id'
+                }, (err, res) => {
+                    if (err) {
+                        console.log(err);
+                        if (responseCallback) { responseCallback({ isSuccess: false }); }
+                        return;
+                    }
+                    console.log('File id: ', res.data.id);
+                    if (responseCallback) { responseCallback({ isSuccess: true }); }
+                    return;
+                });
+            },
+            responseCallback);
+    }
+    else {
+        if (responseCallback) { responseCallback({ isSuccess: false, error: 'Failed to save file ' + filename + '!' }); }
+    }
+}
+
 function getMimeType(filename) {
     let result = null;
     const fileType = filename.match(/.+\.(.+)$/);
@@ -226,7 +264,7 @@ function getFile(filename, mimeType, callback, responseCallback) {
 
                     if (res.data.files && res.data.files.length > 0) {
                         var fileId = res.data.files[0].id;
-                        getFileById(driveClient, fileId, callback, responseCallback);
+                        getFileById(driveClient, fileId, false, callback, responseCallback);
                         return;
                     }
                     else {
@@ -276,10 +314,14 @@ async function getBinaryFileById(driveClient, filename, fileId, callback, respon
         .pipe(dest);
 }
 
-function getFileById(driveClient, fileId, callback, responseCallback) {
+function getFileById(driveClient, fileId, isBinary, callback, responseCallback) {
     driveClient.files.get({
         fileId: fileId,
         alt: 'media'
+    }, isBinary ? { 
+        responseType: 'arraybuffer' //,encoding: null 
+    } : {
+        //empty
     }, (err, res) => {
         if (err) {
             console.log(err);
@@ -306,16 +348,56 @@ function getFileById(driveClient, fileId, callback, responseCallback) {
 }
 
 function saveAsBinary(doc, filename) {
-    //console.log('Base64 len: ', doc.length);
-    var byteCharacters = atob(doc);
+    saveLocalRawData(filename, doc);
+
     //console.log('Binary len:', byteCharacters.length);
-    saveBinaryFile(filename, byteCharacters);
+    //saveLocalBinaryFile('binary_' + filename, doc);
+    
+    //saveLocalEncodedFile('encoded_' + filename, doc);
+
+    //saveLocalBinaryFile(filename, doc)
+
+    //saveLocalBinaryEncodedFile('binary_encoded_' + filename, doc);
+
     return filename;
 }
 
-function saveBinaryFile(filename, data) {
-    console.log('Saving file ' + filename)
-    fs.writeFile(STORAGE_FOLDER + filename, str2ab(data), function (err) {
+function saveLocalBinaryEncodedFile(filename, data) {
+    var byteCharacters = str2ab(atob(data));
+    console.log('Saving file ' + filename + ' with encoded binary [length='+ byteCharacters.length +']...');
+    fs.writeFile(STORAGE_FOLDER + filename, byteCharacters, function (err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("The file was saved!");
+    });
+}
+
+function saveLocalBinaryFile(filename, data) {
+    var byteCharacters = atob(data);
+    console.log('Saving file ' + filename + ' with binary conversion [length='+ byteCharacters.length +']...');
+    fs.writeFile(STORAGE_FOLDER + filename, byteCharacters, function (err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("The file was saved!");
+    });
+}
+
+function saveLocalEncodedFile(filename, data) {
+    var byteCharacters = str2ab(data);
+    console.log('Saving file ' + filename + ' with encoded data [length='+ byteCharacters.length +']...');
+    fs.writeFile(STORAGE_FOLDER + filename, byteCharacters, function (err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("The file was saved!");
+    });
+}
+
+function saveLocalRawData(filename, data) {
+    console.log('Saving file ' + filename + ' with raw data [length='+ data.length +']...');
+    fs.writeFile(STORAGE_FOLDER + filename, data, function (err) {
         if (err) {
             return console.log(err);
         }
@@ -337,5 +419,6 @@ module.exports = {
     saveUsers,
     restoreUsers,
     saveDocuments,
-    restoreDocuments
+    restoreDocuments,
+    saveBinaryFile
 }

@@ -16,7 +16,7 @@ function init() {
                 console.log(err);
                 return;
             }
-            console.log('Storage folder created: ', STORAGE_FOLDER );
+            console.log('Storage folder created: ', STORAGE_FOLDER);
         })
     }
 
@@ -57,34 +57,64 @@ function init() {
             ],
             BirthStepLimit: [
                 {
-                    Season: 2018,
+                    Season: 2017,
                     StepId: 1,
                     MinDate: "2005-11-25T00:00:00.000Z",
                     MaxDate: "2009-11-24T00:00:00.000Z"
                 },
                 {
-                    Season: 2018,
+                    Season: 2017,
                     StepId: 2,
                     MinDate: "2000-11-25T00:00:00.000Z",
                     MaxDate: "2005-11-24T00:00:00.000Z"
                 },
                 {
-                    Season: 2018,
+                    Season: 2017,
                     StepId: 3,
                     MinDate: "1900-01-01T00:00:00.000Z",
                     MaxDate: "2000-11-24T00:00:00.000Z"
                 },
                 {
-                    Season: 2018,
+                    Season: 2017,
                     StepId: 4,
                     MinDate: "2009-11-25T00:00:00.000Z",
+                    MaxDate: "2013-12-31T00:00:00.000Z"
+                },
+                {
+                    Season: 2017,
+                    StepId: 5,
+                    MinDate: "1900-01-01T00:00:00.000Z",
+                    MaxDate: "2005-11-24T00:00:00.000Z"
+                },
+                {
+                    Season: 2018,
+                    StepId: 1,
+                    MinDate: "2005-11-22T00:00:00.000Z",
+                    MaxDate: "2009-11-21T00:00:00.000Z"
+                },
+                {
+                    Season: 2018,
+                    StepId: 2,
+                    MinDate: "2000-11-22T00:00:00.000Z",
+                    MaxDate: "2005-11-21T00:00:00.000Z"
+                },
+                {
+                    Season: 2018,
+                    StepId: 3,
+                    MinDate: "1900-01-01T00:00:00.000Z",
+                    MaxDate: "2000-11-21T00:00:00.000Z"
+                },
+                {
+                    Season: 2018,
+                    StepId: 4,
+                    MinDate: "2009-11-22T00:00:00.000Z",
                     MaxDate: "2013-12-31T00:00:00.000Z"
                 },
                 {
                     Season: 2018,
                     StepId: 5,
                     MinDate: "1900-01-01T00:00:00.000Z",
-                    MaxDate: "2005-11-24T00:00:00.000Z"
+                    MaxDate: "2005-11-21T00:00:00.000Z"
                 }
             ],
             Person: [],
@@ -96,7 +126,10 @@ function init() {
     if (!users.has('User').value()) {
         users.defaults({
             User: [
-                { Id: 1, Username: 'Admin', Password: 'Barnabe2018', TeamId: null }
+                { Id: 1, Username: 'Admin', Password: 'Barnabe2018', TeamId: null },
+                { Id: 11, Username: 'Aruil', Password: 'Aruil', TeamId: 2 },
+                { Id: 12, Username: 'Negrais', Password: 'Srdn#1973', TeamId: 5 },
+                { Id: 13, Username: 'Saloios Dª Maria', Password: '141035', TeamId: 6 }
             ]
         }).write();
     }
@@ -118,9 +151,9 @@ function getSingle(entity, value) {
     try {
         const result = db.get(entity)
             .cloneDeep()
-            .find({ Id: value})
+            .find({ Id: value })
             .value();
-        
+
         return result;
     } catch (err) {
         handleError(err);
