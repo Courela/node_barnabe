@@ -1,4 +1,5 @@
 const atob = require('atob');
+const btoa = require('btoa');
 const fs = require('fs');
 
 const playersRepo = require('../repositories/players');
@@ -29,14 +30,7 @@ function getPlayer(season, teamId, stepId, playerId) {
                 const player = results.recordset[0];
                 let photo = [];
                 if (player.PhotoFilename) {
-                    var photoPath = STORAGE_FOLDER + player.PhotoFilename;
-                    if (fs.existsSync(photoPath)) { 
-                        photo = fs.readFileSync(photoPath); 
-                    }
-                    else {
-                        console.warn('Missing file: ', player.PhotoFilename);
-                    }
-                    //console.log('Photo: ' + photo.length);
+                    photo = getPhoto(player.PhotoFilename);
                 }
                 if (player.DocFilename) {
                     var docPath = STORAGE_FOLDER + player.DocFilename;
@@ -55,6 +49,20 @@ function getPlayer(season, teamId, stepId, playerId) {
             console.error(err);
             throw 'Unexpected error!';
         });
+}
+
+function getPhoto(filename) {
+    let result = [];
+    var photoPath = STORAGE_FOLDER + filename;
+    if (fs.existsSync(photoPath)) { 
+        const mimeType = googleApi.getMimeType(filename);
+        result = "data:" + mimeType + ";base64," + btoa(fs.readFileSync(photoPath));
+    }
+    else {
+        console.warn('Missing file: ', filename);
+    }
+    //console.log('Photo: ' + photo.length);
+    return result;
 }
 
 async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comments, photo, doc) {
@@ -141,9 +149,7 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
         await playersRepo.updatePlayer(playerId, caretakerId, comments);
 
         if (photo) {
-            const fileExtension = getFileExtension(photo);
-            const filename = [season, teamId, stepId, playerId + fileExtension].join('_');
-            saveRawFile(filename, photo);
+            const filename = savePlayerPhoto(photo, season, teamId, stepId, playerId);
             playersRepo.addPhotoFile(playerId, filename);
         }
         if (doc) {
@@ -157,38 +163,36 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
     }
 }
 
+function savePlayerPhoto(photo, season, teamId, stepId, playerId) {
+    const fileExtension = getFileExtension(photo);
+    const filename = [season, teamId, stepId, playerId + fileExtension].join('_');
+    saveRawFile(filename, convertDataUrltoBinary(photo));
+    googleApi.saveFile(STORAGE_FOLDER, filename, null);
+    return filename;
+}
+
+function savePlayerDoc(doc, season, teamId, stepId, playerId) {
+    const fileExtension = getFileExtension(doc);
+    const filename = [season, teamId, stepId, playerId, 'doc' + fileExtension].join('_');
+    saveRawFile(filename, convertDataUrltoBinary(doc));
+    googleApi.saveFile(STORAGE_FOLDER, filename, null);
+    return filename;
+}
+
 function getFileExtension(doc) {
     const fileType = doc.match(FILE_REGEX);
     return fileType && fileType.length > 2 ? '.' + fileType[2] : '';
 }
 
-function savePlayerDoc(doc, season, teamId, stepId, playerId) {
-    //console.log('Base64 len: ', doc.length);
-    const fileExtension = getFileExtension(doc);
-    //console.log('File extension: ', fileExtension);
-    doc = doc.replace(FILE_REGEX, '');
-    var byteCharacters = atob(doc);
-    //console.log('Binary len:', byteCharacters.length);
-    const filename = [season, teamId, stepId, playerId, 'doc' + fileExtension].join('_');
-    
-    //saveBinaryFile(filename, byteCharacters);
-    googleApi.saveBinaryFile(byteCharacters, filename);
-    return filename;
+function convertDataUrltoBinary(data) {
+    data = data.replace(FILE_REGEX, '');
+    var byteCharacters = atob(data);
+    return str2ab(byteCharacters);
 }
 
 function saveRawFile(filename, data) {
     console.log('Saving file ' + filename)
     fs.writeFile(STORAGE_FOLDER + filename, data, function (err) {
-        if (err) {
-            return console.log(err);
-        }
-        console.log("The file was saved!");
-    });
-}
-
-function saveBinaryFile(filename, data) {
-    console.log('Saving file ' + filename)
-    fs.writeFile(STORAGE_FOLDER + filename, str2ab(data), function (err) {
         if (err) {
             return console.log(err);
         }
