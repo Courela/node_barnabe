@@ -21,6 +21,9 @@ async function getTeamPlayers(req, res) {
         errors.handleErrors(res);
         response = err;
     }
+    if (!response) {
+        res.statusCode = 404;
+    }
     res.send(response);
 }
 

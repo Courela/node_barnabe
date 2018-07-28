@@ -3,6 +3,7 @@ const btoa = require('btoa');
 const fs = require('fs');
 
 const playersRepo = require('../repositories/players');
+const teamsMgr = require('../managers/teams');
 const personMgr = require('../managers/person');
 //const teamsMgr = require('../managers/teams');
 const googleApi = require('../authentication/googleApi');
@@ -10,16 +11,23 @@ const googleApi = require('../authentication/googleApi');
 const STORAGE_FOLDER = './data/storage/';
 const FILE_REGEX = /^data:(.+)\/(.+);base64,/;
 
-function getPlayers(season, teamId, stepId, roles) {
-    return playersRepo.getPlayers(season, teamId, stepId, roles)
-        .then((results) => {
-            //console.log(results);
-            return results.recordset;
-        })
-        .catch((err) => {
-            console.error(err);
-            throw 'Unexpected error!';
-        });
+async function getPlayers(season, teamId, stepId, roles) {
+    const teamSteps = await teamsMgr.getTeamSteps(season, teamId, false);
+    const step = teamSteps.find(s => s.Id === stepId);
+    if (step) {
+        return playersRepo.getPlayers(season, teamId, stepId, roles)
+            .then((results) => {
+                //console.log(results);
+                return results.recordset;
+            })
+            .catch((err) => {
+                console.error(err);
+                throw 'Unexpected error!';
+            });
+    }
+    else {
+        return Promise.resolve(null);
+    }
 }
 
 function getPlayer(season, teamId, stepId, playerId) {
@@ -34,7 +42,7 @@ function getPlayer(season, teamId, stepId, playerId) {
                 }
                 if (player.DocFilename) {
                     var docPath = STORAGE_FOLDER + player.DocFilename;
-                    if (!fs.existsSync(docPath)) { 
+                    if (!fs.existsSync(docPath)) {
                         console.warn('Missing file: ', player.DocFilename);
                         player.DocFilename = null;
                     }
@@ -54,7 +62,7 @@ function getPlayer(season, teamId, stepId, playerId) {
 function getPhoto(filename) {
     let result = [];
     var photoPath = STORAGE_FOLDER + filename;
-    if (fs.existsSync(photoPath)) { 
+    if (fs.existsSync(photoPath)) {
         const mimeType = googleApi.getMimeType(filename);
         result = "data:" + mimeType + ";base64," + btoa(fs.readFileSync(photoPath));
     }
@@ -239,7 +247,7 @@ function importPlayers(teamId, stepId, season, selectedSeason, playerIds) {
     return playersRepo.importPlayers(teamId, stepId, season, selectedSeason, playerIds)
         .then(result => {
             if (result.rowsAffected && result.rowsAffected.length > 0) {
-                
+
             }
         })
         .catch(err => {

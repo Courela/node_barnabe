@@ -7,7 +7,7 @@ function getTeamSteps(season, teamId, invert = false) {
             .cloneDeep()
             .filter({ TeamId: teamId, Season: season })
             .value();
-        console.log('Team steps for ' + season + ' [' + teamId + ']: ', teamSteps);
+        //console.log('Team steps for ' + season + ' [' + teamId + ']: ', teamSteps);
         if (!teamSteps) { teamSteps = [] };
         let result = [];
         if (!invert) {
@@ -24,7 +24,7 @@ function getTeamSteps(season, teamId, invert = false) {
                 .value();
         }
         result.forEach(s => { s.StepId = s.Id; s.TeamId = teamId; s.Season = season });
-        console.log('Team Steps: ', result);
+        //console.log('Team Steps: ', result);
         return result;
     };
     return new Promise((resolve, reject) => {
