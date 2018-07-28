@@ -6,6 +6,19 @@ async function getTeams(req, res) {
     res.send(results);
 }
 
+async function getTeam(req, res) {
+    let result = null;
+    const { teamId } = req.params;
+    if (teamId) {
+        const teams = await teamsMgr.getTeams();
+        const team = teams.find(t => t.Id == parseInt(teamId));
+        console.log('Selected Team: ', team);
+        result = team;
+    }
+    else { res.statusCode = 400; }
+    res.send(result);
+}
+
 async function getStep(req, res) {
     console.log('GetStep request params: ', req.params);
     let result = '';
@@ -83,6 +96,7 @@ async function deleteTeamStep(req, res) {
 }
 
 module.exports = {
+    getTeam,
     getTeams,
     getStep,
     getSignSteps,

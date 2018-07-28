@@ -38,6 +38,7 @@ adminRouter.get('/ping', serverController.ping)
 const apiRouter = express.Router();
 apiRouter.use('/admin', adminRouter)
     .get('/teams', teamsController.getTeams)
+    .get('/teams/:teamId', teamsController.getTeam)
     .get('/steps/:stepId', teamsController.getStep)
     .get('/seasons/:season/steps/:stepId', teamsController.getStep)
     .get('/persons', getPerson)
