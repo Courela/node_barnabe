@@ -36,7 +36,8 @@ if (process.argv.length > 3) {
                     IdCardExpireDate: null,
                     VoterNr: p.VoterNr ? p.VoterNr : null,
                     Phone: p.Phone && !isCaretakerRequired(p.StepId) ? p.Phone.toString() : '',
-                    Email: p.Email && !isCaretakerRequired(p.StepId) ? p.Email : ''
+                    Email: p.Email && !isCaretakerRequired(p.StepId) ? p.Email : '',
+                    LocalBorn: false
                 };
                 result.Person.push(person);
                 personId = personId + 1;

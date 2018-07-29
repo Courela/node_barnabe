@@ -30,7 +30,7 @@ function getPersonByIdCardNr(idCardNr) {
     });
 }
 
-function addPerson(name, gender, birthdate, docId, voterNr, phone, email) {
+function addPerson(name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn) {
     //console.log('Person to insert: ' + name + gender + birthdate + docId + voterNr + phone + email);
     console.log('New Person: ', docId);
     const query = function (db) {
@@ -49,6 +49,7 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email) {
             VoterNr: voterNr, 
             Phone: phone, 
             Email: email,
+            LocalBorn: isLocalBorn,
             CreatedAt: new Date()
         };
         db.get('Person')
@@ -68,8 +69,7 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email) {
     });
 }
 
-function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email) {
-    //console.log('Person to update: ', id, name, gender, birthdate, docId, voterNr, phone, email);
+function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn) {
     console.log('Updating Person: ', docId);
     const query = function (db) {
         const person = db.get('Person')
@@ -81,6 +81,7 @@ function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email)
                 VoterNr: voterNr, 
                 Phone: phone, 
                 Email: email,
+                LocalBorn: isLocalBorn,
                 LastUpdatedAt: new Date()
             })
             .write();

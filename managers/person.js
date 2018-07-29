@@ -18,7 +18,7 @@ function getPersonByIdCardNr(docId){
         });
 }
 
-function addPerson (name, gender, birthdate, docId, voterNr, phone, email) {
+function addPerson (name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn) {
     return personRepo.addPerson(
             stringLimit(name, validations.NAME_MAX_LENGTH), 
             gender,
@@ -26,7 +26,9 @@ function addPerson (name, gender, birthdate, docId, voterNr, phone, email) {
             stringLimit(docId, validations.DOC_ID_MAX_LENGTH), 
             stringLimit(voterNr, validations.VOTER_NR_MAX_LENGTH),
             stringLimit(phone, validations.PHONE_MAX_LENGTH),
-            stringLimit(email, validations.EMAIL_MAX_LENGTH))
+            stringLimit(email, validations.EMAIL_MAX_LENGTH),
+            isLocalBorn
+        )
         .then((results) => {
             //console.log(results);
             return results.recordset && results.recordset.length > 0 ? 
@@ -40,7 +42,7 @@ function addPerson (name, gender, birthdate, docId, voterNr, phone, email) {
 }
 
 function updatePerson(person) {
-    const { id, name, gender, birth, docId, voterNr, phoneNr, email } = person;
+    const { id, name, gender, birth, docId, voterNr, phoneNr, email, isLocalBorn } = person;
     return personRepo.updatePerson(id,
             stringLimit(name, validations.NAME_MAX_LENGTH), 
             gender,
@@ -48,7 +50,9 @@ function updatePerson(person) {
             stringLimit(docId, validations.DOC_ID_MAX_LENGTH), 
             stringLimit(voterNr, validations.VOTER_NR_MAX_LENGTH),
             stringLimit(phoneNr, validations.PHONE_MAX_LENGTH),
-            stringLimit(email, validations.EMAIL_MAX_LENGTH))
+            stringLimit(email, validations.EMAIL_MAX_LENGTH),
+            isLocalBorn
+        )
         .then((results) => {
             //console.log(results);
             return results.recordset && results.recordset.length > 0 ? 

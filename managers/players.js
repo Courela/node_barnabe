@@ -85,8 +85,8 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
         }
         await personMgr.updatePerson(person);
     } else {
-        const { name, gender, birth, docId, voterNr, phoneNr, email } = person;
-        personEntity = await personMgr.addPerson(name, gender, birth, docId, voterNr, phoneNr, email);
+        const { name, gender, birth, docId, voterNr, phoneNr, email, isLocalBorn } = person;
+        personEntity = await personMgr.addPerson(name, gender, birth, docId, voterNr, phoneNr, email, isLocalBorn);
     }
 
     let caretakerEntity = null;
