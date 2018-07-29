@@ -37,7 +37,8 @@ if (process.argv.length > 3) {
                     VoterNr: p.VoterNr ? p.VoterNr : null,
                     Phone: p.Phone && !isCaretakerRequired(p.StepId) ? p.Phone.toString() : '',
                     Email: p.Email && !isCaretakerRequired(p.StepId) ? p.Email : '',
-                    LocalBorn: false
+                    LocalBorn: false,
+                    CreatedAt: new Date()
                 };
                 result.Person.push(person);
                 personId = personId + 1;
@@ -58,7 +59,8 @@ if (process.argv.length > 3) {
                     IdCardExpireDate: null,
                     VoterNr: p.CaretakerVoterNr,
                     Phone: p.Phone ? p.Phone.toString() : '',
-                    Email: p.Email ? p.Email : ''
+                    Email: p.Email ? p.Email : '',
+                    CreatedAt: new Date()
                 };
                 result.Person.push(caretaker);
                 personId = personId + 1;
@@ -81,7 +83,8 @@ if (process.argv.length > 3) {
                     CareTakerId: caretaker ? caretaker.Id : null,
                     Comments: p.Comments,
                     PhotoFilename: null,
-                    DocFilename: null
+                    DocFilename: null,
+                    CreatedAt: new Date()
                 };
                 result.Player.push(player);
                 playerId = playerId + 1;
@@ -105,7 +108,8 @@ if (process.argv.length > 3) {
                     Id: teamStepId,
                     TeamId: p.TeamId,
                     StepId: p.StepId,
-                    Season: season
+                    Season: season,
+                    CreatedAt: new Date()
                 };
                 result.TeamStep.push(teamStep);
 
