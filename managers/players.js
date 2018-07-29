@@ -100,9 +100,9 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
         }
     }
 
-    return playersRepo.addPlayer(teamId, stepId, season, isResident, personEntity.Id, roleId, 
-            caretakerEntity ? caretakerEntity.Id : null, 
-            stringLimit(comments, validations.COMMENTS_MAX_LENGTH))
+    return playersRepo.addPlayer(teamId, stepId, season, isResident, personEntity.Id, roleId,
+        caretakerEntity ? caretakerEntity.Id : null,
+        stringLimit(comments, validations.COMMENTS_MAX_LENGTH))
         .then(result => {
             //console.log('Add Player result:');
             //console.log(result);
@@ -134,29 +134,32 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
 
         let newCaretaker = null;
         await personMgr.updatePerson(person);
-        const caretakerPerson = await personMgr.getPersonByIdCardNr(caretaker.docId);
-        if (caretakerPerson) {
-            console.log('Updating caretaker: ', caretakerPerson.IdCardNr);
-            const merge = {
-                id: caretaker.id,
-                name: caretaker.name,
-                voterNr: caretaker.voterNr,
-                phoneNr: caretaker.phoneNr,
-                email: caretaker.email,
 
-                gender: caretakerPerson.Gender,
-                birth: caretakerPerson.Birthdate,
-                docId: caretakerPerson.IdCardNr
-            };
-            await personMgr.updatePerson(merge);
-        }
-        else {
-            console.log('New caretaker: ', caretaker.docId);
-            newCaretaker = await personMgr.addPerson(caretaker.name, null, null, caretaker.docId, caretaker.voterNr, caretaker.phoneNr, caretaker.email);
+        if (caretaker) {
+            const caretakerPerson = await personMgr.getPersonByIdCardNr(caretaker.docId);
+            if (caretakerPerson) {
+                console.log('Updating caretaker: ', caretakerPerson.IdCardNr);
+                const merge = {
+                    id: caretaker.id,
+                    name: caretaker.name,
+                    voterNr: caretaker.voterNr,
+                    phoneNr: caretaker.phoneNr,
+                    email: caretaker.email,
+
+                    gender: caretakerPerson.Gender,
+                    birth: caretakerPerson.Birthdate,
+                    docId: caretakerPerson.IdCardNr
+                };
+                await personMgr.updatePerson(merge);
+            }
+            else {
+                console.log('New caretaker: ', caretaker.docId);
+                newCaretaker = await personMgr.addPerson(caretaker.name, null, null, caretaker.docId, caretaker.voterNr, caretaker.phoneNr, caretaker.email);
+            }
         }
 
-        const caretakerId = newCaretaker ? newCaretaker.Id : caretaker.id;
-        await playersRepo.updatePlayer(playerId, caretakerId, 
+        const caretakerId = newCaretaker ? newCaretaker.Id : (caretaker ? caretaker.id : null);
+        await playersRepo.updatePlayer(playerId, caretakerId,
             stringLimit(comments, validations.COMMENTS_MAX_LENGTH), isResident);
 
         if (photo) {

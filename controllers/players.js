@@ -200,7 +200,7 @@ function isPersonValid(person) {
     let result = false;
     if (person) {
         const { name, gender, birth, docId, email, phoneNr } = person;
-        result = name && docId &&
+        result = (name ? true : false) && (docId ? true : false) &&
             isValidDate(birth) &&
             isValidGender(gender) &&
             isValidEmail(email) &&
