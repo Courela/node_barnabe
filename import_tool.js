@@ -1,5 +1,9 @@
 const fs = require('fs');
 
+function isCaretakerRequired(stepId) {
+    return [1,2,4].indexOf(stepId) >= 0;
+}
+
 if (process.argv.length > 3) {
     try {
         const result = {
@@ -31,8 +35,8 @@ if (process.argv.length > 3) {
                     IdCardNr: p.IdCardNr ? p.IdCardNr.toString() : '',
                     IdCardExpireDate: null,
                     VoterNr: p.VoterNr ? p.VoterNr : null,
-                    Phone: p.Phone ? p.Phone.toString() : '',
-                    Email: p.Email ? p.Email : ''
+                    Phone: p.Phone && !isCaretakerRequired(p.StepId) ? p.Phone.toString() : '',
+                    Email: p.Email && !isCaretakerRequired(p.StepId) ? p.Email : ''
                 };
                 result.Person.push(person);
                 personId = personId + 1;
@@ -43,7 +47,7 @@ if (process.argv.length > 3) {
             }
 
             let caretaker = null;
-            if (p.CaretakerVoterNr) {
+            if (isCaretakerRequired(p.StepId) && (p.CaretakerVoterNr || p.Email || p.Phone )) {
                 caretaker = {
                     Id: personId,
                     Name: '',
@@ -52,8 +56,8 @@ if (process.argv.length > 3) {
                     IdCardNr: '',
                     IdCardExpireDate: null,
                     VoterNr: p.CaretakerVoterNr,
-                    Phone: '',
-                    Email: ''
+                    Phone: p.Phone ? p.Phone.toString() : '',
+                    Email: p.Email ? p.Email : ''
                 };
                 result.Person.push(caretaker);
                 personId = personId + 1;

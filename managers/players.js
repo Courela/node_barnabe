@@ -75,7 +75,7 @@ function getPhoto(filename) {
     return result;
 }
 
-async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comments, photo, doc) {
+async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comments, isResident, photo, doc) {
     let personEntity = await personMgr.getPersonByIdCardNr(person.docId);
     //console.log('Person: ', personEntity);
     if (personEntity) {
@@ -100,8 +100,7 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
         }
     }
 
-    const resident = person.voterNr && person.voterNr != '' ? 1 : 0;
-    return playersRepo.addPlayer(teamId, stepId, season, resident, personEntity.Id, roleId, 
+    return playersRepo.addPlayer(teamId, stepId, season, isResident, personEntity.Id, roleId, 
             caretakerEntity ? caretakerEntity.Id : null, 
             stringLimit(comments, validations.COMMENTS_MAX_LENGTH))
         .then(result => {
@@ -130,7 +129,7 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
         });
 }
 
-async function updatePlayer(teamId, stepId, season, playerId, person, roleId, caretaker, comments, photo, doc) {
+async function updatePlayer(teamId, stepId, season, playerId, person, roleId, caretaker, comments, isResident, photo, doc) {
     try {
         //console.log('Person: ', person);
         //console.log('Caretaker: ', caretaker);
@@ -160,7 +159,7 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
 
         const caretakerId = newCaretaker ? newCaretaker.Id : caretaker.id;
         await playersRepo.updatePlayer(playerId, caretakerId, 
-            stringLimit(comments, validations.COMMENTS_MAX_LENGTH));
+            stringLimit(comments, validations.COMMENTS_MAX_LENGTH), isResident);
 
         if (photo) {
             const filename = savePlayerPhoto(photo, season, teamId, stepId, playerId);
@@ -172,7 +171,7 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
         }
     }
     catch (err) {
-        console.log(err);
+        console.error(err);
         throw 'Error';
     }
 }
@@ -208,7 +207,7 @@ function saveRawFile(filename, data) {
     console.log('Saving file ' + filename)
     fs.writeFile(STORAGE_FOLDER + filename, data, function (err) {
         if (err) {
-            return console.log(err);
+            return console.error(err);
         }
         console.log("The file was saved!");
     });
@@ -242,7 +241,7 @@ function deleteFile(filename) {
     if (fs.existsSync(filePath)) {
         fs.unlink(filePath, (err) => {
             if (err) {
-                return console.log(err);
+                return console.error(err);
             }
             console.log("The file was deleted!");
         });

@@ -54,7 +54,7 @@ async function getStaff(req, res) {
 }
 
 async function getPlayer(req, res) {
-    console.log('GetPlayer: ', req.params);
+    //console.log('GetPlayer: ', req.params);
     let response = '';
     try {
         const { teamId, stepId, season, playerId } = req.params;
@@ -77,10 +77,8 @@ async function getPlayer(req, res) {
 async function addPlayer(req, res) {
     let response = '';
     try {
-        console.log('AddPlayer params: ', req.params);
-        console.log('AddPlayer: ', req.body);
         const { teamId, stepId, season } = req.params;
-        const { person, caretaker, role, photo, doc, comments } = req.body;
+        const { person, caretaker, role, photo, doc, comments, isResident } = req.body;
 
         if (season && teamId && stepId && role && isPersonValid(person) && isCaretakerValid(caretaker)) {
             const playerId = await playersMgr.addPlayer(
@@ -91,6 +89,7 @@ async function addPlayer(req, res) {
                 parseInt(role),
                 caretaker,
                 comments,
+                isResident,
                 photo,
                 doc
             );
@@ -119,12 +118,9 @@ async function addPlayer(req, res) {
 async function updatePlayer(req, res) {
     let response = '';
     try {
-        //console.log('updatePlayer params: ', req.params);
-        //console.log('updatePlayer: ', req.body.player);
-
         const { teamId, stepId, season, playerId } = req.params;
         const { person, caretaker } = req.body;
-        const { roleId, comments, doc, photo } = req.body.player;
+        const { roleId, comments, doc, photo, isResident } = req.body.player;
 
         if (person.id && teamId && stepId && season && isPersonValid(person) && isCaretakerValid(caretaker)) {
             await playersMgr.updatePlayer(
@@ -136,6 +132,7 @@ async function updatePlayer(req, res) {
                 parseInt(roleId),
                 caretaker,
                 comments,
+                isResident,
                 photo,
                 doc
             );

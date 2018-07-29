@@ -118,9 +118,9 @@ function init() {
                     MaxDate: "2005-11-21T00:00:00.000Z"
                 }
             ],
+            TeamStep: [],
             Person: [],
-            Player: [],
-            TeamStep: []
+            Player: []
         }).write();
     }
 

@@ -12,7 +12,7 @@ async function getTeam(req, res) {
     if (teamId) {
         const teams = await teamsMgr.getTeams();
         const team = teams.find(t => t.Id == parseInt(teamId));
-        console.log('Selected Team: ', team);
+        //console.log('Selected Team: ', team);
         result = team;
     }
     else { res.statusCode = 400; }
@@ -20,7 +20,7 @@ async function getTeam(req, res) {
 }
 
 async function getStep(req, res) {
-    console.log('GetStep request params: ', req.params);
+    //console.log('GetStep request params: ', req.params);
     let result = '';
     const stepId = req.params.stepId;
     const season = req.params.season ? req.params.season : null;
@@ -70,7 +70,7 @@ async function addTeamStep(req, res) {
     if (season && teamId && stepId) {
         const affectedRows = await teamsMgr.addStep(parseInt(season), parseInt(teamId), parseInt(stepId))
             .catch(() => -1);
-        console.log('AddTeamStep rows affected: ' + affectedRows);
+        //console.log('AddTeamStep rows affected: ' + affectedRows);
         res.statusCode = affectedRows > 0 ? 201 : affectedRows < 0 ? 500 : 409;
     }
     else {
@@ -86,7 +86,7 @@ async function deleteTeamStep(req, res) {
     if (season && teamId && stepId) {
         const affectedRows = await teamsMgr.deleteStep(parseInt(season), parseInt(teamId), parseInt(stepId))
             .catch(() => -1);
-        console.log('DeleteTeamStep rows affected: ' + affectedRows);
+        //console.log('DeleteTeamStep rows affected: ' + affectedRows);
         res.statusCode = affectedRows >= 0 ? 200 : 500;
     }
     else {
