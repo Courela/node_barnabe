@@ -7,6 +7,8 @@ const teamsMgr = require('../managers/teams');
 const personMgr = require('../managers/person');
 //const teamsMgr = require('../managers/teams');
 const googleApi = require('../authentication/googleApi');
+const validations = require('../utils/validations');
+const { stringLimit } = validations;
 
 const STORAGE_FOLDER = './data/storage/';
 const FILE_REGEX = /^data:(.+)\/(.+);base64,/;
@@ -83,7 +85,8 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
         }
         await personMgr.updatePerson(person);
     } else {
-        personEntity = await personMgr.addPerson(person.name, person.gender, person.birth, person.docId, person.voterNr, person.phoneNr, person.email);
+        const { name, gender, birth, docId, voterNr, phoneNr, email } = person;
+        personEntity = await personMgr.addPerson(name, gender, birth, docId, voterNr, phoneNr, email);
     }
 
     let caretakerEntity = null;
@@ -98,7 +101,9 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
     }
 
     const resident = person.voterNr && person.voterNr != '' ? 1 : 0;
-    return playersRepo.addPlayer(teamId, stepId, season, resident, personEntity.Id, roleId, caretakerEntity ? caretakerEntity.Id : null, comments)
+    return playersRepo.addPlayer(teamId, stepId, season, resident, personEntity.Id, roleId, 
+            caretakerEntity ? caretakerEntity.Id : null, 
+            stringLimit(comments, validations.COMMENTS_MAX_LENGTH))
         .then(result => {
             //console.log('Add Player result:');
             //console.log(result);
@@ -154,7 +159,8 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
         }
 
         const caretakerId = newCaretaker ? newCaretaker.Id : caretaker.id;
-        await playersRepo.updatePlayer(playerId, caretakerId, comments);
+        await playersRepo.updatePlayer(playerId, caretakerId, 
+            stringLimit(comments, validations.COMMENTS_MAX_LENGTH));
 
         if (photo) {
             const filename = savePlayerPhoto(photo, season, teamId, stepId, playerId);

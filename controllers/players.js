@@ -1,5 +1,6 @@
 const errors = require('../errors');
 const playersMgr = require('../managers/players');
+const { isValidGender, isValidEmail, isValidPhone, isValidDate } = require('../utils/validations');
 
 async function getTeamPlayers(req, res) {
     let response = '';
@@ -18,6 +19,7 @@ async function getTeamPlayers(req, res) {
         }
     }
     catch (err) {
+        console.error(err);
         errors.handleErrors(res);
         response = err;
     }
@@ -44,6 +46,7 @@ async function getStaff(req, res) {
         }
     }
     catch (err) {
+        console.error(err);
         errors.handleErrors(res);
         response = err;
     }
@@ -64,6 +67,7 @@ async function getPlayer(req, res) {
         }
     }
     catch (err) {
+        console.error(err);
         errors.handleErrors(res);
         response = err;
     }
@@ -73,20 +77,20 @@ async function getPlayer(req, res) {
 async function addPlayer(req, res) {
     let response = '';
     try {
-        //console.log('AddPlayer params: ', req.params);
-        //console.log('AddPlayer: ', req.body);
+        console.log('AddPlayer params: ', req.params);
+        console.log('AddPlayer: ', req.body);
         const { teamId, stepId, season } = req.params;
-        const { name, gender, birth, docId } = req.body.person;
-        const { role, photo, doc } = req.body;
-        if (teamId && stepId && season && name && gender && birth && docId) {
+        const { person, caretaker, role, photo, doc, comments } = req.body;
+
+        if (season && teamId && stepId && role && isPersonValid(person) && isCaretakerValid(caretaker)) {
             const playerId = await playersMgr.addPlayer(
                 parseInt(teamId),
                 parseInt(stepId),
                 parseInt(season),
-                req.body.person,
+                person,
                 parseInt(role),
-                req.body.caretaker,
-                req.body.comments,
+                caretaker,
+                comments,
                 photo,
                 doc
             );
@@ -105,6 +109,7 @@ async function addPlayer(req, res) {
         }
     }
     catch (err) {
+        console.error(err);
         errors.handleErrors(res);
         response = err;
     }
@@ -116,18 +121,20 @@ async function updatePlayer(req, res) {
     try {
         //console.log('updatePlayer params: ', req.params);
         //console.log('updatePlayer: ', req.body.player);
+
         const { teamId, stepId, season, playerId } = req.params;
+        const { person, caretaker } = req.body;
         const { roleId, comments, doc, photo } = req.body.player;
-        const { id, name, gender, birth, docId } = req.body.person;
-        if (id && teamId && stepId && season && name && gender && birth && docId) {
+
+        if (person.id && teamId && stepId && season && isPersonValid(person) && isCaretakerValid(caretaker)) {
             await playersMgr.updatePlayer(
                 parseInt(teamId),
                 parseInt(stepId),
                 parseInt(season),
                 parseInt(playerId),
-                req.body.person,
+                person,
                 parseInt(roleId),
-                req.body.caretaker,
+                caretaker,
                 comments,
                 photo,
                 doc
@@ -147,6 +154,7 @@ async function updatePlayer(req, res) {
         }
     }
     catch (err) {
+        console.error(err);
         errors.handleErrors(res);
         response = err;
     }
@@ -189,6 +197,31 @@ async function importPlayers(req, res) {
     }
 
     res.send();
+}
+
+function isPersonValid(person) {
+    let result = false;
+    if (person) {
+        const { name, gender, birth, docId, email, phoneNr } = person;
+        result = name && docId &&
+            isValidDate(birth) &&
+            isValidGender(gender) &&
+            isValidEmail(email) &&
+            isValidPhone(phoneNr);
+    }
+    return result;
+}
+
+function isCaretakerValid(caretaker) {
+    let result = false;
+    if (caretaker) {
+        const { name, docId, email, phoneNr } = caretaker;
+        result = name && docId &&
+            isValidEmail(email) &&
+            isValidPhone(phoneNr);
+    }
+    else { result = true; }
+    return result;
 }
 
 module.exports = {
