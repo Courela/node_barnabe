@@ -53,8 +53,8 @@ function init() {
                 { Id: 99, Name: 'Test Team', ShortDescription: 'Test Team' }
             ],
             Season: [
-                { Year: 2017, IsActive: false },
-                { Year: 2018, IsActive: true }
+                { Year: 2017, IsActive: false, SignUpDueDate: "2017-08-01T00:00:00.000Z" },
+                { Year: 2018, IsActive: true, SignUpDueDate: "2018-09-04T00:00:00.000Z" }
             ],
             BirthStepLimit: [
                 {
