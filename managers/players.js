@@ -109,9 +109,7 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
             if (result.recordset && result.recordset.length > 0) {
                 const playerId = result.recordset[0].Id;
                 if (photo) {
-                    const fileExtension = getFileExtension(photo);
-                    const filename = [season, teamId, stepId, playerId + fileExtension].join('_');
-                    saveRawFile(filename, photo);
+                    const filename = savePlayerPhoto(photo, season, teamId, stepId, playerId);
                     playersRepo.addPhotoFile(playerId, filename);
                 }
                 if (doc) {

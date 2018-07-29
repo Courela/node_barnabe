@@ -49,7 +49,7 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email, isLoca
             VoterNr: voterNr, 
             Phone: phone, 
             Email: email,
-            LocalBorn: isLocalBorn,
+            LocalBorn: isLocalBorn ? isLocalBorn : false,
             CreatedAt: new Date()
         };
         db.get('Person')
@@ -81,7 +81,7 @@ function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email,
                 VoterNr: voterNr, 
                 Phone: phone, 
                 Email: email,
-                LocalBorn: isLocalBorn,
+                LocalBorn: isLocalBorn ? isLocalBorn : false,
                 LastUpdatedAt: new Date()
             })
             .write();
