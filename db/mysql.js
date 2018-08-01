@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 
-function ping() {
+function ping(responseCallback) {
     var con = mysql.createConnection({
         host: "sabaik6fx8he7pua.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
         user: process.env.MYSQL_USERNAME,
@@ -13,6 +13,10 @@ function ping() {
         }
         else {
             console.log("Connected!");
+        }
+
+        if (responseCallback) {
+            responseCallback(err || "Connected!");
         }
     });
 }
