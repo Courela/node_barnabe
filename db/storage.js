@@ -127,11 +127,7 @@ function init() {
     if (!users.has('User').value()) {
         users.defaults({
             User: [
-                { Id: 1, Username: 'Admin', Password: 'Barnabe2018', TeamId: null, CreatedAt: new Date() },
-                { Id: 2, Username: 'TestUser', Password: 'TestPass', TeamId: 99, CreatedAt: new Date() },
-                { Id: 11, Username: 'Negrais', Password: 'Srdn#1973', TeamId: 5, CreatedAt: new Date("2018-07-27T16:15:00.000Z") },
-                { Id: 12, Username: 'Saloios Dª Maria', Password: '141035', TeamId: 6, CreatedAt: new Date("2018-07-27T16:15:00.000Z") },
-                { Id: 13, Username: 'Pedro Coelho', Password: 'sabuguense', TeamId: 1, CreatedAt: new Date("2018-08-01T00:19:00.000Z") }
+                { Id: 1, Username: 'Admin', Password: 'Barnabe2018', TeamId: null, CreatedAt: new Date() }
             ]
         }).write();
     }

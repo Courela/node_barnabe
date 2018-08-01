@@ -2,9 +2,9 @@ const mysql = require('mysql');
 
 function ping() {
     var con = mysql.createConnection({
-        host: "mysqlbarnabe.cbaozwl3e3ub.eu-west-2.rds.amazonaws.com",
-        user: "barnabe",
-        password: "barnabe2018"
+        host: "sabaik6fx8he7pua.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
+        user: process.env.mysql_username,
+        password: process.env.mysql_password
     });
 
     con.connect(function (err) {
