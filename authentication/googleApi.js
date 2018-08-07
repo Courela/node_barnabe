@@ -216,6 +216,7 @@ function getFile(filename, mimeType, callback, responseCallback) {
             responseCallback);
     }
     else {
+        console.warn('Failed to get file from Drive, client not set correctly!');
         if (responseCallback) { responseCallback({ isSuccess: false, error: 'Failed to restore file ' + filename + '!' }); }
     }
 }
