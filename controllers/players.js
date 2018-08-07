@@ -1,7 +1,7 @@
-const server = require('./server');
 const errors = require('../errors');
 const playersMgr = require('../managers/players');
 const { isValidGender, isValidEmail, isValidPhone, isValidDate } = require('../utils/validations');
+const googleApi = require('../authentication/googleApi');
 
 async function getTeamPlayers(req, res) {
     let response = '';
@@ -207,7 +207,7 @@ async function importPlayers(req, res) {
 
     //TODO Remove when saving data handled properly
     googleApi.saveData((result) => res.json(result));
-    
+
     res.send();
 }
 
