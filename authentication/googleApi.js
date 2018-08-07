@@ -1,7 +1,8 @@
 const fs = require('fs');
 const { google } = require('googleapis');
 const atob = require('atob');
-const oAuth2 = require('./oAuth2');
+//const authClient = require('./oAuth2');
+const authClient = require('./jwt');
 const storage = require('../db/storage');
 
 const DRIVE_FOLDER = process.env.NODE_ENV == 'production' ? 'TacaBarnabe' : 'TacaBarnabeDev';
@@ -9,6 +10,7 @@ const DATA_FOLDER = './data/';
 const STORAGE_FOLDER = './data/storage/';
 const DB_FILE = 'db.json';
 const USERS_FILE = 'users.json';
+const DRIVE_API_VERSION = 'v3';
 
 function saveData(responseCallback) {
     saveFile(DATA_FOLDER, DB_FILE, responseCallback);
@@ -42,11 +44,11 @@ function saveDocuments(responseCallback) {
     }
 }
 
-function restoreDocuments(responseCallback) {
+async function restoreDocuments(responseCallback) {
     try {
-        const oAuth2Client = oAuth2.authorize();
-        if (oAuth2Client) {
-            const driveClient = google.drive({ version: 'v3', auth: oAuth2Client });
+        const client = await authClient.authorize();
+        if (client) {
+            const driveClient = google.drive({ version: DRIVE_API_VERSION, auth: client });
             getAppFolder(driveClient, (folder) => {
                 listFiles(folder, driveClient, (files) => {
                     for (let i = 0; i < files.length; i++) {
@@ -85,14 +87,21 @@ function restoreDocuments(responseCallback) {
 function getAppFolder(driveClient, callback, responseCallback) {
     driveClient.files.list({
         q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + DRIVE_FOLDER + "'",
+        //q: "mimeType = 'application/vnd.google-apps.folder'",
         fields: 'files(id, name)',
         spaces: 'drive'
     }, (err, res) => {
-        if (err || !res || res.data.files.length < 1) {
-            console.log(err);
+        if (err) {
+            console.error(`Error getting directory ${DRIVE_FOLDER}: `, err);
             if (responseCallback) { responseCallback({ isSuccess: false }); }
             return;
         }
+        else if (!res || res.data.files.length < 1) {
+            console.warn(`Directory ${DRIVE_FOLDER} not found!`);
+            if (responseCallback) { responseCallback({ isSuccess: false }); }
+            return;
+        }
+
         console.log(res.data.files);
         if (callback) {
             callback(res.data.files[0], responseCallback);
@@ -118,11 +127,11 @@ function listFiles(folder, driveClient, callback, responseCallback) {
     return;
 }
 
-function saveFile(filePath, filename, responseCallback) {
-    const oAuth2Client = oAuth2.authorize();
-    if (oAuth2Client) {
+async function saveFile(filePath, filename, responseCallback) {
+    const client = await authClient.authorize();
+    if (client) {
         console.log('Saving file ' + filename + ' to Drive...');
-        const driveClient = google.drive({ version: 'v3', auth: oAuth2Client });
+        const driveClient = google.drive({ version: DRIVE_API_VERSION, auth: client });
         getAppFolder(driveClient,
             (folder) => {
                 var fileMetadata = {
@@ -180,11 +189,11 @@ function getMimeType(filename) {
     return result;
 }
 
-function getFile(filename, mimeType, callback, responseCallback) {
-    const oAuth2Client = oAuth2.authorize();
-    if (oAuth2Client) {
+async function getFile(filename, mimeType, callback, responseCallback) {
+    const client = await authClient.authorize();
+    if (client) {
         console.log('Getting file ' + filename + ' from Drive...');
-        var options = { version: 'v3', auth: oAuth2Client };
+        var options = { version: DRIVE_API_VERSION, auth: client };
         const driveClient = google.drive(options);
         getAppFolder(driveClient,
             (folder) => {

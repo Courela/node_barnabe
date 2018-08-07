@@ -130,32 +130,20 @@ function getOAuth2Client(credentials) {
     }
 }
 
-// function authorize(oAuth2Client = null) {
-//     try {
-//         // Check if we have previously stored a token.
-//         const token = fs.readFileSync(TOKEN_PATH);
-//         if (!oAuth2Client) {
-//             oAuth2Client = getOAuth2Client(getOAuth2Credentials());
-//         }
-//         oAuth2Client.setCredentials(JSON.parse(token));
-//         return oAuth2Client;
-//     }
-//     catch (err) {
-//         console.log(err);
-//         return null;
-//     }
-// }
-
-async function authorize() {
-    const keysEnvVar = process.env['CREDS'];
-    if (!keysEnvVar) {
-        throw new Error('The $CREDS environment variable was not found!');
+function authorize(oAuth2Client = null) {
+    try {
+        // Check if we have previously stored a token.
+        const token = fs.readFileSync(TOKEN_PATH);
+        if (!oAuth2Client) {
+            oAuth2Client = getOAuth2Client(getOAuth2Credentials());
+        }
+        oAuth2Client.setCredentials(JSON.parse(token));
+        return oAuth2Client;
     }
-    const keys = JSON.parse(keysEnvVar);
-    const client = google.auth.fromJSON(keys);
-    client.scopes = SCOPES;
-    await client.authorize();
-    return client;
+    catch (err) {
+        console.log(err);
+        return null;
+    }
 }
 
 module.exports = {
