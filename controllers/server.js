@@ -11,7 +11,11 @@ function setup() {
 }
 
 function ping(req, res) {
-    mysqlAdapter.ping((msg) => res.send({ status: msg }));
+    mysqlAdapter.ping()
+        .then(results => 
+        {
+            res.send({ status: results });
+        });
 }
 
 function setClientSecret(req, res) {

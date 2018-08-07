@@ -1,8 +1,39 @@
 const teamsRepo = require('../repositories/teams');
 
+function getTeamSteps(season, teamId, invert = false) {
+    return teamsRepo.getTeamSteps(season, teamId, invert)
+        .then((results) => {
+            //console.log(results);
+            return results.recordset;
+        })
+        .catch((err) => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
+function addStep(season, teamId, stepId) {
+    return teamsRepo.addStep(season, teamId, stepId)
+        .then(result => result.rowsAffected[0])
+        .catch((err) => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
+function deleteStep(season, teamId, stepId) {
+    return teamsRepo.deleteStep(season, teamId, stepId)
+        .then(result => result.rowsAffected[0])
+        .catch((err) => {
+            console.error(err);
+            const res = err.name == 'RequestError' ? 0 : -1;
+            return res;
+        });
+}
+
 function getTeams(season) {
-    let promise = season ? teamsRepo.getTeamsBySeason : teamsRepo.getTeams;
-    return promise(season)
+    let promise = season ? teamsRepo.getTeamsBySeason(season) : teamsRepo.getTeams();
+    return promise
         .then((results) => {
             //console.log(results);
             return results.recordset;
@@ -13,14 +44,14 @@ function getTeams(season) {
         });
 }
 
-function getTeamSteps(season, teamId, invert = false) {
-    return teamsRepo.getTeamSteps(season, teamId, invert)
+function getSteps() {
+    return teamsRepo.getSteps()
         .then((results) => {
             //console.log(results);
             return results.recordset;
         })
         .catch((err) => {
-            console.error(err);
+            console.log(err);
             throw 'Unexpected error!';
         });
 }
@@ -37,28 +68,9 @@ function getStep(stepId, season = null) {
         });
 }
 
-function addStep(season, teamId, stepId) {
-    return teamsRepo.addStep(season, teamId, stepId)
-        .then(result => result.rowsAffected[0])
-        .catch((err) => {
-            console.error(err);
-            const res = err.name == 'RequestError' ? 0 : -1;
-            return res;
-        });
-}
-
-function deleteStep(season, teamId, stepId) {
-    return teamsRepo.deleteStep(season, teamId, stepId)
-        .then(result => result.rowsAffected[0])
-        .catch((err) => {
-            console.error(err);
-            const res = err.name == 'RequestError' ? 0 : -1;
-            return res;
-        });
-}
-
 module.exports = {
     getStep,
+    getSteps,
     addStep,
     getTeams,
     getTeamSteps,

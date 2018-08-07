@@ -1,0 +1,32 @@
+{
+  "User": [
+    {
+      "Id": 1,
+      "Username": "Admin",
+      "Password": "Barnabe2018",
+      "TeamId": null,
+      "CreatedAt": "2018-07-27T19:01:30.427Z"
+    },
+    {
+      "Id": 2,
+      "Username": "TestUser",
+      "Password": "TestPass",
+      "TeamId": 99,
+      "CreatedAt": "2018-07-27T19:01:30.427Z"
+    },
+    {
+      "Id": 11,
+      "Username": "Negrais",
+      "Password": "Srdn#1973",
+      "TeamId": 5,
+      "CreatedAt": "2018-07-27T16:15:00.000Z"
+    },
+    {
+      "Id": 12,
+      "Username": "Saloios Dª Maria",
+      "Password": "141035",
+      "TeamId": 6,
+      "CreatedAt": "2018-07-27T16:15:00.000Z"
+    }
+  ]
+}

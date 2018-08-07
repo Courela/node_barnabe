@@ -1,172 +1,70 @@
-const storage = require('../db/storage');
+const mysql = require('../db/mysql');
 
 function getTeamSteps(season, teamId, invert = false) {
-    const query = function (db) {
-        //console.log(db.get('TeamStep').value());
-        const teamSteps = db.get('TeamStep')
-            .cloneDeep()
-            .filter({ TeamId: teamId, Season: season })
-            .value();
-        //console.log('Team steps for ' + season + ' [' + teamId + ']: ', teamSteps);
-        if (!teamSteps) { teamSteps = [] };
-        let result = [];
-        if (!invert) {
-            result = db.get('Step')
-                .cloneDeep()
-                .intersectionWith(teamSteps, (obj1, obj2) => obj1.Id === obj2.StepId)
-                .value();
-        }
-        else {
-            //TODO Not working
-            result = db.get('Step')
-                .cloneDeep()
-                .differenceWith(teamSteps, (obj1, obj2) => false)
-                .value();
-        }
-        result.forEach(s => { s.StepId = s.Id; s.TeamId = teamId; s.Season = season });
-        //console.log('Team Steps: ', result);
-        return result;
-    };
-    return new Promise((resolve, reject) => {
-        try {
-            const result = storage.statementQuery(query);
-            resolve({ recordset: result, rowsAffected: [result.length] });
-        }
-        catch (err) {
-            reject(err);
-        }
-    });
+    return (!invert ? 
+        mysql.executeStatement('SELECT StepId, TeamId, Season ' +
+            ' FROM teamstep ' +
+            ' WHERE season = ? AND teamId = ? ;', [season, teamId]) :
+        mysql.executeStatement('SELECT s.Id, null AS TeamId, ? AS Season ' +
+            ' FROM step s' +
+                ' LEFT JOIN teamstep ts ON ts.StepId = s.Id AND ts.Season = ? AND ts.TeamId = ? ' +
+            ' WHERE ts.StepId IS NULL ;', [season, season, teamId]))
+            .then(results => { return { recordset: results, rowsAffected: [results.length] }});
 }
 
 function addStep(season, teamId, stepId) {
-    const query = function (db) {
-        const exists = db.get('TeamStep')
-            .cloneDeep()
-            .find({ TeamId: teamId, StepId: stepId, Season: season })
-            .value();
-        if (exists) { return 0; };
-
-        const last = db.get('TeamStep').cloneDeep().last().value();
-        const id = last && last.Id ? last.Id + 1 : 1;
-
-        db.get('TeamStep')
-            .push({ 
-                Id: id, 
-                TeamId: teamId, 
-                StepId: stepId, 
-                Season: season,
-                CreatedAt: new Date()
-            })
-            .write();
-        return 1;
-    };
-    return new Promise((resolve, reject) => {
-        try {
-            const result = storage.statementQuery(query);
-            resolve({ rowsAffected: [result] });
-        }
-        catch (err) {
-            reject(err);
-        }
-    });
+    return mysql.executeStatement('INSERT INTO teamstep (TeamId, StepId, Season) ' + 
+        'VALUES (?, ?, ?);', [teamId, stepId, season])
+        .then(res => { return { rowsAffected: [res.affectedRows] }; })
+        .catch((err) => {
+            if (err.code === 'ER_DUP_ENTRY') {
+                console.warn('Duplicated entry:', err);
+                return { rowsAffected: [0] };
+            }
+            else { throw err; }
+        });
 }
 
 function deleteStep(season, teamId, stepId) {
-    const query = function (db) {
-        db.get('TeamStep')
-            .remove({ TeamId: teamId, StepId: stepId, Season: season })
-            .write();
-        return 1;
-    };
-    return new Promise((resolve, reject) => {
-        try {
-            const result = storage.statementQuery(query);
-            resolve({ rowsAffected: [result] });
-        }
-        catch (err) {
-            reject(err);
-        }
-    });
+    return mysql.executeStatement('DELETE FROM teamstep ' +
+        ' WHERE teamId = ? AND stepId = ? AND season = ?',[teamId, stepId, season])
+        .then(res => { return { rowsAffected: [res.affectedRows] }; });
 }
 
 function getTeams() {
-    const query = function (db) {
-        return db.get('Team')
-            .cloneDeep()
-            .value();
-    };
-    return new Promise((resolve, reject) => {
-        try {
-            const result = storage.statementQuery(query);
-            resolve({ recordset: result, rowsAffected: result.length });
-        }
-        catch (err) {
-            reject(err);
-        }
-    });
+    return mysql.executeStatement('SELECT * FROM team')
+        .then(res => { return { recordset: res, rowsAffected: [res.length] }; });
+}
+
+function getSteps() {
+    return mysql.executeStatement('SELECT * FROM step')
+        .then(result => {
+            return { recordset: result, rowsAffected: [result.length] };
+        });
 }
 
 function getStep(stepId, season = null) {
-    const query = function (db) {
-        let step = db.get('Step')
-            .cloneDeep()
-            .find({ Id: stepId })
-            .value();
-        
-        if (season) {
-            const birthStepLimit = db.get('BirthStepLimit')
-                .cloneDeep()
-                .find({ Season: season, StepId: stepId })
-                .value();
-
-            if (birthStepLimit) {
-                step = Object.assign(step, birthStepLimit);
-            }
-        }
-        return step;
-    };
-    return new Promise((resolve, reject) => {
-        try {
-            const result = storage.statementQuery(query);
-            resolve({ recordset: [result], rowsAffected: [1] });
-        }
-        catch (err) {
-            reject(err);
-        }
-    });
+    return mysql.executeStatement('SELECT s.Id, s.Description, s.Gender, s.IsCaretakerRequired, ' +
+                ' b.Season, b.MinDate, b.MaxDate ' +
+            ' FROM step s ' + 
+                ' LEFT JOIN birthsteplimit b on b.StepId = s.Id AND b.season = COALESCE(?, b.season) ' +
+            ' WHERE s.Id = ? ;',
+            [season ? season : 'null', stepId])
+        .then(res => { return { recordset: res, rowsAffected: [res.length] }; });
 }
 
 function getTeamsBySeason(season) {
-    const query = function (db) {
-        const stepsBySeason = db.get('TeamStep')
-            .cloneDeep()
-            .filter({ Season: season })
-            .value();
-
-        if (!stepsBySeason) { stepsBySeason = [] };
-        let result = [];
-        result = db.get('Team')
-                .cloneDeep()
-                .intersectionWith(stepsBySeason, (obj1, obj2) => obj1.Id === obj2.TeamStepId)
-                .value();
-        result.forEach(t => { t.TeamId = t.Id; t.Season = season });
-        console.log('Teams by season: ', result);
-        return result;
-    };
-    return new Promise((resolve, reject) => {
-        try {
-            const result = storage.statementQuery(query);
-            resolve({ recordset: result, rowsAffected: result.length });
-        }
-        catch (err) {
-            reject(err);
-        }
-    });
+    return mysql.executeStatement(' SELECT t.Id, ts.Season ' + 
+            ' FROM team t ' +
+                ' INNER JOIN teamstep ts ON ts.TeamId = t.Id AND ts.Season = ? ' +
+            ' GROUP BY t.Id, ts.Season ', [season] )
+        .then(res => { return { recordset: res, rowsAffected: [res.length] }; });
 }
 
 module.exports = {
     addStep,
     getStep,
+    getSteps,
     getTeams,
     getTeamsBySeason,
     getTeamSteps,

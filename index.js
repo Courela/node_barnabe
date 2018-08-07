@@ -14,6 +14,10 @@ const utilsController = require('./controllers/utils');
 const authentication = require('./authentication/authentication');
 const personMgr = require('./managers/person');
 
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').load();
+}
+
 serverController.setup();
 
 const app = express();
@@ -38,6 +42,7 @@ adminRouter.get('/ping', serverController.ping)
 const apiRouter = express.Router();
 apiRouter.use('/admin', adminRouter)
     .get('/teams', teamsController.getTeams)
+    .get('/steps', teamsController.getSteps)
     .get('/teams/:teamId', teamsController.getTeam)
     .get('/steps/:stepId', teamsController.getStep)
     .get('/seasons/:season/steps/:stepId', teamsController.getStep)
@@ -63,7 +68,7 @@ apiRouter.use('/admin', adminRouter)
     .get('/seasons/:season', utilsController.getSeason);
 
 app.use(serverController.setCors)
-    .use(bodyParser.json({limit: '500kb'}))
+    .use(bodyParser.json({ limit: '500kb' }))
     //.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
     .use(session({
         cookieName: 'barnabe',
@@ -116,7 +121,7 @@ function logout(req, res) {
     res.send();
 }
 
-async function getPerson (req, res) {
+async function getPerson(req, res) {
     let result;
     const docId = req.query.docId;
     if (docId) {
