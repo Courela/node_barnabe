@@ -138,11 +138,15 @@ function init() {
 function restoreDb(data) {
     db.setState(data)
         .write();
+
+    return false;
 }
 
 function restoreUsers(data) {
     users.setState(data)
         .write();
+
+    return false;
 }
 
 function getSingle(entity, value) {

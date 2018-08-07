@@ -76,6 +76,10 @@ async function addTeamStep(req, res) {
     else {
         res.statusCode = 400;
     }
+
+    //TODO Remove when saving data handled properly
+    googleApi.saveData();
+
     res.send();
 }
 
@@ -92,6 +96,10 @@ async function deleteTeamStep(req, res) {
     else {
         res.statusCode = 400;
     }
+
+    //TODO Remove when saving data handled properly
+    googleApi.saveData((result) => res.json(result));
+    
     res.send();
 }
 
