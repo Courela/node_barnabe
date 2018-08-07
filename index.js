@@ -1,8 +1,6 @@
 // index.js
 const express = require('express');
 const bodyParser = require('body-parser');
-const utf8 = require('utf8');
-const base64 = require('base-64');
 const session = require('client-sessions');
 
 const serverController = require('./controllers/server');
@@ -13,11 +11,20 @@ const utilsController = require('./controllers/utils');
 
 const authentication = require('./authentication/authentication');
 const personMgr = require('./managers/person');
+const googleApi = require('./authentication/googleApi');
 
 serverController.setup();
 
 const app = express();
 const port = process.env.PORT || 8000;
+
+process.on('SIGINT', function() {
+    googleApi.saveData(() => process.exit(0));
+});
+
+process.on('SIGTERM', function () {
+    process.exit(0);googleApi.saveData(() => process.exit(0));
+});
 
 const adminRouter = express.Router();
 adminRouter.get('/ping', serverController.ping)
