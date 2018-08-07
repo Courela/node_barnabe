@@ -274,7 +274,7 @@ function getFileById(driveClient, fileId, isBinary, callback, responseCallback) 
                     // Object.assign(obj, res);
                     // delete obj.data;
                     // console.log('Response: ', obj);
-                    if (callback) { callback(res.data, responseCallback); return; }
+                    if (callback && callback(res.data, responseCallback)) { return; }
                     if (responseCallback) { responseCallback({ isSuccess: true }); }
                     return;
                 }
