@@ -148,7 +148,6 @@ function restoreDb(data) {
 function restoreUsers(data) {
     users.setState(data)
         .write();
-    
     return false;
 }
 

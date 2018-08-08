@@ -1,4 +1,5 @@
 const teamsMgr = require('../managers/teams');
+const googleApi = require('../authentication/googleApi');
 
 async function getTeams(req, res) {
     const season = req.query.season;
@@ -76,6 +77,10 @@ async function addTeamStep(req, res) {
     else {
         res.statusCode = 400;
     }
+
+    //TODO Remove when saving data handled properly
+    googleApi.saveData();
+
     res.send();
 }
 
@@ -92,6 +97,10 @@ async function deleteTeamStep(req, res) {
     else {
         res.statusCode = 400;
     }
+
+    //TODO Remove when saving data handled properly
+    googleApi.saveData((result) => res.json(result));
+
     res.send();
 }
 

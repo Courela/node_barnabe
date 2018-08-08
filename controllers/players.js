@@ -1,6 +1,7 @@
 const errors = require('../errors');
 const playersMgr = require('../managers/players');
 const { isValidGender, isValidEmail, isValidPhone, isValidDate } = require('../utils/validations');
+const googleApi = require('../authentication/googleApi');
 
 async function getTeamPlayers(req, res) {
     let response = '';
@@ -112,6 +113,10 @@ async function addPlayer(req, res) {
         errors.handleErrors(res);
         response = err;
     }
+
+    //TODO Remove when saving data handled properly
+    googleApi.saveData();
+
     res.send(response);
 }
 
@@ -155,6 +160,10 @@ async function updatePlayer(req, res) {
         errors.handleErrors(res);
         response = err;
     }
+    
+    //TODO Remove when saving data handled properly
+    googleApi.saveData();
+
     res.send(response);
 }
 
@@ -171,6 +180,9 @@ async function removePlayer(req, res) {
     else {
         res.statusCode = 400;
     }
+
+    //TODO Remove when saving data handled properly
+    googleApi.saveData((result) => res.json(result));
 
     res.send();
 }
@@ -192,6 +204,9 @@ async function importPlayers(req, res) {
     else {
         res.statusCode = 400;
     }
+
+    //TODO Remove when saving data handled properly
+    googleApi.saveData((result) => res.json(result));
 
     res.send();
 }
