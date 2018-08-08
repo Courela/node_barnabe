@@ -19,7 +19,7 @@ async function authorize() {
         keysEnvVar = fs.readFileSync(DATA_FOLDER + 'tacabarnabe-1533670876618-cc2fe43f4084.json');
     }
     const keys = JSON.parse(keysEnvVar);
-    console.log(keys);
+    //console.log(keys);
     const jwt = new google.auth.JWT(
         keys.client_email,
         null,
@@ -28,9 +28,9 @@ async function authorize() {
     );
     try {
         const res = await jwt.authorize();
-        console.log('JWT res: ', res);
-        const driveClient = google.drive({ version: 'v3', auth: jwt });
-        list(driveClient);
+        //console.log('JWT res: ', res);
+        // const driveClient = google.drive({ version: 'v3', auth: jwt });
+        // list(driveClient);
     }
     catch(err) {
         console.error(err);
@@ -39,22 +39,22 @@ async function authorize() {
     return jwt;
 }
 
-function list(driveClient) {
-    driveClient.files.list({
-        spaces: 'drive'
-    }, (err, res) => {
-        if (err) {
-            console.error(`Error listing: `, err);
-            return;
-        }
-        else if (!res || res.data.files.length < 1) {
-            console.warn(`Nothing found: `, res);
-            return;
-        }
+// function list(driveClient) {
+//     driveClient.files.list({
+//         spaces: 'drive'
+//     }, (err, res) => {
+//         if (err) {
+//             console.error(`Error listing: `, err);
+//             return;
+//         }
+//         else if (!res || res.data.files.length < 1) {
+//             console.warn(`Nothing found: `, res);
+//             return;
+//         }
 
-        console.log(res.data.files);
-    });
-}
+//         console.log(res.data.files);
+//     });
+// }
 
 module.exports = {
     authorize
