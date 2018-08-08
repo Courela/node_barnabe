@@ -8,7 +8,7 @@ const db = low(dbAdapter);
 const usersAdapter = new FileSync('./data/users.json');
 const users = low(usersAdapter);
 
-function init() {
+function createFolders() {
     var fs = require('fs');
     if (!fs.existsSync(STORAGE_FOLDER)) {
         fs.mkdir(STORAGE_FOLDER, (err) => {
@@ -19,7 +19,9 @@ function init() {
             console.log('Storage folder created: ', STORAGE_FOLDER);
         })
     }
+}
 
+function initData() {
     if (!db.has('Season').value()) {
         // Set some defaults (required if your JSON file is empty)
         db.defaults({
@@ -123,7 +125,9 @@ function init() {
             Player: []
         }).write();
     }
+}
 
+function initUsers() {
     if (!users.has('User').value()) {
         users.defaults({
             User: [
@@ -132,7 +136,7 @@ function init() {
         }).write();
     }
 
-    return db.getState();
+    //return db.getState();
 }
 
 function restoreDb(data) {
@@ -187,7 +191,9 @@ function usersStatementQuery(query) {
 }
 
 module.exports = {
-    init,
+    createFolders,
+    initData,
+    initUsers,
     getSingle,
     getMultiple,
     statementQuery,

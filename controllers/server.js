@@ -7,7 +7,10 @@ const googleApi = require('../authentication/googleApi');
 const { settings } = require('../settings');
 
 function setup() {
-    storageAdapter.init();
+    googleApi.restoreUsers();
+    googleApi.restoreData();
+    storageAdapter.initUsers();
+    storageAdapter.initData();
 }
 
 function ping(req, res) {
