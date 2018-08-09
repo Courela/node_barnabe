@@ -1,4 +1,5 @@
 const teamsMgr = require('../managers/teams');
+const googleApi = require('../authentication/googleApi');
 
 async function getTeamSteps(req, res) {
     let response = '';
@@ -29,7 +30,14 @@ async function addTeamStep(req, res) {
         catch(err) {
             affectedRows = -1;
         }
-        res.statusCode = affectedRows > 0 ? 201 : affectedRows === 0 ? 409 : 500;
+        if (affectedRows > 0) {
+            //TODO Remove when saving data handled properly
+            googleApi.saveData((result) => res.json(result));
+            res.statusCode = 201;
+        }
+        else {
+            res.statusCode = affectedRows === 0 ? 409 : 500;
+        }
     }
     else {
         res.statusCode = 400;
@@ -45,6 +53,10 @@ async function deleteTeamStep(req, res) {
         const affectedRows = await teamsMgr.deleteStep(parseInt(season), parseInt(teamId), parseInt(stepId))
             .catch(() => -1);
         //console.log('DeleteTeamStep rows affected: ' + affectedRows);
+        if (affectedRows > 0) {
+            //TODO Remove when saving data handled properly
+            googleApi.saveData((result) => res.json(result));
+        }
         res.statusCode = affectedRows >= 0 ? 200 : 500;
     }
     else {

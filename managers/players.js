@@ -46,7 +46,7 @@ function getPlayer(season, teamId, stepId, playerId) {
                     var docPath = STORAGE_FOLDER + player.DocFilename;
                     if (!fs.existsSync(docPath)) {
                         console.warn('Missing file: ', player.DocFilename);
-                        player.DocFilename = null;
+                        //player.DocFilename = null;
                     }
                 }
                 return { player: player, photo: photo.toString() };
@@ -70,6 +70,10 @@ function getPhoto(filename) {
     }
     else {
         console.warn('Missing file: ', filename);
+
+        //TODO Remove when saving data handled properly
+        console.log('Restoring documents...');
+        googleApi.restoreDocuments();
     }
     //console.log('Photo: ' + photo.length);
     return result;
