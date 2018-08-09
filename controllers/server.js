@@ -7,6 +7,7 @@ const googleApi = require('../authentication/googleApi');
 const { settings } = require('../settings');
 
 function setup() {
+    storageAdapter.createFolders();
     googleApi.restoreUsers();
     googleApi.restoreData();
     storageAdapter.initUsers();
