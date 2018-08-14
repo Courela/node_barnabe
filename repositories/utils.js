@@ -37,7 +37,26 @@ function getSeasons() {
     });
 }
 
+function getSteps() {
+    const query = function (db) {
+        const roles = db.get('Step')
+            .cloneDeep()
+            .value();
+        return { recordset: roles, rowsAffected: [roles.length] };
+    };
+    return new Promise((resolve, reject) => {
+        try {
+            const result = storage.statementQuery(query);
+            resolve(result);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     getRoles,
-    getSeasons
+    getSeasons,
+    getSteps
 }

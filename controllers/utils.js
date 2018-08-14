@@ -18,8 +18,14 @@ async function getSeason (req, res) {
     res.send(result);
 }
 
+async function getSteps (req, res) {
+    const result = await utilsMgr.getSteps();
+    res.send(result);
+}
+
 module.exports = {
     getRoles,
     getSeasons,
-    getSeason
+    getSeason,
+    getSteps
 }
