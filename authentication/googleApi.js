@@ -17,7 +17,7 @@ function saveData(responseCallback) {
 }
 
 function restoreData(responseCallback) {
-    getFile(DB_FILE, 'application/json', storage.restoreDb, responseCallback);
+    getFile(DB_FILE, 'application/json', false, storage.restoreDb, responseCallback);
 }
 
 function saveUsers(responseCallback) {
@@ -25,7 +25,7 @@ function saveUsers(responseCallback) {
 }
 
 function restoreUsers(responseCallback) {
-    getFile(USERS_FILE, 'application/json', storage.restoreUsers, responseCallback);
+    getFile(USERS_FILE, 'application/json', false, storage.restoreUsers, responseCallback);
 }
 
 function saveDocuments(responseCallback) {
@@ -189,7 +189,7 @@ function getMimeType(filename) {
     return result;
 }
 
-async function getFile(filename, mimeType, callback, responseCallback) {
+async function getFile(filename, mimeType, isBinary, callback, responseCallback) {
     const client = await authClient.authorize();
     if (client) {
         console.log('Getting file ' + filename + ' from Drive...');
@@ -212,7 +212,7 @@ async function getFile(filename, mimeType, callback, responseCallback) {
 
                     if (res.data.files && res.data.files.length > 0) {
                         var fileId = res.data.files[0].id;
-                        getFileById(driveClient, fileId, false, callback, responseCallback);
+                        getFileById(driveClient, fileId, isBinary, callback, responseCallback);
                         return;
                     }
                     else {
@@ -369,6 +369,7 @@ module.exports = {
     restoreUsers,
     saveDocuments,
     restoreDocuments,
+    getFile,
     saveFile,
     getMimeType
 }

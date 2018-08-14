@@ -64,16 +64,16 @@ function getPlayer(season, teamId, stepId, playerId) {
 function getPhoto(filename) {
     let result = [];
     var photoPath = STORAGE_FOLDER + filename;
+    const mimeType = googleApi.getMimeType(filename);
     if (fs.existsSync(photoPath)) {
-        const mimeType = googleApi.getMimeType(filename);
         result = "data:" + mimeType + ";base64," + btoa(fs.readFileSync(photoPath));
     }
     else {
         console.warn('Missing file: ', filename);
-
         //TODO Remove when saving data handled properly
-        console.log('Restoring documents...');
-        googleApi.restoreDocuments();
+        console.log('Restoring photo ' + filename +'...');
+        googleApi.getFile(filename, mimeType, true, (data) => saveRawFile(filename, data));
+        result = '/show_loader.gif';
     }
     //console.log('Photo: ' + photo.length);
     return result;

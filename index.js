@@ -51,7 +51,7 @@ adminRouter.get('/ping', serverController.ping)
 const apiRouter = express.Router();
 apiRouter.use('/admin', adminRouter)
     .get('/teams', teamsController.getTeams)
-    .get('/steps', teamsController.getSteps)
+    .get('/steps', utilsController.getSteps)
     .get('/teams/:teamId', teamsController.getTeam)
     .get('/steps/:stepId', teamsController.getStep)
     .get('/seasons/:season/steps/:stepId', teamsController.getStep)
@@ -77,7 +77,7 @@ apiRouter.use('/admin', adminRouter)
     .get('/seasons/:season', utilsController.getSeason);
 
 app.use(serverController.setCors)
-    .use(bodyParser.json({ limit: '500kb' }))
+    .use(bodyParser.json({limit: '700kb'}))
     //.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
     .use(session({
         cookieName: 'barnabe',

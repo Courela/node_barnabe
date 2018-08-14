@@ -24,7 +24,21 @@ function getSeasons() {
         });
 }
 
+function getSteps() {
+    return utilsRepo.getSteps()
+        .then((results) => {
+            //console.log(results);
+            return results.recordset;
+        })
+        .catch((err) => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
+
 module.exports = {
     getRoles,
-    getSeasons
+    getSeasons,
+    getSteps
 }
