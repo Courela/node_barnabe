@@ -1,4 +1,6 @@
 const usersMgr = require('../managers/users');
+const utilsMgr = require('../managers/utils');
+const playersMgr = require('../managers/players');
 const serverMgr = require('../managers/server');
 const mysqlAdapter = require('../db/mysql');
 const storageAdapter = require('../db/storage');
@@ -7,11 +9,13 @@ const googleApi = require('../authentication/googleApi');
 const { settings } = require('../settings');
 
 function setup() {
-    storageAdapter.createFolders();
-    googleApi.restoreUsers();
-    googleApi.restoreData();
-    storageAdapter.initUsers();
-    storageAdapter.initData();
+    if (process.env.NODE_ENV === 'production') {
+        storageAdapter.createFolders();
+        googleApi.restoreUsers();
+        googleApi.restoreData();
+        storageAdapter.initUsers();
+        storageAdapter.initData();
+    }
 }
 
 function ping(req, res) {
@@ -104,6 +108,18 @@ async function activateSeason(req, res) {
     res.send();
 }
 
+async function getStatistics(req, res) {
+    const activeSeason = await utilsMgr.getSeasons()
+        .then(res => res.find(s => s.IsActive));
+    const usersCount = await usersMgr.getUsersCount();
+    const playersCount = await playersMgr.getPlayersCount(activeSeason.Year);
+    const result = {
+        nrUsers: usersCount,
+        nrPlayers: playersCount
+    }
+    res.send(result);
+}
+
 function setCors(req, res, next) {
     res.append('Access-Control-Allow-Origin', [ settings.CORS_HOST ]);
     res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH');
@@ -150,5 +166,6 @@ module.exports = {
     restoreDocuments,
     testDrive,
     addUser,
-    activateSeason
+    activateSeason,
+    getStatistics
 }

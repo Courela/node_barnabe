@@ -60,9 +60,19 @@ function getUser(username, password) {
         });
 }
 
+function getUsersCount() {
+    return usersRepo.getUsersCount()
+        .then(result => result.recordset[0])
+        .catch((err) => {
+            console.log(err);
+            throw 'Unexpected error!';
+        });
+}
+
 module.exports = {
     addUser,
     existsUser,
     getUserById,
-    getUser
+    getUser,
+    getUsersCount
 }

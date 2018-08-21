@@ -276,6 +276,25 @@ function importPlayers(teamId, stepId, season, selectedSeason, playerIds) {
     });
 }
 
+function getPlayersCount(year) {
+    const query = function (db) {
+        const playersCount = db.get('Player')
+            .filter({ Season: year, RoleId: 1 })
+            .size()
+            .value();
+        return { recordset: [playersCount], rowsAffected: [1] };
+    };
+    return new Promise((resolve, reject) => {
+        try {
+            const result = storage.statementQuery(query);
+            resolve(result);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });   
+}
+
 module.exports = {
     addPlayer,
     existsPlayer,
@@ -285,5 +304,6 @@ module.exports = {
     removePlayer,
     importPlayers,
     addDocFile,
-    addPhotoFile
+    addPhotoFile,
+    getPlayersCount
 }

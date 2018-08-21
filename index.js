@@ -30,6 +30,7 @@ process.on('SIGTERM', function () {
 
 const adminRouter = express.Router();
 adminRouter.get('/ping', serverController.ping)
+    .get('/statistics', serverController.getStatistics)
     .get('/export-players', exportController.exportPlayers)
     .post('/client-secret', serverController.setClientSecret)
     .post('/auth-code', serverController.setAccessToken)

@@ -89,9 +89,30 @@ function getUser(username, password) {
     });
 }
 
+function getUsersCount() {
+    const query = function (users) {
+        return users.get('User')
+            .cloneDeep()
+            .filter((v) => v.TeamId)
+            .size()
+            .value();
+    };
+    return new Promise((resolve, reject) => {
+        try {
+            const size = storage.usersStatementQuery(query);
+            let result = [size];
+            resolve({ recordset: result, rowsAffected: [1] });
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     addUser,
     existsUser,
     getUserById,
-    getUser
+    getUser,
+    getUsersCount
 }

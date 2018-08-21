@@ -184,7 +184,10 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
 function savePlayerPhoto(photo, season, teamId, stepId, playerId) {
     const fileExtension = getFileExtension(photo);
     const filename = [season, teamId, stepId, playerId + fileExtension].join('_');
-    saveRawFile(filename, convertDataUrltoBinary(photo));
+    saveBuffer(filename, photo);
+    
+    //saveStream(filename, photo);
+
     googleApi.saveFile(STORAGE_FOLDER, filename, null);
     return filename;
 }
@@ -192,7 +195,8 @@ function savePlayerPhoto(photo, season, teamId, stepId, playerId) {
 function savePlayerDoc(doc, season, teamId, stepId, playerId) {
     const fileExtension = getFileExtension(doc);
     const filename = [season, teamId, stepId, playerId, 'doc' + fileExtension].join('_');
-    saveRawFile(filename, convertDataUrltoBinary(doc));
+    
+    saveBuffer(filename, doc);
     googleApi.saveFile(STORAGE_FOLDER, filename, null);
     return filename;
 }
@@ -202,11 +206,15 @@ function getFileExtension(doc) {
     return fileType && fileType.length > 2 ? '.' + fileType[2] : '';
 }
 
-function convertDataUrltoBinary(data) {
-    data = data.replace(FILE_REGEX, '');
-    var byteCharacters = atob(data);
-    return str2ab(byteCharacters);
+function saveBuffer(filename, photo) {
+    var buf = Buffer.from(photo.replace(FILE_REGEX, ''), 'base64');
+    saveRawFile(filename, buf);
 }
+
+// function saveStream(filename, photo) {
+//     let writeStream = fs.createWriteStream(STORAGE_FOLDER + filename);
+//     writeStream.write(photo.replace(FILE_REGEX, ''), 'base64');
+// }
 
 function saveRawFile(filename, data) {
     console.log('Saving file ' + filename)
@@ -218,13 +226,19 @@ function saveRawFile(filename, data) {
     });
 }
 
-function str2ab(str) {
-    var idx, len = str.length, arr = new Array(len);
-    for (idx = 0; idx < len; ++idx) {
-        arr[idx] = str.charCodeAt(idx) & 0xFF;
-    }
-    return new Uint8Array(arr);
-};
+// function convertDataUrltoBinary(data) {
+//     data = data.replace(FILE_REGEX, '');
+//     var byteCharacters = atob(data);
+//     return str2ab(byteCharacters);
+// }
+
+// function str2ab(str) {
+//     var idx, len = str.length, arr = new Array(len);
+//     for (idx = 0; idx < len; ++idx) {
+//         arr[idx] = str.charCodeAt(idx) & 0xFF;
+//     }
+//     return new Uint8Array(arr);
+// };
 
 function removePlayer(teamId, stepId, season, playerId) {
     return playersRepo.removePlayer(teamId, stepId, season, playerId)
@@ -266,11 +280,21 @@ function importPlayers(teamId, stepId, season, selectedSeason, playerIds) {
         });
 }
 
+function getPlayersCount(year) {
+    return playersRepo.getPlayersCount(year)
+        .then(result => result.recordset[0])
+        .catch(err => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
 module.exports = {
     addPlayer,
     getPlayer,
     updatePlayer,
     getPlayers,
     removePlayer,
-    importPlayers
+    importPlayers,
+    getPlayersCount
 }
