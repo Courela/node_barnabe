@@ -208,7 +208,7 @@ async function getFile(filename, mimeType, isBinary, callback, responseCallback)
                         if (responseCallback) { responseCallback({ isSuccess: false }); }
                         return;
                     }
-                    console.log('Files: ', res.data.files);
+                    //console.log('Files: ', res.data.files);
 
                     if (res.data.files && res.data.files.length > 0) {
                         var fileId = res.data.files[0].id;
