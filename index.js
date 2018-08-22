@@ -74,7 +74,7 @@ apiRouter.use('/admin', adminRouter)
     .get('/seasons/:season', utilsController.getSeason);
 
 app.use(serverController.setCors)
-    .use(bodyParser.json({limit: '700kb'}))
+    .use(bodyParser.json({limit: '925kb'}))
     //.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
     .use(session({
         cookieName: 'barnabe',
