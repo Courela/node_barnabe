@@ -1,4 +1,5 @@
 const utilsMgr = require('../managers/utils');
+const personMgr = require('../managers/person');
 
 async function getRoles (req, res) {
     const result = await utilsMgr.getRoles();
@@ -23,9 +24,28 @@ async function getSteps (req, res) {
     res.send(result);
 }
 
+async function getPerson (req, res) {
+    let result;
+    const docId = req.query.docId;
+    const multiple = !!req.query.multiple;
+    if (docId) {
+        result = await personMgr.getPersonByIdCardNr(docId);
+        if (!multiple) {
+            result = result ? result[0] : null;
+        }
+        else {
+            result ? result : [];
+        }
+    } else {
+        res.statusCode = 400;
+    }
+    res.send(result);
+}
+
 module.exports = {
     getRoles,
     getSeasons,
     getSeason,
-    getSteps
+    getSteps,
+    getPerson
 }

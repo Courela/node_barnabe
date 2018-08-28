@@ -7,13 +7,13 @@ function getPersonById(id) {
 function getPersonByIdCardNr(idCardNr) {
     //console.log('Search DocId: ' + idCardNr);
     const query = function (db) {
-        const person = db.get('Person')
+        const persons = db.get('Person')
             .cloneDeep()
-            .find({ IdCardNr: idCardNr })
+            .filter({ IdCardNr: idCardNr })
             .value();
         //console.log('Get storage person:',person);
-        if (person) {
-            return { recordset: [ person ], rowsAffected: [ 1 ] };
+        if (persons) {
+            return { recordset: persons, rowsAffected: [ persons.length ] };
         }
         else {
             return { recordset: [], rowsAffected: [ 0 ] };

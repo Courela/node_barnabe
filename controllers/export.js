@@ -1,5 +1,10 @@
 const exportMgr = require('../managers/export');
 
+async function exportSource(req, res) {
+    const { type, season, teamId, stepId } = req.query;
+    res.redirect(`/api/files/export-players?season=${season}&teamId=${teamId}&stepId=${stepId}`);
+}
+
 async function exportPlayers(req, res) {
     let response = '';
     try {
@@ -23,5 +28,6 @@ async function exportPlayers(req, res) {
 }
 
 module.exports = {
+    exportSource,
     exportPlayers
 }

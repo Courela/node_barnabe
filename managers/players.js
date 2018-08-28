@@ -83,6 +83,7 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
     let personEntity = await personMgr.getPersonByIdCardNr(person.docId);
     //console.log('Person: ', personEntity);
     if (personEntity) {
+        personEntity = personEntity[personEntity.length - 1];
         if (await playersRepo.existsPlayer(teamId, stepId, season, personEntity.Id)) {
             console.warn('Player already exists!');
             return -409;
@@ -98,6 +99,7 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
         caretakerEntity = await personMgr.getPersonByIdCardNr(caretaker.docId);
         //console.log('Caretaker: ', caretakerEntity);
         if (caretakerEntity) {
+            caretakerEntity = caretakerEntity[caretakerEntity.length - 1];
             personMgr.updatePerson(caretaker);
         } else {
             caretakerEntity = await personMgr.addPerson(caretaker.name, null, null, caretaker.docId, caretaker.voterNr, caretaker.phoneNr, caretaker.email);
@@ -140,8 +142,11 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
         await personMgr.updatePerson(person);
 
         if (caretaker) {
-            const caretakerPerson = await personMgr.getPersonByIdCardNr(caretaker.docId);
+            let caretakerPerson = await personMgr.getPersonByIdCardNr(caretaker.docId);
+            
             if (caretakerPerson) {
+                caretakerPerson = caretakerPerson[caretakerPerson.length - 1];
+
                 console.log('Updating caretaker: ', caretakerPerson.IdCardNr);
                 const merge = {
                     id: caretaker.id,

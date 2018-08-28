@@ -10,7 +10,6 @@ const exportController = require('./controllers/export');
 const utilsController = require('./controllers/utils');
 
 const authentication = require('./authentication/authentication');
-const personMgr = require('./managers/person');
 const googleApi = require('./authentication/googleApi');
 
 serverController.setup();
@@ -31,7 +30,7 @@ process.on('SIGTERM', function () {
 const adminRouter = express.Router();
 adminRouter.get('/ping', serverController.ping)
     .get('/statistics', serverController.getStatistics)
-    .get('/export-players', exportController.exportPlayers)
+    .get('/export', exportController.exportSource)
     .post('/client-secret', serverController.setClientSecret)
     .post('/auth-code', serverController.setAccessToken)
     .post('/reset-auth', serverController.resetAuth)
@@ -45,14 +44,18 @@ adminRouter.get('/ping', serverController.ping)
     .put('/users', serverController.addUser)
     .post('/seasons/activate', serverController.activateSeason);
 
+const filesRouter = express.Router();
+filesRouter.get('/export-players', exportController.exportPlayers);
+
 const apiRouter = express.Router();
 apiRouter.use('/admin', adminRouter)
+    .use('/files', filesRouter)
     .get('/teams', teamsController.getTeams)
     .get('/steps', utilsController.getSteps)
     .get('/teams/:teamId', teamsController.getTeam)
     .get('/steps/:stepId', teamsController.getStep)
     .get('/seasons/:season/steps/:stepId', teamsController.getStep)
-    .get('/persons', getPerson)
+    .get('/persons', utilsController.getPerson)
     .get('/roles', utilsController.getRoles)
     .get('/seasons/:season/teams/:teamId/signsteps', teamsController.getSignSteps)
     .get('/seasons/:season/teams/:teamId/steps', teamsController.getTeamSteps)
@@ -125,15 +128,4 @@ function logout(req, res) {
     console.log('User logout: ' + req.barnabe.user);
     req.barnabe.reset();
     res.send();
-}
-
-async function getPerson (req, res) {
-    let result;
-    const docId = req.query.docId;
-    if (docId) {
-        result = await personMgr.getPersonByIdCardNr(docId);
-    } else {
-        res.statusCode = 400;
-    }
-    res.send(result);
 }

@@ -10,7 +10,7 @@ function getPersonByIdCardNr(docId){
     return personRepo.getPersonByIdCardNr(docId)
         .then((results) => {
             //console.log(results);
-            return results.rowsAffected[0] > 0 ? results.recordset[0] : null;
+            return results.rowsAffected[0] > 0 ? results.recordset : null;
         })
         .catch((err) => {
             console.error(err);
