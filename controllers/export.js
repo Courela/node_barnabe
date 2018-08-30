@@ -12,9 +12,14 @@ async function exportPlayers(req, res) {
         const { season, teamId, stepId } = req.query;
         if (season && teamId && stepId) {
             response = await exportMgr.exportPlayers(parseInt(season), parseInt(teamId), parseInt(stepId));
-            console.log(response);
-            res.attachment('players_' + season + '_' + teamId + '_' + stepId + '.csv');
-            res.type('text/csv');
+            if (response) {
+                //console.log(response);
+                res.attachment('players_' + season + '_' + teamId + '_' + stepId + '.csv');
+                res.type('text/csv');
+            }
+            else {
+                res.statusCode = 404;
+            }
         }
         else {
             res.statusCode = 400;
