@@ -149,17 +149,18 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
 
                 console.log('Updating caretaker: ', caretakerPerson.IdCardNr);
                 const merge = {
-                    id: caretaker.id,
                     name: caretaker.name,
                     voterNr: caretaker.voterNr,
                     phoneNr: caretaker.phoneNr,
                     email: caretaker.email,
 
+                    id: caretakerPerson.Id,
                     gender: caretakerPerson.Gender,
                     birth: caretakerPerson.Birthdate,
                     docId: caretakerPerson.IdCardNr
                 };
                 await personMgr.updatePerson(merge);
+                caretaker = merge;
             }
             else {
                 console.log('New caretaker: ', caretaker.docId);
