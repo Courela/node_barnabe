@@ -211,6 +211,26 @@ async function importPlayers(req, res) {
     res.send();
 }
 
+async function getPhoto(req, res) {
+    let response = '';
+    try {
+        const { teamId, stepId, season, playerId } = req.params;
+        if (teamId && stepId && season && playerId) {
+            response = await playersMgr.getLocalPhoto(parseInt(season), parseInt(teamId), parseInt(stepId), parseInt(playerId));
+            //console.log(response);
+            if (!response) { res.statusCode = 404 }
+        } else {
+            res.statusCode = 400;
+        }
+    }
+    catch (err) {
+        console.error(err);
+        errors.handleErrors(res);
+        response = err;
+    }
+    res.send(response);
+}
+
 function isPersonValid(person) {
     let result = false;
     if (person) {
@@ -243,5 +263,6 @@ module.exports = {
     getPlayer,
     updatePlayer,
     removePlayer,
-    importPlayers
+    importPlayers,
+    getPhoto
 }

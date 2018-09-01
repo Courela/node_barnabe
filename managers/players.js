@@ -49,7 +49,7 @@ function getPlayer(season, teamId, stepId, playerId) {
                         //player.DocFilename = null;
                     }
                 }
-                return { player: player, photo: photo.toString() };
+                return { player: player, photo: photo };
             }
             else {
                 return null;
@@ -62,18 +62,19 @@ function getPlayer(season, teamId, stepId, playerId) {
 }
 
 function getPhoto(filename) {
-    let result = [];
     var photoPath = STORAGE_FOLDER + filename;
     const mimeType = googleApi.getMimeType(filename);
-    if (fs.existsSync(photoPath)) {
-        result = "data:" + mimeType + ";base64," + btoa(fs.readFileSync(photoPath));
+
+    let result = { src: null, existsLocally: fs.existsSync(photoPath) };
+    if (result.existsLocally) {
+        result.src = "data:" + mimeType + ";base64," + btoa(fs.readFileSync(photoPath));
     }
     else {
         console.warn('Missing file: ', filename);
         //TODO Remove when saving data handled properly
         console.log('Restoring photo ' + filename +'...');
         googleApi.getFile(filename, mimeType, true, (data) => saveRawFile(filename, data));
-        result = '/show_loader.gif';
+        result.src = '/show_loader.gif';
     }
     //console.log('Photo: ' + photo.length);
     return result;
@@ -295,6 +296,16 @@ function getPlayersCount(year) {
         });
 }
 
+function getLocalPhoto(season, teamId, stepId, playerId) {
+    return getPlayer(season, teamId, stepId, playerId)
+        .then(result => {
+            if (result) {
+                return result.photo;
+            }
+            else return null;
+        });
+}
+
 module.exports = {
     addPlayer,
     getPlayer,
@@ -302,5 +313,6 @@ module.exports = {
     getPlayers,
     removePlayer,
     importPlayers,
-    getPlayersCount
+    getPlayersCount,
+    getLocalPhoto
 }
