@@ -46,7 +46,7 @@ async function exportPlayers(season, teamId, stepId) {
                 {
                     label: 'Data Nascimento',
                     value: (row) => formatDate(row['person.Birthdate']),
-                    default: 'N/A'
+                    default: ''
                 },
                 {
                     label: 'CC Jogador',
@@ -55,43 +55,49 @@ async function exportPlayers(season, teamId, stepId) {
                 {
                     label: 'Nome Responsavel',
                     value: 'caretaker.Name',
-                    default: 'N/A'
+                    default: ''
                 },
                 {
                     label: 'CC Responsavel',
                     value: 'caretaker.IdCardNr',
-                    default: 'N/A'
+                    default: ''
                 },
                 {
                     label: 'Nr Eleitor',
                     //value: 'caretaker.VoterNr',
                     value: (row) => row['caretaker.VoterNr'] ? row['caretaker.VoterNr'] : row['person.VoterNr'],
-                    default: 'N/A'
+                    default: ''
                     //value: (row) => row.caretaker && row.caretaker.VoterNr ? row.caretaker.VoterNr : (row.person.VoterNr ? row.person.VoterNr : 'N/A')
                 },
                 {
                     label: 'Foto?',
-                    value: (row) => row['PhotoFilename'] ? 'Sim' : 'Não',
-                    default: 'N/A'
+                    value: (row) => row['PhotoFilename'] ? 'Sim' : 'Nao',
+                    default: ''
                 },
                 {
                     label: 'FichaAtleta?',
-                    value: (row) => row['DocFilename'] ? 'Sim' : 'Não',
-                    default: 'N/A'
+                    value: (row) => row['DocFilename'] ? 'Sim' : 'Nao',
+                    default: ''
                 },
                 {
                     label: 'Telefone',
                     value: 'caretaker.Phone',
-                    default: 'N/A'
+                    default: ''
                     //value: (row) => row.caretaker && row.caretaker.Phone ? row.caretaker.Phone : (row.person.Phone ? row.person.Phone : 'N/A')
                 },
                 {
                     label: 'Email',
                     value: 'caretaker.Email',
-                    default: 'N/A'
+                    default: ''
                     //value: (row) => row.caretaker && row.caretaker.Email ? row.caretaker.Email : (row.person.Email ? row.person.Email : 'N/A')
-                }
-                ];
+                },
+                {
+                    label: 'Notas',
+                    value: 'Comments',
+                    default: ''
+                    //value: (row) => row.caretaker && row.caretaker.Email ? row.caretaker.Email : (row.person.Email ? row.person.Email : 'N/A')
+                }];
+
                 //const json2csvParser = new Json2csvParser({ fields, header: true, delimiter: '\t', quote: '', flatten: true });
                 const json2csvParser = new Json2csvParser({ fields, header: true, delimiter: ';', quote: '', flatten: true });
                 const tsv = json2csvParser.parse(players);
