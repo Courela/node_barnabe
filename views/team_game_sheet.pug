@@ -1,0 +1,13 @@
+html
+  head
+    title= title
+  body
+    h1= message
+    table
+        tbody
+            th
+                td = "Nome"
+                td = "Cap"
+            tr
+                each player in #{players}
+                    td player.Name 

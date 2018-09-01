@@ -30,6 +30,7 @@
     "lowdb": "^1.0.0",
     "mssql": "^4.2.0",
     "mysql": "^2.15.0",
+    "pug": "^2.0.3",
     "utf8": "^3.0.0"
   },
   "devDependencies": {
