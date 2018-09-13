@@ -70,13 +70,13 @@ async function exportPlayers(season, teamId, stepId) {
                     //value: (row) => row.caretaker && row.caretaker.VoterNr ? row.caretaker.VoterNr : (row.person.VoterNr ? row.person.VoterNr : 'N/A')
                 },
                 {
-                    label: 'Foto?',
-                    value: (row) => row['PhotoFilename'] ? 'Sim' : 'Nao',
+                    label: 'Foto',
+                    value: (row) => row['PhotoFilename'] ? row['PhotoFilename'] : '',
                     default: ''
                 },
                 {
-                    label: 'FichaAtleta?',
-                    value: (row) => row['DocFilename'] ? 'Sim' : 'Nao',
+                    label: 'FichaAtleta',
+                    value: (row) => row['DocFilename'] ? row['DocFilename'] : '',
                     default: ''
                 },
                 {

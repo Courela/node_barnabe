@@ -17,9 +17,14 @@ function getPlayers(season, teamId, stepId, roles) {
                 .cloneDeep()
                 .find({ Id: player.CareTakerId })
                 .value();
+
+            const role = db.get('Role')
+                .cloneDeep()
+                .find({ Id: player.RoleId })
+                .value();
             
             //console.log('Caretaker:', caretaker);
-            result.push(Object.assign(player, { person: person }, caretaker ? { caretaker: caretaker } : null ));
+            result.push(Object.assign(player, {role, role }, { person: person }, caretaker ? { caretaker: caretaker } : null ));
         });
         //console.log('Storage persons:'); console.log(result);
         return { recordset: result, rowsAffected: [result.length] };
@@ -78,6 +83,11 @@ function getPlayer(season, teamId, stepId, playerId) {
             .find({ Id: player.StepId })
             .value();
 
+        const role = db.get('Role')
+            .cloneDeep()
+            .find({ Id: player.RoleId })
+            .value();
+
         const birthStepLimit = db.get('BirthStepLimit')
             .cloneDeep()
             .find({ Season: player.Season, StepId: player.StepId })
@@ -91,7 +101,7 @@ function getPlayer(season, teamId, stepId, playerId) {
             .value();
         }
         
-        const result = Object.assign({ step: Object.assign(step, birthStepLimit) }, player, { person: person }, { caretaker: caretaker });
+        const result = Object.assign({ step: Object.assign(step, birthStepLimit) }, { role: role } , player, { person: person }, { caretaker: caretaker });
         console.log("Get Player: ", result);
         return { recordset: [ result ], rowsAffected: [1] };
     };
