@@ -8,6 +8,7 @@ const teamsController = require('./controllers/teams');
 const playersController = require('./controllers/players');
 const exportController = require('./controllers/export');
 const utilsController = require('./controllers/utils');
+const templatesController = require('./controllers/templates');
 
 const authentication = require('./authentication/authentication');
 const googleApi = require('./authentication/googleApi');
@@ -27,8 +28,13 @@ process.on('SIGTERM', function () {
     googleApi.saveData(() => process.exit(0));
 });
 
+const templatesRouter = express.Router();
+templatesRouter.get('/team', templatesController.teamTemplate)
+    .get('/game', templatesController.gameTemplate);
+
 const adminRouter = express.Router();
-adminRouter.get('/ping', serverController.ping)
+adminRouter.use('/templates', templatesRouter)
+    .get('/ping', serverController.ping)
     .get('/statistics', serverController.getStatistics)
     .get('/export', exportController.exportSource)
     .post('/client-secret', serverController.setClientSecret)
@@ -77,7 +83,9 @@ apiRouter.use('/admin', adminRouter)
     .delete('/seasons/:season/teams/:teamId/steps/:stepId', teamsController.deleteTeamStep)
     .get('/seasons/:season', utilsController.getSeason);
 
-app.use(serverController.setCors)
+app.set('view engine', 'pug')
+    .set('views', './views')    
+    .use(serverController.setCors)
     .use(bodyParser.json({limit: '925kb'}))
     //.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
     .use(session({

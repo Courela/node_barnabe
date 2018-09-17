@@ -1,13 +1,134 @@
 html
-  head
-    title= title
-  body
-    h1= message
-    table
-        tbody
-            th
-                td = "Nome"
-                td = "Cap"
-            tr
-                each player in #{players}
-                    td player.Name 
+    head
+        link(rel='stylesheet', href='stylesheets/style.css', type='text/css')
+        //- link(rel='stylesheet', href='./stylesheets/style.css', type='text/css')
+        title= title
+    body
+        p
+            img(src='team.jpg' style={ 'float': 'left', 'width': '80px' })
+            div(style={'display': 'inline', 'float': 'left' })
+                div(style={ 'margin-left': '20px', 'font-size': '2em' })= team
+                div(style={ 'margin-left': '20px', 'font-size': '2em' })= step
+            img(src='logo.jpg' style={ 'float': 'right', 'width': '80px' })
+        table(style={ 'clear': 'both', 'margin-top': '10px'})
+            thead
+                tr 
+                    th(colspan=19 style={ 'border': '1px solid black', 'text-align': 'center'}) JOGADORES
+                tr 
+                    th(style={ 'border': '1px solid black' }) Nome
+                    th(style={ 'border': '1px solid black' }) Camisola
+                    th(style={ 'border': '1px solid black' }) CAP
+                    th(style={ 'border': '1px solid black' }) SC
+                    th(style={ 'border': '1px solid black' }) GR
+                    th(style={ 'border': '1px solid black' }) G1
+                    th(style={ 'border': '1px solid black' }) G2
+                    th(style={ 'border': '1px solid black' }) G3
+                    th(style={ 'border': '1px solid black' }) G4
+                    th(style={ 'border': '1px solid black' }) G5
+                    th(style={ 'border': '1px solid black' }) G6
+                    th(style={ 'border': '1px solid black' }) G7
+                    th(style={ 'border': '1px solid black' }) G8
+                    th(style={ 'border': '1px solid black' }) G9
+                    th(style={ 'border': '1px solid black' }) G10
+                    th(style={ 'border': '1px solid black' }) A1
+                    th(style={ 'border': '1px solid black' }) A2
+                    th(style={ 'border': '1px solid black' }) V
+            tbody
+                each player in players
+                    tr  
+                        td(style={ 'border': '1px solid black' })= player.person.Name
+                        td(style={ 'border': '1px solid black' }) 
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+                        td(style={ 'border': '1px solid black','width': '30px'})
+        p
+        div
+            table(style={ 'border': '1px solid black', 'border-collapse': 'collapse', 'display': 'inline' })
+                thead
+                    tr 
+                        th(colspan=2 style={ 'border': '1px solid black', 'text-align': 'center'}) EQUIPA TÉCNICA
+                    tr
+                        th(style={ 'border': '1px solid black' }) Nome
+                        th(style={ 'border': '1px solid black', 'width': '30px'})
+                tbody
+                    each elem in staff
+                        tr
+                            td(style={ 'border': '1px solid black' })= elem.person.Name
+                            td(style={ 'border': '1px solid black', 'width': '30px'})
+            table(style={ 'border': '1px solid black', 'border-collapse': 'collapse', 'display': 'inline', 'margin-left': '15px' })
+                tbody
+                    tr
+                        td(style={ 'border': '1px solid black', 'font-weight': 'bold' }) Faltas próprias
+                        td(style={ 'border': '1px solid black' }) 1º tempo:
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black' }) 2º tempo:
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                    tr
+                        td(style={ 'border': '1px solid black', 'font-weight': 'bold' }) Faltas do adversário
+                        td(style={ 'border': '1px solid black' }) 1º tempo:
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black' }) 2º tempo:
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                    tr
+                        td(style={ 'border': '1px solid black', 'font-weight': 'bold' }) Descontos próprios
+                        td(style={ 'border': '1px solid black' }) 1º tempo:
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black' }) 2º tempo:
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                    tr
+                        td(style={ 'border': '1px solid black', 'font-weight': 'bold' }) Descontos do adversário
+                        td(style={ 'border': '1px solid black' }) 1º tempo:
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black' }) 2º tempo:
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                    tr
+                        td(style={ 'border': '1px solid black', 'font-weight': 'bold' }) Resultado
+                        td(style={ 'border': '1px solid black' }) ao intervalo:
+                        td(style={ 'border': '1px solid black', 'width': '30px'} colspan=5)
+                        td(style={ 'border': '1px solid black' }) final:
+                        td(style={ 'border': '1px solid black', 'width': '30px'} colspan=5)
