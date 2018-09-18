@@ -113,7 +113,7 @@ async function gameTemplate(req, res) {
             var options = {
                 format: 'A4',
                 orientation: "landscape",
-                base: "file:///" + basePath.replace(/\\/g, "/"),
+                base: "file:///" + basePath, //.replace(/\\/g, "/"),
                 border: "8mm"
             };
 
