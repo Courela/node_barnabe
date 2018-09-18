@@ -37,7 +37,7 @@ async function teamTemplate(req, res) {
                 format: 'A4',
                 orientation: "landscape",
                 base: "file:///" + basePath.replace(/\\/g, "/"),
-                border: "8mm"
+                border: "10mm"
             };
 
             pdf.create(result, options).toBuffer(function (err, buffer) {
@@ -48,7 +48,7 @@ async function teamTemplate(req, res) {
                 res.send({ src: src });
             });
 
-            pdf.create(result, options).toFile(path.join(basePath, 'doc/game_file.pdf'), function (err, result) {
+            pdf.create(result, options).toFile(path.join(basePath, 'doc/team_game_sheet.pdf'), function (err, result) {
                 if (err) { 
                     return console.log(err); 
                 }
@@ -77,9 +77,76 @@ async function teamTemplate(req, res) {
     //res.send({ src: src });
 }
 
-function gameTemplate(req, res) {
-    res.statusCode = 404;
-    res.send();
+async function gameTemplate(req, res) {
+    const { season, homeTeamId, awayTeamId, stepId } = req.query;
+
+    if (season && homeTeamId && awayTeamId && stepId) {
+        const teams = await teamsMgr.getTeams();
+        const homeTeam = teams.find(t => t.Id == parseInt(homeTeamId));
+        const awayTeam = teams.find(t => t.Id == parseInt(awayTeamId));
+
+        const step = await teamsMgr.getStep(parseInt(stepId));
+
+        const homePlayers = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [1]);
+        const homeStaff = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
+
+        const awayPlayers = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [1]);
+        const awayStaff = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
+        
+        const data = {
+            homeTeam: homeTeam.ShortDescription,
+            awayTeam: awayTeam.ShortDescription,
+            step: step.Description,
+            homePlayers: homePlayers,
+            homeStaff: homeStaff,
+            awayPlayers: awayPlayers,
+            awayStaff: awayStaff
+        };
+
+        try {
+            const basePath = path.join(__dirname, '..', 'public\\');
+            //console.log('Base path: ', basePath);
+
+            const compiledFunction = pug.compileFile('./views/game_sheet.pug');
+            const result = compiledFunction(data);
+
+            var options = {
+                format: 'A4',
+                orientation: "landscape",
+                base: "file:///" + basePath.replace(/\\/g, "/"),
+                border: "8mm"
+            };
+
+            pdf.create(result, options).toBuffer(function (err, buffer) {
+                if (err) { 
+                    return console.log(err); 
+                }
+                const src = "data:application/pdf;base64," + btoa(buffer);
+                res.send({ src: src });
+            });
+
+            pdf.create(result, options).toFile(path.join(basePath, 'doc/game_sheet.pdf'), function (err, result) {
+                if (err) { 
+                    return console.log(err); 
+                }
+
+                console.log('Generated PDF: ', result);
+                // const src = "data:application/pdf;base64," + btoa(fs.readFileSync(result.filename));
+                // res.send({ src: src });
+            });
+
+            //res.render('game_sheet', data);
+        }
+        catch (err) {
+            console.error(err);
+            res.statusCode = 500;
+            res.send();
+        }
+    }
+    else {
+        res.statusCode = 400;
+        res.send();
+    }
 }
 
 function getTeamLogoFilename(teamId) {
