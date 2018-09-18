@@ -25,7 +25,7 @@ async function teamTemplate(req, res) {
         };
 
         try {
-            const basePath = path.join(__dirname, '..', 'public\\');
+            const basePath = path.join(__dirname, '..', 'public' + path.sep);
             //console.log('Base path: ', basePath);
 
             fs.copyFileSync(path.join(basePath, getTeamLogoFilename(parseInt(teamId))), path.join(basePath, 'team.jpg'));
@@ -104,7 +104,7 @@ async function gameTemplate(req, res) {
         };
 
         try {
-            const basePath = path.join(__dirname, '..', 'public\\');
+            const basePath = path.join(__dirname, '..', 'public' + path.sep);
             //console.log('Base path: ', basePath);
 
             const compiledFunction = pug.compileFile('./views/game_sheet.pug');
