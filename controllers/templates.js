@@ -48,15 +48,15 @@ async function teamTemplate(req, res) {
                 res.send({ src: src });
             });
 
-            pdf.create(result, options).toFile(path.join(basePath, 'doc/team_game_sheet.pdf'), function (err, result) {
-                if (err) { 
-                    return console.log(err); 
-                }
+            // pdf.create(result, options).toFile(path.join(basePath, 'doc/team_game_sheet.pdf'), function (err, result) {
+            //     if (err) { 
+            //         return console.log(err); 
+            //     }
 
-                console.log('Generated PDF: ', result);
-                // const src = "data:application/pdf;base64," + btoa(fs.readFileSync(result.filename));
-                // res.send({ src: src });
-            });
+            //     console.log('Generated PDF: ', result);
+            //     // const src = "data:application/pdf;base64," + btoa(fs.readFileSync(result.filename));
+            //     // res.send({ src: src });
+            // });
         }
         catch (err) {
             console.error(err);
@@ -125,15 +125,15 @@ async function gameTemplate(req, res) {
                 res.send({ src: src });
             });
 
-            pdf.create(result, options).toFile(path.join(basePath, 'doc/game_sheet.pdf'), function (err, result) {
-                if (err) { 
-                    return console.log(err); 
-                }
+            // pdf.create(result, options).toFile(path.join(basePath, 'doc/game_sheet.pdf'), function (err, result) {
+            //     if (err) { 
+            //         return console.log(err); 
+            //     }
 
-                console.log('Generated PDF: ', result);
-                // const src = "data:application/pdf;base64," + btoa(fs.readFileSync(result.filename));
-                // res.send({ src: src });
-            });
+            //     console.log('Generated PDF: ', result);
+            //     // const src = "data:application/pdf;base64," + btoa(fs.readFileSync(result.filename));
+            //     // res.send({ src: src });
+            // });
 
             //res.render('game_sheet', data);
         }
