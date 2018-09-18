@@ -36,7 +36,7 @@ async function teamTemplate(req, res) {
             var options = {
                 format: 'A4',
                 orientation: "landscape",
-                base: "file:///" + basePath.replace(/\\/g, "/"),
+                base: "file:///" + basePath, //.replace(/\\/g, "/"),
                 border: "10mm"
             };
 
