@@ -114,7 +114,7 @@ async function gameTemplate(req, res) {
                 format: 'A4',
                 orientation: "landscape",
                 base: "file:///" + basePath, //.replace(/\\/g, "/"),
-                border: "8mm"
+                border: "5mm"
             };
 
             pdf.create(result, options).toBuffer(function (err, buffer) {
