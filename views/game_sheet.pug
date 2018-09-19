@@ -20,26 +20,26 @@ html
                             th(colspan=9 style={ 'border': '1px solid black', 'font-size': '12px' }) Golos
                             th(colspan=3 style={ 'border': '1px solid black', 'font-size': '11px'}) Cartões
                         tr 
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) Nº
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) Nome
-                            th(style={ 'border': '1px solid black', 'font-size': '8px', 'width': '10px' })
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 1
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 2
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 3
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 4
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 5
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 6
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 7
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 8
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 9
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) A
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) A
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) V
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) Nº
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) Nome
+                            th(style={ 'border': '1px solid black', 'font-size': '9px', 'width': '10px' })
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 1
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 2
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 3
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 4
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 5
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 6
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 7
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 8
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 9
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) A
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) A
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) V
                     tbody
                         each player in homePlayers
                             tr  
                                 td(style={ 'border': '1px solid black' }) 
-                                td(style={ 'border': '1px solid black', 'font-size': '7px', 'text-transform': 'capitalize' })= player.person.Name
+                                td(style={ 'border': '1px solid black', 'font-size': '8px' })= player
                                 td(style={ 'border': '1px solid black','width': '12px'})
                                 td(style={ 'border': '1px solid black','width': '12px'})
                                 td(style={ 'border': '1px solid black','width': '12px'})
@@ -60,13 +60,13 @@ html
                                         tr 
                                             th(colspan=2 style={ 'border': '1px solid black', 'font-size': '12px'}) Equipa Técnica
                                         tr
-                                            th(style={ 'border': '1px solid black', 'font-size': '7px'}) Função
-                                            th(style={ 'border': '1px solid black', 'font-size': '7px'}) Nome
+                                            th(style={ 'border': '1px solid black', 'font-size': '9px'}) Função
+                                            th(style={ 'border': '1px solid black', 'font-size': '9px'}) Nome
                                     tbody
                                         each staff in homeStaff
                                             tr
-                                                td(style={ 'border': '1px solid black', 'font-size': '6px'})= staff.role.Description
-                                                td(style={ 'border': '1px solid black', 'font-size': '6px'})= staff.person.Name
+                                                td(style={ 'border': '1px solid black', 'font-size': '8px'})= staff.role
+                                                td(style={ 'border': '1px solid black', 'font-size': '8px'})= staff.name
                         tr
                             td(colspan=16)
                                 table(style={'border-collapse': 'collapse', 'float': 'left'})
@@ -111,26 +111,26 @@ html
                             th(colspan=9 style={ 'border': '1px solid black', 'font-size': '12px'}) Golos
                             th(colspan=3 style={ 'border': '1px solid black', 'font-size': '11px'}) Cartões
                         tr 
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) Nº
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) Nome
-                            th(style={ 'border': '1px solid black', 'font-size': '8px', 'width': '10px' })
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 1
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 2
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 3
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 4
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 5
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 6
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 7
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 8
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) 9
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) A
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) A
-                            th(style={ 'border': '1px solid black', 'font-size': '8px' }) V
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) Nº
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) Nome
+                            th(style={ 'border': '1px solid black', 'font-size': '9px', 'width': '10px' })
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 1
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 2
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 3
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 4
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 5
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 6
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 7
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 8
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) 9
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) A
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) A
+                            th(style={ 'border': '1px solid black', 'font-size': '9px' }) V
                     tbody
                         each player in awayPlayers
                             tr  
                                 td(style={ 'border': '1px solid black' }) 
-                                td(style={ 'border': '1px solid black', 'font-size': '7px', 'text-transform': 'capitalize' })= player.person.Name
+                                td(style={ 'border': '1px solid black', 'font-size': '8px' })= player
                                 td(style={ 'border': '1px solid black','width': '12px'})
                                 td(style={ 'border': '1px solid black','width': '12px'})
                                 td(style={ 'border': '1px solid black','width': '12px'})
@@ -151,13 +151,13 @@ html
                                         tr 
                                             th(colspan=2 style={ 'border': '1px solid black', 'font-size': '12px'}) Equipa Técnica
                                         tr
-                                            th(style={ 'border': '1px solid black', 'font-size': '8px'}) Função
-                                            th(style={ 'border': '1px solid black', 'font-size': '8px'}) Nome
+                                            th(style={ 'border': '1px solid black', 'font-size': '9px'}) Função
+                                            th(style={ 'border': '1px solid black', 'font-size': '9px'}) Nome
                                     tbody
                                         each staff in awayStaff
                                             tr
-                                                td(style={ 'border': '1px solid black', 'font-size': '6px'})= staff.role.Description
-                                                td(style={ 'border': '1px solid black', 'font-size': '6px'})= staff.person.Name
+                                                td(style={ 'border': '1px solid black', 'font-size': '8px'})= staff.role
+                                                td(style={ 'border': '1px solid black', 'font-size': '8px'})= staff.name
 
                         tr
                             td(colspan=16)

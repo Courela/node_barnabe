@@ -20,8 +20,8 @@ async function teamTemplate(req, res) {
         const data = {
             team: team.Name,
             step: step.Description,
-            players: players,
-            staff: staff
+            players: players.map(p => formatName(p.person.Name.toLowerCase())),
+            staff: staff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; })
         };
 
         try {
@@ -97,10 +97,10 @@ async function gameTemplate(req, res) {
             homeTeam: homeTeam.ShortDescription,
             awayTeam: awayTeam.ShortDescription,
             step: step.Description,
-            homePlayers: homePlayers,
-            homeStaff: homeStaff,
-            awayPlayers: awayPlayers,
-            awayStaff: awayStaff
+            homePlayers: homePlayers.map(p => formatName(p.person.Name.toLowerCase())),
+            homeStaff: homeStaff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }),
+            awayPlayers: awayPlayers.map(p => formatName(p.person.Name.toLowerCase())),
+            awayStaff: awayStaff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; })
         };
 
         try {
@@ -147,6 +147,24 @@ async function gameTemplate(req, res) {
         res.statusCode = 400;
         res.send();
     }
+}
+
+function formatName(val) {
+    var name = val.toLowerCase();
+    var names = name.split(' ');
+    while(names.length > 4) {
+        names.splice(2, 1);
+    }
+    var result = [];
+    for(var i = 0; i < names.length; i++) {
+        var curr = names[i];
+        result.push(capitalizeFirstLetter(curr));
+    }
+    return result.join(' ');
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function getTeamLogoFilename(teamId) {
