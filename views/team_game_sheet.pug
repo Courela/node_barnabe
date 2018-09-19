@@ -7,10 +7,10 @@ html
         p
             img(src='team.jpg' style={ 'float': 'left', 'width': '80px' })
             div(style={'display': 'inline', 'float': 'left' })
-                div(style={ 'margin-left': '20px', 'font-size': '12px' })= team
-                div(style={ 'margin-left': '20px', 'font-size': '12px' })= step
+                div(style={ 'margin-left': '20px', 'font-size': '13px' })= team
+                div(style={ 'margin-left': '20px', 'margin-top': '10px', 'font-size': '13px' })= step
             img(src='logo.jpg' style={ 'float': 'right', 'width': '80px' })
-        table(style={ 'clear': 'both', 'margin-top': '10px'})
+        table(style={ 'clear': 'both', 'padding-top': '10px'})
             thead
                 tr 
                     th(colspan=19 style={ 'border': '1px solid black', 'font-size': '12px', 'text-align': 'center'}) JOGADORES
@@ -54,80 +54,78 @@ html
                         td(style={ 'border': '1px solid black','width': '30px'})
                         td(style={ 'border': '1px solid black','width': '30px'})
                         td(style={ 'border': '1px solid black','width': '30px'})
-        p
-        div
+        
+        div(style={ 'padding-top': '15px'})
             table(style={ 'border': '1px solid black', 'border-collapse': 'collapse', 'display': 'inline' })
                 thead
                     tr 
-                        th(colspan=3 style={ 'border': '1px solid black', 'font-size': '12px', 'text-align': 'center'}) EQUIPA TÉCNICA
+                        th(colspan=2 style={ 'border': '1px solid black', 'font-size': '12px', 'text-align': 'center'}) EQUIPA TÉCNICA
                     tr
                         th(style={ 'border': '1px solid black', 'font-size': '11px' }) Função
                         th(style={ 'border': '1px solid black', 'font-size': '11px' }) Nome
-                        th(style={ 'border': '1px solid black', 'width': '30px'})
                 tbody
                     each elem in staff
                         tr
-                            td(style={ 'border': '1px solid black', 'font-size': '10px' })= elem.name
                             td(style={ 'border': '1px solid black', 'font-size': '10px' })= elem.role
-                            td(style={ 'border': '1px solid black', 'width': '30px'})
+                            td(style={ 'border': '1px solid black', 'font-size': '10px' })= elem.name
             table(style={ 'border': '1px solid black', 'border-collapse': 'collapse', 'display': 'inline', 'margin-left': '15px' })
                 tbody
                     tr
                         td(style={ 'border': '1px solid black', 'font-size': '11px', 'font-weight': 'bold' }) Faltas próprias
                         td(style={ 'border': '1px solid black', 'font-size': '11px' }) 1º tempo:
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
                         td(style={ 'border': '1px solid black', 'font-size': '11px' }) 2º tempo:
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
                     tr
                         td(style={ 'border': '1px solid black', 'font-size': '11px', 'font-weight': 'bold' }) Faltas do adversário
                         td(style={ 'border': '1px solid black', 'font-size': '11px' }) 1º tempo:
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
                         td(style={ 'border': '1px solid black', 'font-size': '11px' }) 2º tempo:
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
                     tr
                         td(style={ 'border': '1px solid black', 'font-size': '11px', 'font-weight': 'bold' }) Descontos próprios
                         td(style={ 'border': '1px solid black', 'font-size': '11px' }) 1º tempo:
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
                         td(style={ 'border': '1px solid black', 'font-size': '11px' }) 2º tempo:
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
                     tr
                         td(style={ 'border': '1px solid black', 'font-size': '11px', 'font-weight': 'bold' }) Descontos do adversário
                         td(style={ 'border': '1px solid black', 'font-size': '11px' }) 1º tempo:
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
                         td(style={ 'border': '1px solid black', 'font-size': '11px' }) 2º tempo:
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
-                        td(style={ 'border': '1px solid black', 'width': '30px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
+                        td(style={ 'border': '1px solid black', 'width': '25px'})
                     tr
                         td(style={ 'border': '1px solid black', 'font-size': '12px', 'font-weight': 'bold' }) Resultado
                         td(style={ 'border': '1px solid black', 'font-size': '12px' }) ao intervalo:
