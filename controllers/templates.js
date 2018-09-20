@@ -20,8 +20,8 @@ async function teamTemplate(req, res) {
         const data = {
             team: team.Name,
             step: step.Description,
-            players: players.map(p => formatName(p.person.Name.toLowerCase())),
-            staff: staff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; })
+            players: players ? players.map(p => formatName(p.person.Name.toLowerCase())) : [],
+            staff: staff ? staff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : []
         };
 
         try {
@@ -36,7 +36,7 @@ async function teamTemplate(req, res) {
             var options = {
                 format: 'A4',
                 orientation: "landscape",
-                base: "file:///" + basePath, //.replace(/\\/g, "/"),
+                base: "file:///" + basePath,
                 border: "10mm"
             };
 
@@ -97,10 +97,10 @@ async function gameTemplate(req, res) {
             homeTeam: homeTeam.ShortDescription,
             awayTeam: awayTeam.ShortDescription,
             step: step.Description,
-            homePlayers: homePlayers.map(p => formatName(p.person.Name.toLowerCase())),
-            homeStaff: homeStaff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }),
-            awayPlayers: awayPlayers.map(p => formatName(p.person.Name.toLowerCase())),
-            awayStaff: awayStaff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; })
+            homePlayers: homePlayers ? homePlayers.map(p => formatName(p.person.Name.toLowerCase())) : [],
+            homeStaff: homeStaff ? homeStaff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : [],
+            awayPlayers: awayPlayers ? awayPlayers.map(p => formatName(p.person.Name.toLowerCase())) : [],
+            awayStaff: awayStaff ? awayStaff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : []
         };
 
         try {
@@ -113,7 +113,7 @@ async function gameTemplate(req, res) {
             var options = {
                 format: 'A4',
                 orientation: "landscape",
-                base: "file:///" + basePath, //.replace(/\\/g, "/"),
+                base: "file:///" + basePath,
                 border: "5mm"
             };
 
