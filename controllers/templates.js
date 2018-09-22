@@ -20,7 +20,7 @@ async function teamTemplate(req, res) {
         const data = {
             team: team.Name,
             step: step.Description,
-            players: players ? players.map(p => formatName(p.person.Name.toLowerCase())) : [],
+            players: players ? players.map(p => formatName(p.person.Name.toLowerCase())).concat(['', '']) : [],
             staff: staff ? staff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : []
         };
 
@@ -37,7 +37,7 @@ async function teamTemplate(req, res) {
                 format: 'A4',
                 orientation: "landscape",
                 base: "file:///" + basePath,
-                border: "10mm"
+                border: "5mm"
             };
 
             pdf.create(result, options).toBuffer(function (err, buffer) {
@@ -92,15 +92,17 @@ async function gameTemplate(req, res) {
 
         const awayPlayers = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [1]);
         const awayStaff = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
-        
+
         const data = {
             homeTeam: homeTeam.ShortDescription,
             awayTeam: awayTeam.ShortDescription,
             step: step.Description,
-            homePlayers: homePlayers ? homePlayers.map(p => formatName(p.person.Name.toLowerCase())) : [],
-            homeStaff: homeStaff ? homeStaff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : [],
-            awayPlayers: awayPlayers ? awayPlayers.map(p => formatName(p.person.Name.toLowerCase())) : [],
-            awayStaff: awayStaff ? awayStaff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : []
+            homePlayers: homePlayers ? homePlayers.map(p => formatName(p.person.Name.toLowerCase())).concat(['', '']) : [],
+            homeStaff1: homeStaff ? homeStaff.slice(0,2).map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : [],
+            homeStaff2: homeStaff ? homeStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : [],
+            awayPlayers: awayPlayers ? awayPlayers.map(p => formatName(p.person.Name.toLowerCase())).concat(['', '']) : [],
+            awayStaff1: awayStaff ? awayStaff.slice(0,2).map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : [],
+            awayStaff2: awayStaff ? awayStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : []
         };
 
         try {

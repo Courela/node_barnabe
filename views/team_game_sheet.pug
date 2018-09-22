@@ -4,14 +4,14 @@ html
         //- link(rel='stylesheet', href='./stylesheets/style.css', type='text/css')
         title= title
     body
-        p
-            img(src='team.jpg' style={ 'float': 'left', 'width': '80px' })
-            div(style={'display': 'inline', 'float': 'left' })
-                div(style={ 'margin-left': '20px', 'font-size': '13px' })= team
-                div(style={ 'height': '20px' })
-                div(style={ 'margin-left': '20px', 'font-size': '13px', 'display': 'inline' })= step
-                div(style={ 'margin-left': '20px', 'font-size': '13px', 'display': 'inline' }) Adversário: ___________________________________________________________
-            img(src='logo.jpg' style={ 'float': 'right', 'width': '80px' })
+        
+        img(src='team.jpg' style={ 'float': 'left', 'width': '50px' })
+        div(style={'display': 'inline', 'float': 'left' })
+            div(style={ 'margin-left': '20px', 'font-size': '12px' })= team
+            div(style={ 'height': '10px' })
+            div(style={ 'margin-left': '20px', 'font-size': '12px', 'display': 'inline' })= step
+            div(style={ 'margin-left': '20px', 'font-size': '12px', 'display': 'inline' }) Adversário: ___________________________________________________________
+        img(src='logo.jpg' style={ 'float': 'right', 'width': '50px' })
         table(style={ 'clear': 'both', 'padding-top': '10px'})
             thead
                 tr 
@@ -38,7 +38,7 @@ html
             tbody
                 each player in players
                     tr  
-                        td(style={ 'border': '1px solid black', 'font-size': '10px' })= player
+                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '10px', 'height': '15px' })= player
                         td(style={ 'border': '1px solid black' }) 
                         td(style={ 'border': '1px solid black', 'width': '30px'})
                         td(style={ 'border': '1px solid black','width': '30px'})
