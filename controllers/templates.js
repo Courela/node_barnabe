@@ -37,7 +37,7 @@ async function teamTemplate(req, res) {
                 format: 'A4',
                 orientation: "landscape",
                 base: "file:///" + basePath,
-                border: "5mm"
+                border: "8mm"
             };
 
             pdf.create(result, options).toBuffer(function (err, buffer) {
@@ -116,7 +116,7 @@ async function gameTemplate(req, res) {
                 format: 'A4',
                 orientation: "landscape",
                 base: "file:///" + basePath,
-                border: "5mm"
+                border: "8mm"
             };
 
             pdf.create(result, options).toBuffer(function (err, buffer) {
