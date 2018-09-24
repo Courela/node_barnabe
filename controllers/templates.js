@@ -6,6 +6,9 @@ const pdf = require('html-pdf');
 const playersMgr = require('../managers/players');
 const teamsMgr = require('../managers/teams');
 
+const MAX_EMPTY_LINES = 5;
+const MAX_PLAYER_LINES = 19;
+
 async function teamTemplate(req, res) {
     const { season, teamId, stepId } = req.query;
 
@@ -15,12 +18,15 @@ async function teamTemplate(req, res) {
 
         const step = await teamsMgr.getStep(parseInt(stepId));
 
-        const players = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [1]);
+        var players = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [1]);
+        players = addEmptyPlayerLines(players ? players.map(p => formatName(p.person.Name.toLowerCase())) : []);
+
         const staff = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [2, 3, 4, 5, 6]);
+
         const data = {
             team: team.Name,
             step: step.Description,
-            players: players ? players.map(p => formatName(p.person.Name.toLowerCase())).concat(['', '']) : [],
+            players: players,
             staff: staff ? staff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : []
         };
 
@@ -87,20 +93,22 @@ async function gameTemplate(req, res) {
 
         const step = await teamsMgr.getStep(parseInt(stepId));
 
-        const homePlayers = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [1]);
+        var homePlayers = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [1]);
+        homePlayers = addEmptyPlayerLines(homePlayers ? homePlayers.map(p => formatName(p.person.Name.toLowerCase())) : []);
         const homeStaff = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
 
-        const awayPlayers = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [1]);
+        var awayPlayers = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [1]);
+        awayPlayers = addEmptyPlayerLines(awayPlayers ? awayPlayers.map(p => formatName(p.person.Name.toLowerCase())) : []);
         const awayStaff = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
-
+        
         const data = {
             homeTeam: homeTeam.ShortDescription,
             awayTeam: awayTeam.ShortDescription,
             step: step.Description,
-            homePlayers: homePlayers ? homePlayers.map(p => formatName(p.person.Name.toLowerCase())).concat(['', '']) : [],
+            homePlayers: homePlayers,
             homeStaff1: homeStaff ? homeStaff.slice(0,2).map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : [],
             homeStaff2: homeStaff ? homeStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : [],
-            awayPlayers: awayPlayers ? awayPlayers.map(p => formatName(p.person.Name.toLowerCase())).concat(['', '']) : [],
+            awayPlayers: awayPlayers,
             awayStaff1: awayStaff ? awayStaff.slice(0,2).map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : [],
             awayStaff2: awayStaff ? awayStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : []
         };
@@ -149,6 +157,15 @@ async function gameTemplate(req, res) {
         res.statusCode = 400;
         res.send();
     }
+}
+
+function addEmptyPlayerLines(arr) {
+    if (arr && arr.length) {
+        for(var i = arr.length, j = arr.length; i < MAX_PLAYER_LINES && i - j < MAX_EMPTY_LINES  ; i++) {
+            arr.push('');
+        }
+    }
+    return arr;
 }
 
 function formatName(val) {
