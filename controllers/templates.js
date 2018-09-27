@@ -19,7 +19,7 @@ async function teamTemplate(req, res) {
         const step = await teamsMgr.getStep(parseInt(stepId));
 
         var players = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [1]);
-        players = addEmptyPlayerLines(players ? players.map(p => formatName(p.person.Name.toLowerCase())) : []);
+        players = addEmptyPlayerLines(players ? mapPlayers(players) : []);
 
         const staff = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [2, 3, 4, 5, 6]);
 
@@ -83,6 +83,17 @@ async function teamTemplate(req, res) {
     //res.send({ src: src });
 }
 
+function isLocal(player) {
+    //console.log('Row:',row);
+    const { person, caretaker } = player;
+    const result = person.LocalBorn || player.Resident || (caretaker && caretaker.VoterNr) ? true : (person.VoterNr ? true : false);
+    return result;
+}
+
+function mapPlayers(players) {
+    return players.map(p => { return { name: formatName(p.person.Name.toLowerCase()), isLocal: isLocal(p), isTown: !!p.person.LocalTown }; });
+}
+
 async function gameTemplate(req, res) {
     const { season, homeTeamId, awayTeamId, stepId } = req.query;
 
@@ -94,11 +105,11 @@ async function gameTemplate(req, res) {
         const step = await teamsMgr.getStep(parseInt(stepId));
 
         var homePlayers = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [1]);
-        homePlayers = addEmptyPlayerLines(homePlayers ? homePlayers.map(p => formatName(p.person.Name.toLowerCase())) : []);
+        homePlayers = addEmptyPlayerLines(homePlayers ? mapPlayers(homePlayers) : []);
         const homeStaff = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
 
         var awayPlayers = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [1]);
-        awayPlayers = addEmptyPlayerLines(awayPlayers ? awayPlayers.map(p => formatName(p.person.Name.toLowerCase())) : []);
+        awayPlayers = addEmptyPlayerLines(awayPlayers ? mapPlayers(awayPlayers) : []);
         const awayStaff = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
         
         const data = {
@@ -162,7 +173,7 @@ async function gameTemplate(req, res) {
 function addEmptyPlayerLines(arr) {
     if (arr && arr.length) {
         for(var i = arr.length, j = arr.length; i < MAX_PLAYER_LINES && i - j < MAX_EMPTY_LINES  ; i++) {
-            arr.push('');
+            arr.push({ });
         }
     }
     return arr;

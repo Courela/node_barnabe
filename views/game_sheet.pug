@@ -305,8 +305,15 @@ html
                         tbody
                             each player in homePlayers
                                 tr  
-                                    td(style={ 'border': '1px solid black' }) 
-                                    td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player
+                                    td(style={ 'border': '1px solid black' })
+                                    if !player.name
+                                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' }) 
+                                    else if player.isTown 
+                                        td(style={ 'background-color': '#c5e8ec', 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player.name
+                                    else if !player.isLocal
+                                        td(style={ 'background-color': '#ffb3b3', 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player.name
+                                    else
+                                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player.name
                                     td(style={ 'border': '1px solid black','width': '12px'})
                                     td(style={ 'border': '1px solid black','width': '12px'})
                                     td(style={ 'border': '1px solid black','width': '12px'})
@@ -406,7 +413,14 @@ html
                             each player in awayPlayers
                                 tr  
                                     td(style={ 'border': '1px solid black' }) 
-                                    td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player
+                                    if !player.name
+                                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' }) 
+                                    else if player.isTown 
+                                        td(style={ 'background-color': '#c5e8ec', 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player.name
+                                    else if !player.isLocal
+                                        td(style={ 'background-color': '#ffb3b3', 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player.name
+                                    else
+                                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player.name
                                     td(style={ 'border': '1px solid black','width': '12px'})
                                     td(style={ 'border': '1px solid black','width': '12px'})
                                     td(style={ 'border': '1px solid black','width': '12px'})
