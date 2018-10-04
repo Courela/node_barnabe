@@ -117,11 +117,11 @@ async function gameTemplate(req, res) {
             awayTeam: awayTeam.ShortDescription,
             step: step.Description,
             homePlayers: homePlayers,
-            homeStaff1: homeStaff ? homeStaff.slice(0,2).map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : [],
-            homeStaff2: homeStaff ? homeStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : [],
+            homeStaff1: homeStaff ? homeStaff.slice(0,2).map(p => { return { name: formatName(p.person.Name.toLowerCase(), 3), role: p.role.Description}; }) : [],
+            homeStaff2: homeStaff ? homeStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase(), 3), role: p.role.Description}; }) : [],
             awayPlayers: awayPlayers,
-            awayStaff1: awayStaff ? awayStaff.slice(0,2).map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : [],
-            awayStaff2: awayStaff ? awayStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : []
+            awayStaff1: awayStaff ? awayStaff.slice(0,2).map(p => { return { name: formatName(p.person.Name.toLowerCase(), 3), role: p.role.Description}; }) : [],
+            awayStaff2: awayStaff ? awayStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase(), 3), role: p.role.Description}; }) : []
         };
 
         try {
@@ -179,10 +179,10 @@ function addEmptyPlayerLines(arr) {
     return arr;
 }
 
-function formatName(val) {
+function formatName(val, nrNames = 4) {
     var name = val.toLowerCase();
     var names = name.split(' ');
-    while(names.length > 4) {
+    while(names.length > nrNames) {
         names.splice(2, 1);
     }
     var result = [];
