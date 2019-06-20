@@ -40,11 +40,11 @@ function getPlayers(season, teamId, stepId, roles) {
     });
 }
 
-function existsPlayer(teamId, stepId, season, personId) {
+function existsPlayer(season, teamId, stepId, roleId, personId) {
     const query = function (db) {
         const player = db.get('Player')
             .cloneDeep()
-            .find({ PersonId: personId, TeamId: teamId, StepId: stepId, Season: season })
+            .find({ PersonId: personId, TeamId: teamId, StepId: stepId, Season: season, RoleId: roleId })
             .value();
         
         const result = player ? true : false;

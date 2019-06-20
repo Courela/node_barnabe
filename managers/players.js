@@ -85,7 +85,7 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
     //console.log('Person: ', personEntity);
     if (personEntity) {
         personEntity = personEntity[personEntity.length - 1];
-        if (await playersRepo.existsPlayer(teamId, stepId, season, personEntity.Id)) {
+        if (await playersRepo.existsPlayer(season, teamId, stepId, roleId, personEntity.Id)) {
             console.warn('Player already exists!');
             return -409;
         }
@@ -283,13 +283,15 @@ async function importPlayers(teamId, stepId, season, selectedSeason, playerIds) 
             if (playerResult.rowsAffected[0] === 1) {
                 var player = playerResult.recordset[0];
                 console.log('Player to import: ', player);
-                if (player && player.person.Birthdate >= step.MinDate) {
-                    await addPlayer(teamId, stepId, season, 
-                        { docId: player.person.IdCardNr }, 
-                        player.RoleId, 
-                        { docId: player.caretaker.IdCardNr }, null, 
-                        player.Resident);
-                    count++;
+                if (player && (player.RoleId !== 1 || player.person.Birthdate >= step.MinDate)) {
+                    if (await addPlayer(teamId, stepId, season, 
+                            { docId: player.person.IdCardNr }, 
+                            player.RoleId, 
+                            player.caretaker ? { docId: player.caretaker.IdCardNr }: null , 
+                            null, 
+                            player.Resident) > 0) {
+                        count++;
+                    }
                 }
             }
         });
