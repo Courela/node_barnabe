@@ -62,7 +62,7 @@ function existsPlayer(teamId, stepId, season, personId) {
     });
 }
 
-function getPlayer(season, teamId, stepId, playerId) {
+async function getPlayer(season, teamId, stepId, playerId) {
     const query = function (db) {
         const player = db.get('Player')
             .cloneDeep()

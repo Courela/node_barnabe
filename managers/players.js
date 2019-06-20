@@ -1,4 +1,4 @@
-const atob = require('atob');
+//const atob = require('atob');
 const btoa = require('btoa');
 const fs = require('fs');
 
@@ -274,17 +274,43 @@ function deleteFile(filename) {
     }
 }
 
-function importPlayers(teamId, stepId, season, selectedSeason, playerIds) {
-    return playersRepo.importPlayers(teamId, stepId, season, selectedSeason, playerIds)
-        .then(result => {
-            if (result.rowsAffected && result.rowsAffected.length > 0) {
-
+async function importPlayers(teamId, stepId, season, selectedSeason, playerIds) {
+    try {
+        var step = await teamsMgr.getStep(stepId, season);
+        var count = 0;
+        await playerIds.forEach(async playerId => {
+            var playerResult = await playersRepo.getPlayer(selectedSeason, teamId, stepId, playerId);
+            if (playerResult.rowsAffected[0] === 1) {
+                var player = playerResult.recordset[0];
+                console.log('Player to import: ', player);
+                if (player && player.person.Birthdate >= step.MinDate) {
+                    await addPlayer(teamId, stepId, season, 
+                        { docId: player.person.IdCardNr }, 
+                        player.RoleId, 
+                        { docId: player.caretaker.IdCardNr }, null, 
+                        player.Resident);
+                    count++;
+                }
             }
-        })
-        .catch(err => {
-            console.error(err);
-            throw 'Unexpected error!';
         });
+    }
+    catch(err){
+        console.error(err);
+        return Promise.reject(err);        
+    }
+    
+    return Promise.resolve(count);
+
+    // return playersRepo.importPlayers(teamId, stepId, season, selectedSeason, playerIds)
+    //     .then(result => {
+    //         if (result.rowsAffected && result.rowsAffected.length > 0) {
+
+    //         }
+    //     })
+    //     .catch(err => {
+    //         console.error(err);
+    //         throw 'Unexpected error!';
+    //     });
 }
 
 function getPlayersCount(year) {

@@ -190,9 +190,10 @@ async function removePlayer(req, res) {
 async function importPlayers(req, res) {
     const { season, teamId, stepId } = req.params;
     const { selectedSeason, playerIds } = req.body;
+    var count = 0;
     if (teamId && stepId && season && selectedSeason && playerIds) {
         if (playerIds.length > 0) {
-            await playersMgr.importPlayers(
+            count = await playersMgr.importPlayers(
                 parseInt(teamId),
                 parseInt(stepId),
                 parseInt(season),
@@ -205,10 +206,13 @@ async function importPlayers(req, res) {
         res.statusCode = 400;
     }
 
+    console.log('Imported players: ', count);
     //TODO Remove when saving data handled properly
-    googleApi.saveData((result) => res.json(result));
-
-    res.send();
+    googleApi.saveData((result) => {
+        console.log(result); 
+        res.json({ imported: count, save: result }); 
+        res.send();
+    });
 }
 
 async function getPhoto(req, res) {
