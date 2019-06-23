@@ -16,7 +16,7 @@ const googleApi = require('./authentication/googleApi');
 serverController.setup();
 
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8001;
 
 process.on('SIGINT', function() {
     console.log('Shutting down...');
@@ -63,7 +63,7 @@ apiRouter.use('/admin', adminRouter)
     .get('/seasons/:season/steps/:stepId', teamsController.getStep)
     .get('/persons', utilsController.getPerson)
     .get('/roles', utilsController.getRoles)
-    .get('/seasons/:season/teams/:teamId/signsteps', teamsController.getSignSteps)
+    .get('/seasons/:season/teams/:teamId/sign-steps', teamsController.getSignSteps)
     .get('/seasons/:season/teams/:teamId/steps', teamsController.getTeamSteps)
     //.route('/season/:season/team/:teamId/step/:stepId/player')
     .get('/seasons/:season/teams/:teamId/steps/:stepId/players/:playerId', playersController.getPlayer)

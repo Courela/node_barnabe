@@ -69,7 +69,7 @@ async function addTeamStep(req, res) {
     const teamId = req.params.teamId;
     const stepId = req.body.stepId;
     if (season && teamId && stepId) {
-        const affectedRows = await teamsMgr.addStep(parseInt(season), parseInt(teamId), parseInt(stepId))
+        const affectedRows = await teamsMgr.addStep(parseInt(season, 10), parseInt(teamId, 10), parseInt(stepId, 10))
             .catch(() => -1);
         //console.log('AddTeamStep rows affected: ' + affectedRows);
         res.statusCode = affectedRows > 0 ? 201 : affectedRows < 0 ? 500 : 409;
@@ -78,6 +78,10 @@ async function addTeamStep(req, res) {
         res.statusCode = 400;
     }
 
+    if (res.statusCode < 400) {
+        const folder = [season, teamId, stepId].join('_') + googleApi.FOLDER_EXTENSION;
+        googleApi.saveFile(null, folder);
+    }
     //TODO Remove when saving data handled properly
     googleApi.saveData();
 
@@ -92,14 +96,14 @@ async function deleteTeamStep(req, res) {
         const affectedRows = await teamsMgr.deleteStep(parseInt(season), parseInt(teamId), parseInt(stepId))
             .catch(() => -1);
         //console.log('DeleteTeamStep rows affected: ' + affectedRows);
-        res.statusCode = affectedRows >= 0 ? 200 : 500;
+        res.statusCode = affectedRows > 0 ? 200 : affectedRows === 0 ? 404 : 500;
     }
     else {
         res.statusCode = 400;
     }
 
     //TODO Remove when saving data handled properly
-    googleApi.saveData((result) => res.json(result));
+    googleApi.saveData((result) => console.log(result));
 
     res.send();
 }

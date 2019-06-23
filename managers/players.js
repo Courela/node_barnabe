@@ -40,7 +40,8 @@ function getPlayer(season, teamId, stepId, playerId) {
                 const player = results.recordset[0];
                 let photo = [];
                 if (player.PhotoFilename) {
-                    photo = getPhoto(player.PhotoFilename);
+                    const folder = [season, teamId, stepId].join('_');
+                    photo = getPhoto(folder, player.PhotoFilename);
                 }
                 if (player.DocFilename) {
                     var docPath = STORAGE_FOLDER + player.DocFilename;
@@ -61,7 +62,7 @@ function getPlayer(season, teamId, stepId, playerId) {
         });
 }
 
-function getPhoto(filename) {
+function getPhoto(folder, filename) {
     var photoPath = STORAGE_FOLDER + filename;
     const mimeType = googleApi.getMimeType(filename);
 
@@ -72,8 +73,9 @@ function getPhoto(filename) {
     else {
         console.warn('Missing file: ', filename);
         //TODO Remove when saving data handled properly
-        console.log('Restoring photo ' + filename +'...');
-        googleApi.getFile(filename, mimeType, true, (data) => saveRawFile(filename, data));
+        console.log('Restoring photo ' + folder + '/'+ filename +'...');
+
+        googleApi.getRemoteFile(folder, filename, mimeType, true, (data) => saveRawFile(filename, data));
         result.src = '/show_loader.gif';
     }
     //console.log('Photo: ' + photo.length);
@@ -190,12 +192,13 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
 
 function savePlayerPhoto(photo, season, teamId, stepId, playerId) {
     const fileExtension = getFileExtension(photo);
+    const folder = [season, teamId, stepId].join('_');
     const filename = [season, teamId, stepId, playerId + fileExtension].join('_');
     saveBuffer(filename, photo);
     
     //saveStream(filename, photo);
 
-    googleApi.saveFile(STORAGE_FOLDER, filename, null);
+    googleApi.uploadFile(STORAGE_FOLDER, filename, folder, null);
     return filename;
 }
 

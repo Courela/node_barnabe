@@ -11,6 +11,7 @@ const STORAGE_FOLDER = './data/storage/';
 const DB_FILE = 'db.json';
 const USERS_FILE = 'users.json';
 const DRIVE_API_VERSION = 'v3';
+const FOLDER_EXTENSION = '.folder';
 
 function saveData(responseCallback) {
     saveFile(DATA_FOLDER, DB_FILE, responseCallback);
@@ -85,19 +86,23 @@ async function restoreDocuments(responseCallback) {
 }
 
 function getAppFolder(driveClient, callback, responseCallback) {
+    getFolder(driveClient, DRIVE_FOLDER, callback, responseCallback);
+}
+
+function getFolder(driveClient, folder, callback, responseCallback) {
     driveClient.files.list({
-        q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + DRIVE_FOLDER + "'",
+        q: "mimeType = 'application/vnd.google-apps.folder' and name = '" + folder + "'",
         //q: "mimeType = 'application/vnd.google-apps.folder'",
         fields: 'files(id, name)',
         spaces: 'drive'
     }, (err, res) => {
         if (err) {
-            console.error(`Error getting directory ${DRIVE_FOLDER}: `, err);
+            console.error(`Error getting directory ${folder}: `, err);
             if (responseCallback) { responseCallback({ isSuccess: false }); }
             return;
         }
         else if (!res || res.data.files.length < 1) {
-            console.warn(`Directory ${DRIVE_FOLDER} not found!`);
+            console.warn(`Directory ${folder} not found!`);
             if (responseCallback) { responseCallback({ isSuccess: false }); }
             return;
         }
@@ -128,21 +133,31 @@ function listFiles(folder, driveClient, callback, responseCallback) {
 }
 
 async function saveFile(filePath, filename, responseCallback) {
+    uploadFile(filePath, filename, DRIVE_FOLDER, responseCallback); 
+}
+
+async function uploadFile(filePath, filename, folder, responseCallback) {
     const client = await authClient.authorize();
     if (client) {
         console.log('Saving file ' + filename + ' to Drive...');
         const driveClient = google.drive({ version: DRIVE_API_VERSION, auth: client });
-        getAppFolder(driveClient,
-            (folder) => {
+        getFolder(driveClient, folder,
+            (f) => {
                 var fileMetadata = {
-                    'name': filename,
-                    parents: [folder.id]
+                    'name': filename.replace(FOLDER_EXTENSION, ''),
+                    parents: [f.id]
                 };
-                var media = {
-                    body: fs.createReadStream(filePath + filename)
-                };
+                var media = null;
                 var mimeType = getMimeType(filename);
-                if (mimeType) { media.mimeType = mimeType }
+                if (filePath) {
+                    media = {
+                        body: fs.createReadStream(filePath + filename)
+                    };
+                    if (mimeType) { media.mimeType = mimeType }
+                }
+                else {
+                    fileMetadata.mimeType = mimeType;
+                }
                 driveClient.files.create({
                     resource: fileMetadata,
                     media: media,
@@ -182,6 +197,9 @@ function getMimeType(filename) {
             case 'jpg':
                 result = 'image/jpeg';
                 break;
+            case 'folder':
+                result = 'application/vnd.google-apps.folder';
+                break;
             default:
                 break;
         }
@@ -190,15 +208,19 @@ function getMimeType(filename) {
 }
 
 async function getFile(filename, mimeType, isBinary, callback, responseCallback) {
+    getRemoteFile(DRIVE_FOLDER, filename, mimeType, isBinary, callback, responseCallback);
+}
+
+async function getRemoteFile(folder, filename, mimeType, isBinary, callback, responseCallback) {
     const client = await authClient.authorize();
     if (client) {
-        console.log('Getting file ' + filename + ' from Drive...');
+        console.log('Getting file ' + folder + '/' + filename + ' from Drive...');
         var options = { version: DRIVE_API_VERSION, auth: client };
         const driveClient = google.drive(options);
-        getAppFolder(driveClient,
-            (folder) => {
+        getFolder(driveClient, folder,
+            (f) => {
                 driveClient.files.list({
-                    q: "'" + folder.id + "' in parents and mimeType='" + mimeType + "' and name = '" + filename + "'",
+                    q: "'" + f.id + "' in parents and mimeType='" + mimeType + "' and name = '" + filename + "'",
                     fields: 'files(id, name)',
                     spaces: 'drive',
                     orderBy: 'createdTime desc'
@@ -370,6 +392,9 @@ module.exports = {
     saveDocuments,
     restoreDocuments,
     getFile,
+    getRemoteFile,
     saveFile,
-    getMimeType
+    uploadFile,
+    getMimeType,
+    FOLDER_EXTENSION
 }

@@ -41,12 +41,11 @@ function getTeamSteps(season, teamId, invert = false) {
 function addStep(season, teamId, stepId) {
     const query = function (db) {
         const exists = db.get('TeamStep')
-            .cloneDeep()
             .find({ TeamId: teamId, StepId: stepId, Season: season })
             .value();
         if (exists) { return 0; };
 
-        const last = db.get('TeamStep').cloneDeep().last().value();
+        const last = db.get('TeamStep').last().value();
         const id = last && last.Id ? last.Id + 1 : 1;
 
         db.get('TeamStep')
@@ -73,10 +72,18 @@ function addStep(season, teamId, stepId) {
 
 function deleteStep(season, teamId, stepId) {
     const query = function (db) {
-        db.get('TeamStep')
-            .remove({ TeamId: teamId, StepId: stepId, Season: season })
-            .write();
-        return 1;
+        var result = 0;
+        var step = db.get('TeamStep')
+            .find({ TeamId: teamId, StepId: stepId, Season: season })
+            .value();
+        
+        if (step) {
+            db.get('TeamStep')
+                .remove({ TeamId: teamId, StepId: stepId, Season: season })
+                .write();
+            result = 1;
+        }
+        return result;
     };
     return new Promise((resolve, reject) => {
         try {
