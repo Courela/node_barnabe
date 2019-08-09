@@ -98,6 +98,9 @@ async function addPlayer(req, res) {
                 res.statusCode = 201;
                 console.log('PlayerId: ' + playerId);
                 response = { Id: playerId };
+
+                //TODO Remove when saving data handled properly
+                googleApi.saveData();
             } else {
                 const result = Math.abs(playerId);
                 console.log('Status code result: ' + result);
@@ -113,9 +116,6 @@ async function addPlayer(req, res) {
         errors.handleErrors(res);
         response = err;
     }
-
-    //TODO Remove when saving data handled properly
-    googleApi.saveData();
 
     res.send(response);
 }
@@ -145,6 +145,9 @@ async function updatePlayer(req, res) {
                 res.statusCode = 200;
                 console.log('PlayerId: ' + playerId);
                 response = { Id: playerId };
+                
+                //TODO Remove when saving data handled properly
+                googleApi.saveData();
             } else {
                 const result = Math.abs(playerId);
                 console.log('Status code result: ' + result);
@@ -160,9 +163,6 @@ async function updatePlayer(req, res) {
         errors.handleErrors(res);
         response = err;
     }
-    
-    //TODO Remove when saving data handled properly
-    googleApi.saveData();
 
     res.send(response);
 }
@@ -176,13 +176,12 @@ async function removePlayer(req, res) {
             parseInt(season),
             parseInt(playerId)
         );
+        //TODO Remove when saving data handled properly
+        googleApi.saveData();
     }
     else {
         res.statusCode = 400;
     }
-
-    //TODO Remove when saving data handled properly
-    googleApi.saveData((result) => res.json(result));
 
     res.send();
 }

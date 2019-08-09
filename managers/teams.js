@@ -13,6 +13,18 @@ function getTeams(season) {
         });
 }
 
+function getTeam(teamId) {
+    return teamsRepo.getTeam(teamId)
+        .then(result => {
+            console.log('GetTeam '+ teamId + ': ', result); 
+            return result.rowsAffected[0] > 0 ? result.recordset[0] : null; 
+        })
+        .catch((err) => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
 function getTeamSteps(season, teamId, invert = false) {
     return teamsRepo.getTeamSteps(season, teamId, invert)
         .then((results) => {
@@ -61,6 +73,7 @@ module.exports = {
     getStep,
     addStep,
     getTeams,
+    getTeam,
     getTeamSteps,
     deleteStep
 }

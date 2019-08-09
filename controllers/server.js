@@ -80,12 +80,19 @@ function testDrive(req, res) {
     res.json(oAuth2.isDriveAuthEnabled());
 }
 
+async function getUsers(req, res) {
+    res.send(await usersMgr.getUsers());
+}
+
 async function addUser(req, res) {
     const { username, password, teamId } = req.body;
     if (username && password && teamId) {
         const exists = await usersMgr.existsUser(username);
         if (!exists) {
             await usersMgr.addUser(username, password, parseInt(teamId));
+
+            //TODO Remove when saving data handled properly
+            googleApi.saveUsers();
         }
         else {
             res.statusCode = 409;
@@ -165,6 +172,7 @@ module.exports = {
     saveDocuments,
     restoreDocuments,
     testDrive,
+    getUsers,
     addUser,
     activateSeason,
     getStatistics

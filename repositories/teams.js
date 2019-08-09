@@ -113,6 +113,26 @@ function getTeams() {
     });
 }
 
+function getTeam(teamId) {
+    const query = function (db) {
+        return db.get('Team')
+            .cloneDeep()
+            .find({ Id: teamId })
+            .value();
+    };
+    return new Promise((resolve, reject) => {
+        try {
+            const team = storage.statementQuery(query);
+            let result = [];
+            if (team) { result.push(team); }
+            resolve({ recordset: result, rowsAffected: [result.length] });
+        }
+        catch (err) {
+            reject(err);
+        }
+    });
+}
+
 function getStep(stepId, season = null) {
     const query = function (db) {
         let step = db.get('Step')
@@ -174,6 +194,7 @@ function getTeamsBySeason(season) {
 module.exports = {
     addStep,
     getStep,
+    getTeam,
     getTeams,
     getTeamsBySeason,
     getTeamSteps,

@@ -20,6 +20,24 @@ function existsUser(username) {
     });    
 }
 
+function getUsers() {
+    const query = function (users) {
+        return users.get('User')
+            .cloneDeep()
+            .filter(u => u.TeamId)
+            .value();
+    };
+    return new Promise((resolve, reject) => {
+        try {
+            const users = storage.usersStatementQuery(query);
+            resolve({ recordset: users, rowsAffected: [users.length] });
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 function addUser(username, password, teamId) {
     const query = function (users) {
         const last = users.get('User').cloneDeep().last().value();
@@ -113,6 +131,7 @@ module.exports = {
     addUser,
     existsUser,
     getUserById,
+    getUsers,
     getUser,
     getUsersCount
 }

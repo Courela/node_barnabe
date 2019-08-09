@@ -1,4 +1,5 @@
 const usersRepo = require('../repositories/users');
+const teamsMgr = require('../managers/teams');
 
 function existsUser(username) {
     return usersRepo.existsUser(username)
@@ -7,6 +8,26 @@ function existsUser(username) {
                 return true;
             } else {
                 return null;
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            throw 'Unexpected error!';
+        });
+}
+
+async function getUsers() {
+    return usersRepo.getUsers()
+        .then(result => {
+            var users = [];
+            if (result.recordset) {
+                result.recordset.forEach(async u => {
+                    var team = await teamsMgr.getTeam(u.TeamId);
+                    users.push(Object.assign(u, { team: team }));
+                });
+                return users;
+            } else {
+                return [];
             }
         })
         .catch((err) => {
@@ -74,5 +95,6 @@ module.exports = {
     existsUser,
     getUserById,
     getUser,
+    getUsers,
     getUsersCount
 }

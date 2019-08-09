@@ -47,6 +47,7 @@ adminRouter.use('/templates', templatesRouter)
     .get('/save-documents', serverController.saveDocuments)
     .get('/restore-documents', serverController.restoreDocuments)
     .get('/drive', serverController.testDrive)
+    .get('/users', serverController.getUsers)
     .put('/users', serverController.addUser)
     .post('/seasons/activate', serverController.activateSeason);
 
