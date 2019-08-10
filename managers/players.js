@@ -204,10 +204,11 @@ function savePlayerPhoto(photo, season, teamId, stepId, playerId) {
 
 function savePlayerDoc(doc, season, teamId, stepId, playerId) {
     const fileExtension = getFileExtension(doc);
+    const folder = [season, teamId, stepId].join('_');
     const filename = [season, teamId, stepId, playerId, 'doc' + fileExtension].join('_');
     
     saveBuffer(filename, doc);
-    googleApi.saveFile(STORAGE_FOLDER, filename, null);
+    googleApi.uploadFile(STORAGE_FOLDER, filename, folder, null);
     return filename;
 }
 
