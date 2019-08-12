@@ -1,5 +1,6 @@
 const teamsMgr = require('../managers/teams');
-const googleApi = require('../authentication/googleApi');
+const googleApi = require('../authentication/googleApi'); 
+const storage = require('../utils/storage');
 
 async function getTeams(req, res) {
     const season = req.query.season;
@@ -79,8 +80,8 @@ async function addTeamStep(req, res) {
     }
 
     if (res.statusCode < 400) {
-        const folder = [season, teamId, stepId].join('_') + googleApi.FOLDER_EXTENSION;
-        googleApi.saveFile(null, folder);
+        const folder = storage.getFolderName(season, teamId, stepId) + googleApi.FOLDER_EXTENSION;
+        googleApi.uploadFile(null, folder);
     }
     //TODO Remove when saving data handled properly
     googleApi.saveData();

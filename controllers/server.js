@@ -72,9 +72,11 @@ function saveDocuments(req, res) {
     googleApi.saveDocuments((result) => res.json(result));
 }
 
+/*
 function restoreDocuments(req, res) {
     googleApi.restoreDocuments((result) => res.json(result));
 }
+*/
 
 function testDrive(req, res) {
     res.json(oAuth2.isDriveAuthEnabled());
@@ -170,7 +172,7 @@ module.exports = {
     saveUsers,
     restoreUsers,
     saveDocuments,
-    restoreDocuments,
+    //restoreDocuments,
     testDrive,
     getUsers,
     addUser,
