@@ -2,6 +2,7 @@ const errors = require('../errors');
 const playersMgr = require('../managers/players');
 const { isValidGender, isValidEmail, isValidPhone, isValidDate } = require('../utils/validations');
 const googleApi = require('../authentication/googleApi');
+const { ROLES } = require('../utils/constants');
 
 async function getTeamPlayers(req, res) {
     let response = '';
@@ -13,7 +14,7 @@ async function getTeamPlayers(req, res) {
                 parseInt(season),
                 parseInt(teamId),
                 parseInt(stepId),
-                [1]);
+                [ROLES.PLAYER]);
         }
         else {
             res.statusCode = 400;
@@ -40,7 +41,11 @@ async function getStaff(req, res) {
                 parseInt(season),
                 parseInt(teamId),
                 parseInt(stepId),
-                [2, 3, 4, 5, 6]);
+                [ ROLES.HEAD_COACH, 
+                  ROLES.ASSISTANT_COACH,
+                  ROLES.MANAGER,
+                  ROLES.ASSISTANT_MANAGER,
+                  ROLES.MEDICAL_STAFF ]);
         }
         else {
             res.statusCode = 400;
