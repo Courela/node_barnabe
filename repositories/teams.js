@@ -191,11 +191,30 @@ function getTeamsBySeason(season) {
     });
 }
 
+function getTeamsByStep(season, stepId) {
+    const query = function (db) {
+        return db.get('Team')
+            .cloneDeep()
+            .find({ Season: season, StepId: stepId })
+            .value();
+    };
+    return new Promise((resolve, reject) => {
+        try {
+            const result = storage.statementQuery(query);
+            resolve({ recordset: result, rowsAffected: result.length });
+        }
+        catch (err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     addStep,
     getStep,
     getTeam,
     getTeams,
+    getTeamsByStep,
     getTeamsBySeason,
     getTeamSteps,
     deleteStep

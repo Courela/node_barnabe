@@ -2,8 +2,14 @@ const teamsMgr = require('../managers/teams');
 const googleApi = require('../authentication/googleApi');
 
 async function getTeams(req, res) {
-    const season = req.query.season;
-    const results = await teamsMgr.getTeams(season);
+    const { season, stepId } = req.query;
+    var results = null;
+    if (stepId) {
+        results = await teamsMgr.getTeamsByStep(season, stepId);
+    }
+    else {
+        results = await teamsMgr.getTeams(season);
+    }
     res.send(results);
 }
 
