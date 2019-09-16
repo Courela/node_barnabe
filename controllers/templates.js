@@ -233,6 +233,18 @@ function getTeamLogoFilename(teamId) {
         case 11:
             result = 'camaroes.jpg';
             break;
+        case 12:
+            result = 'maceira.jpg';
+            break;
+        case 13:
+            result = 'montelavar.jpg';
+            break;
+        case 14:
+            result = 'pero_pinheiro.jpg';
+            break;
+        case 15:
+            result = 'ancos.jpg';
+            break;
     }
     return result;
 }
