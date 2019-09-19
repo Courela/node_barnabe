@@ -91,7 +91,7 @@ function isLocal(player) {
 }
 
 function mapPlayers(players) {
-    return players.map(p => { return { name: formatName(p.person.Name.toLowerCase()), isLocal: isLocal(p), isTown: !!p.person.LocalTown }; });
+    return players.map(p => { return { name: formatName(p.person.Name.toLowerCase()), isLocal: isLocal(p), isTown: false }; });
 }
 
 async function gameTemplate(req, res) {
