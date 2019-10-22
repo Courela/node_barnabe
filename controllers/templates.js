@@ -6,8 +6,8 @@ const pdf = require('html-pdf');
 const playersMgr = require('../managers/players');
 const teamsMgr = require('../managers/teams');
 
-const MAX_EMPTY_LINES = 5;
-const MAX_PLAYER_LINES = 19;
+const MIN_EMPTY_LINES = 4;
+const MAX_PLAYER_LINES = 21;
 
 async function teamTemplate(req, res) {
     const { season, teamId, stepId } = req.query;
@@ -18,10 +18,13 @@ async function teamTemplate(req, res) {
 
         const step = await teamsMgr.getStep(parseInt(stepId));
 
-        var players = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [1]);
-        players = addEmptyPlayerLines(players ? mapPlayers(players) : []);
+        // var players = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [1]);
+        // players = addEmptyPlayerLines(players ? mapPlayers(players) : []);
 
-        const staff = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [2, 3, 4, 5, 6]);
+        var players = await getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [1], 9999, true);
+
+        //const staff = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [2, 3, 4, 5, 6]);
+        const staff = await getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [2, 3, 4, 5, 6]);
 
         const data = {
             team: team.Name,
@@ -104,13 +107,16 @@ async function gameTemplate(req, res) {
 
         const step = await teamsMgr.getStep(parseInt(stepId));
 
-        var homePlayers = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [1]);
-        homePlayers = addEmptyPlayerLines(homePlayers ? mapPlayers(homePlayers) : []);
-        const homeStaff = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
+        const maxPlayers = MAX_PLAYER_LINES - MIN_EMPTY_LINES;
+        // var homePlayers = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [1]);
+        // homePlayers = addEmptyPlayerLines(homePlayers ? mapPlayers(homePlayers) : []);
+        const homePlayers = await getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [1], maxPlayers, true);
+        const homeStaff = await getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
 
-        var awayPlayers = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [1]);
-        awayPlayers = addEmptyPlayerLines(awayPlayers ? mapPlayers(awayPlayers) : []);
-        const awayStaff = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
+        // var awayPlayers = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [1]);
+        // awayPlayers = addEmptyPlayerLines(awayPlayers ? mapPlayers(awayPlayers) : []);
+        const awayPlayers = await getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [1], maxPlayers, true);
+        const awayStaff = await getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
         
         const data = {
             homeTeam: homeTeam.ShortDescription,
@@ -170,21 +176,41 @@ async function gameTemplate(req, res) {
     }
 }
 
+async function getPlayers(season, teamId, stepId, roles, maxElements = 9999, addEmptyLines = false) {
+    var players = await playersMgr.getPlayers(season, teamId, stepId, roles);
+    if (players && players.length > maxElements) {
+        players.splice(maxElements, players.length);
+    }
+
+    if (addEmptyLines) {
+        players = addEmptyPlayerLines(players ? mapPlayers(players) : []);
+    }
+    return players;
+}
+
 function addEmptyPlayerLines(arr) {
     if (arr && arr.length) {
-        for(var i = arr.length, j = arr.length; i < MAX_PLAYER_LINES && i - j < MAX_EMPTY_LINES  ; i++) {
+        for(var i = arr.length /*, j = arr.length */; i < MAX_PLAYER_LINES /* && i - j < MAX_EMPTY_LINES*/; i++) {
             arr.push({ });
         }
     }
     return arr;
 }
 
-function formatName(val, nrNames = 4) {
+function formatName(val, nrNames = 4, totalLetters = 24) {
     var name = val.toLowerCase();
     var names = name.split(' ');
+
+    //limit nr of names
     while(names.length > nrNames) {
         names.splice(2, 1);
     }
+
+    //Limit total name length
+    while(names.reduce((p, a) => p + a.length, 0) > totalLetters) {
+        names.splice(1, 1);
+    }
+
     var result = [];
     for(var i = 0; i < names.length; i++) {
         var curr = names[i];

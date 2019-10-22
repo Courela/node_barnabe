@@ -115,6 +115,11 @@ async function activateSeason(req, res) {
     res.send();
 }
 
+async function addSeason(req, res) {
+    const { year, isActive, signUpDueDate, startDate } = req.body;
+    await serverMgr.addSeason(year, isActive, signUpDueDate, startDate);
+}
+
 async function getStatistics(req, res) {
     const activeSeason = await utilsMgr.getSeasons()
         .then(res => res.find(s => s.IsActive));
@@ -175,5 +180,6 @@ module.exports = {
     getUsers,
     addUser,
     activateSeason,
-    getStatistics
+    getStatistics,
+    addSeason
 }

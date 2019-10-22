@@ -192,15 +192,28 @@ function getTeamsBySeason(season) {
 }
 
 function getTeamsByStep(season, stepId) {
+    //console.log('getTeamsByStep << season:' + season + ' stepId:' + stepId);
     const query = function (db) {
-        return db.get('Team')
+        var teamSteps = db.get('TeamStep')
             .cloneDeep()
-            .find({ Season: season, StepId: stepId })
+            .filter({ Season: season, StepId: stepId })
             .value();
+
+        //console.log('getTeamsByStep :: teamSteps: ', teamSteps);
+
+        if (!teamSteps) { teamSteps = [] };
+        let result = [];
+        result = db.get('Team')
+                .cloneDeep()
+                .intersectionWith(teamSteps, (obj1, obj2) => obj1.Id === obj2.TeamId)
+                .value();
+        return result;
+    
     };
     return new Promise((resolve, reject) => {
         try {
             const result = storage.statementQuery(query);
+            //console.log('getTeamsByStep >> ', result);
             resolve({ recordset: result, rowsAffected: result.length });
         }
         catch (err) {

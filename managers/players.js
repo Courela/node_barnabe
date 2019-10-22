@@ -13,11 +13,11 @@ const { stringLimit } = validations;
 const STORAGE_FOLDER = './data/storage/';
 const FILE_REGEX = /^data:(.+)\/(.+);base64,/;
 
-async function getPlayers(season, teamId, stepId, roles) {
+async function getPlayers(season, teamId, stepId, roles, pageSize = 9999, page = 0) {
     const teamSteps = await teamsMgr.getTeamSteps(season, teamId, false);
     const step = teamSteps.find(s => s.Id === stepId);
     if (step) {
-        return playersRepo.getPlayers(season, teamId, stepId, roles)
+        return playersRepo.getPlayers(season, teamId, stepId, roles, pageSize, page)
             .then((results) => {
                 //console.log(results);
                 return results.recordset;

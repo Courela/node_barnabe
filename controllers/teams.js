@@ -5,7 +5,7 @@ async function getTeams(req, res) {
     const { season, stepId } = req.query;
     var results = null;
     if (stepId) {
-        results = await teamsMgr.getTeamsByStep(season, stepId);
+        results = await teamsMgr.getTeamsByStep(parseInt(season), parseInt(stepId));
     }
     else {
         results = await teamsMgr.getTeams(season);

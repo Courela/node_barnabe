@@ -49,7 +49,8 @@ adminRouter.use('/templates', templatesRouter)
     .get('/drive', serverController.testDrive)
     .get('/users', serverController.getUsers)
     .put('/users', serverController.addUser)
-    .post('/seasons/activate', serverController.activateSeason);
+    .post('/seasons/activate', serverController.activateSeason)
+    .put('/seasons', serverController.addSeason);
 
 const filesRouter = express.Router();
 filesRouter.get('/export-players', exportController.exportPlayers);

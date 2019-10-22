@@ -29,7 +29,7 @@ function getTeamsByStep(season, stepId) {
     return teamsRepo.getTeamsByStep(season, stepId)
         .then(result => {
             //console.log('GetTeam '+ teamId + ': ', result); 
-            return result.rowsAffected[0] > 0 ? result.recordset[0] : null; 
+            return result.recordset; 
         })
         .catch((err) => {
             console.error(err);

@@ -13,6 +13,19 @@ function activateSeason(season) {
         });
 }
 
+async function addSeason(year, isActive, signUpDueDate, startDate) {
+    return serverRepo.addSeason(year, isActive, signUpDueDate, startDate)
+        .then((results) => {
+            //console.log(results);
+            return results;
+        })
+        .catch((err) => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
 module.exports = {
-    activateSeason
+    activateSeason,
+    addSeason
 }

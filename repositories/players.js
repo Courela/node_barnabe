@@ -1,10 +1,11 @@
 const storage = require('../db/storage');
 
-function getPlayers(season, teamId, stepId, roles) {
+function getPlayers(season, teamId, stepId, roles, pageSize, page) {
     const query = function (db) {
         const players = db.get('Player')
             .cloneDeep()
             .filter(p => p.Season == season && p.TeamId == teamId && p.StepId == stepId && roles.includes(p.RoleId))
+            .slice(page*pageSize, page*pageSize + pageSize)
             .value();
         let result = []
         players.forEach(player => {
