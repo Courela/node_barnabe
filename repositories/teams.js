@@ -23,7 +23,19 @@ function getTeamSteps(season, teamId, invert = false) {
                 .differenceWith(teamSteps, (obj1, obj2) => false)
                 .value();
         }
-        result.forEach(s => { s.StepId = s.Id; s.TeamId = teamId; s.Season = season });
+
+        const birthStepLimit = db.get('BirthStepLimit')
+            .cloneDeep()
+            .filter({ Season: season })
+            .value();
+
+        result.forEach(s => { 
+            s.StepId = s.Id; 
+            s.TeamId = teamId; 
+            s.Season = season;
+            s.MinDate = birthStepLimit.find(bs => bs.StepId === s.Id).MinDate;
+            s.MaxDate = birthStepLimit.find(bs => bs.StepId === s.Id).MaxDate; 
+        });
         //console.log('Team Steps: ', result);
         return result;
     };

@@ -6,8 +6,8 @@ function getPersonById(id) {
     return personRepo.getPersonById(id);
 }
 
-function getPersonByIdCardNr(docId){
-    return personRepo.getPersonByIdCardNr(docId)
+function getPersonByIdCardNr(docId, includeCaretaker) {
+    return personRepo.getPersonByIdCardNr(docId, includeCaretaker)
         .then((results) => {
             //console.log(results);
             return results.rowsAffected[0] > 0 ? results.recordset : null;

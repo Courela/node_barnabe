@@ -4,16 +4,28 @@ function getPersonById(id) {
     return storage.getSingle('Person', id);
 }
 
-function getPersonByIdCardNr(idCardNr) {
+function getPersonByIdCardNr(idCardNr, includeCaretaker) {
     //console.log('Search DocId: ' + idCardNr);
     const query = function (db) {
-        const persons = db.get('Person')
+        const person = db.get('Person')
             .cloneDeep()
-            .filter({ IdCardNr: idCardNr })
+            .find({ IdCardNr: idCardNr })
             .value();
-        //console.log('Get storage person:',person);
-        if (persons) {
-            return { recordset: persons, rowsAffected: [ persons.length ] };
+        
+        if (person) {
+            if (includeCaretaker) {
+                var caretaker = getCaretaker(db, person.Id);
+                if (caretaker) {
+                    Object.assign(person, 
+                        { 
+                            caretaker: caretaker
+                            //caretakerDocId: caretaker.IdCardNr, caretakerName: caretaker.Name, phoneNr: caretaker.Phone, email: caretaker.Email 
+                        });
+                }
+            }
+
+            console.log('Get storage person: ', person);
+            return { recordset: [ person ], rowsAffected: [ 1 ] };
         }
         else {
             return { recordset: [], rowsAffected: [ 0 ] };
@@ -28,6 +40,28 @@ function getPersonByIdCardNr(idCardNr) {
             reject(err);
         }
     });
+}
+
+function getCaretaker(db, personId) {
+    var result = null;
+    const players = db.get('Player')
+        .cloneDeep()
+        .filter({ PersonId: personId })
+        .sortBy('Season')
+        .value();
+
+    //console.log('Players: ', players);
+
+    if (players) {
+        var last = players[players.length - 1];
+        if (last) {
+            result = db.get('Person')
+                .cloneDeep()
+                .find({ Id: last.CareTakerId })
+                .value();
+        }
+    }
+    return result;
 }
 
 function addPerson(name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn, isLocalTown) {
