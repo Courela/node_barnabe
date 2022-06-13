@@ -9,12 +9,15 @@ const googleApi = require('../authentication/googleApi');
 const { settings } = require('../settings');
 
 function setup() {
+    console.log("Starting server...");
     if (process.env.NODE_ENV === 'production') {
         storageAdapter.createFolders();
         googleApi.restoreUsers();
         googleApi.restoreData();
         storageAdapter.initUsers();
         storageAdapter.initData();
+    } else {
+        console.log("Not production environment: ", process.env.NODE_ENV || "none");
     }
 }
 
