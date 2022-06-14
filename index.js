@@ -56,6 +56,7 @@ filesRouter.get('/export-players', exportController.exportPlayers);
 const apiRouter = express.Router();
 apiRouter.use('/admin', adminRouter)
     .use('/files', filesRouter)
+    .get('/users', serverController.getUsers)
     .get('/teams', teamsController.getTeams)
     .get('/steps', utilsController.getSteps)
     .get('/teams/:teamId', teamsController.getTeam)

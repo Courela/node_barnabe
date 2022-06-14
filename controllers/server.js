@@ -83,6 +83,11 @@ function testDrive(req, res) {
     res.json(oAuth2.isDriveAuthEnabled());
 }
 
+async function getUsers(req, res) {
+    const users = await usersMgr.getUsers();
+    res.Send(users);
+}
+
 async function addUser(req, res) {
     const { username, password, teamId } = req.body;
     if (username && password && teamId) {
@@ -163,6 +168,7 @@ module.exports = {
     resetAuth,
     saveData,
     restoreData,
+    getUsers,
     saveUsers,
     restoreUsers,
     saveDocuments,

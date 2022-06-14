@@ -1,5 +1,16 @@
 const usersRepo = require('../repositories/users');
 
+function getUsers() {
+    return usersRepo.getUsers()
+        .then(result => {
+            return result.recordset;
+        })
+        .catch((err) => {
+            console.log(err);
+            throw 'Unexpected error!';
+        });
+}
+
 function existsUser(username) {
     return usersRepo.existsUser(username)
         .then(result => {
@@ -70,6 +81,7 @@ function getUsersCount() {
 }
 
 module.exports = {
+    getUsers,
     addUser,
     existsUser,
     getUserById,

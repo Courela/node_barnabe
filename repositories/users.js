@@ -1,5 +1,22 @@
 const storage = require('../db/storage');
 
+function getUsers() {
+    const query = function (users) {
+        return users.get('User')
+            .cloneDeep()
+            .value();
+    };
+    return new Promise((resolve, reject) => {
+        try {
+            const result = storage.usersStatementQuery(query);
+            resolve({ recordset: result, rowsAffected: [result.length] });
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 function existsUser(username) {
     const query = function (users) {
         return users.get('User')
@@ -110,6 +127,7 @@ function getUsersCount() {
 }
 
 module.exports = {
+    getUsers,
     addUser,
     existsUser,
     getUserById,
