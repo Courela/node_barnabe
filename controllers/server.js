@@ -85,7 +85,7 @@ function testDrive(req, res) {
 
 async function getUsers(req, res) {
     const users = await usersMgr.getUsers();
-    res.Send(users);
+    res.json(users);
 }
 
 async function addUser(req, res) {
