@@ -1,6 +1,6 @@
 {
   "name": "node_barnabe",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,22 +19,22 @@
   },
   "homepage": "https://github.com/Courela/node_barnabe#readme",
   "dependencies": {
-    "atob": "^2.1.2",
-    "base-64": "^0.1.0",
-    "body-parser": "^1.19.0",
-    "btoa": "^1.2.1",
-    "client-sessions": "^0.8.0",
-    "express": "^4.17.1",
-    "googleapis": "^27.0.0",
-    "html-pdf": "^2.2.0",
-    "json2csv": "^4.5.1",
-    "lowdb": "^1.0.0",
-    "mssql": "^4.3.7",
-    "mysql": "^2.17.1",
-    "pug": "^2.0.4",
-    "utf8": "^3.0.0"
+    "atob": "*2.1.2",
+    "base-64": "*0.1.0",
+    "body-parser": "*1.19.0",
+    "btoa": "*1.2.1",
+    "client-sessions": "*0.8.0",
+    "express": "*4.17.1",
+    "googleapis": "*100.0.0",
+    "html-pdf": "*3.0.1",
+    "json2csv": "*4.5.1",
+    "lowdb": "*1.0.0",
+    "mssql": "*4.3.7",
+    "mysql": "*2.17.1",
+    "pug": "*3.0.2",
+    "utf8": "*3.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "nodemon": "*2.0.16"
   }
 }
