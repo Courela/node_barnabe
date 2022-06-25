@@ -1,15 +1,13 @@
-const storage = require('../db/storage');
+const mysqlStorage = require("../db/mysql")
 
 function getUsers() {
-    const query = function (users) {
-        return users.get('User')
-            .cloneDeep()
-            .value();
-    };
     return new Promise((resolve, reject) => {
         try {
-            const result = storage.usersStatementQuery(query);
-            resolve({ recordset: result, rowsAffected: [result.length] });
+            var fn = function(r) {
+                console.log("getUsers response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.getUsers(fn);
         }
         catch(err) {
             reject(err);
@@ -18,45 +16,45 @@ function getUsers() {
 }
 
 function existsUser(username) {
-    const query = function (users) {
-        return users.get('User')
-            .cloneDeep()
-            .find({ Username: username })
-            .value();
-    };
     return new Promise((resolve, reject) => {
         try {
-            const user = storage.usersStatementQuery(query);
-            let result = [];
-            if (user) { result.push(user); }
-            resolve({ recordset: result, rowsAffected: [result.length] });
+            var fn = function(r) {
+                console.log("existsUser response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.existsUser(username, fn);
         }
         catch(err) {
             reject(err);
         }
-    });    
+    });  
+}
+
+function getUser(username, password) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                //console.log("getUser response:", r);
+                let result = [];
+                if (r) { result.push(r); }
+                resolve({ recordset: result, rowsAffected: [result.length] });
+            }
+            mysqlStorage.getUser(username, password, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
 }
 
 function addUser(username, password, teamId) {
-    const query = function (users) {
-        const last = users.get('User').cloneDeep().last().value();
-        let id = last && last.Id ? last.Id + 1 : 1;
-        if (id < 11) { id = 11; }
-
-        return users.get('User')
-            .push({
-                Id: id, 
-                Username: username, 
-                Password: password, 
-                TeamId: teamId,
-                CreatedAt: new Date()
-            })
-            .write();
-    };
     return new Promise((resolve, reject) => {
         try {
-            const user = storage.usersStatementQuery(query);
-            resolve({ recordset: [true], rowsAffected: [1] });
+            var fn = function(r) {
+                console.log("addUser response:", r);
+                resolve({ recordset: [true], rowsAffected: [1] });
+            }
+            mysqlStorage.addUser(username, password, teamId, fn);
         }
         catch(err) {
             reject(err);
@@ -65,40 +63,13 @@ function addUser(username, password, teamId) {
 }
 
 function getUserById(id) {
-    const query = function (users) {
-        return users.get('User')
-            .cloneDeep()
-            .find({ Id: id })
-            .value();
-    };
     return new Promise((resolve, reject) => {
         try {
-            const user = storage.usersStatementQuery(query);
-            let result = [];
-            if (user) { result.push(user); }
-            resolve({ recordset: result, rowsAffected: [result.length] });
-        }
-        catch(err) {
-            reject(err);
-        }
-    });
-}
-
-function getUser(username, password) {
-    const query = function (users) {
-        console.log("Logging in with: "+username+" "+password);
-        return users.get('User')
-            .cloneDeep()
-            .find({ Username: username, Password: password })
-            .value();
-    };
-    return new Promise((resolve, reject) => {
-        try {
-            const user = storage.usersStatementQuery(query);
-            console.log("User found:", user);
-            let result = [];
-            if (user) { result.push(user); }
-            resolve({ recordset: result, rowsAffected: [result.length] });
+            var fn = function(r) {
+                console.log("getUserById response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.getUserById(id, fn);
         }
         catch(err) {
             reject(err);
@@ -107,18 +78,13 @@ function getUser(username, password) {
 }
 
 function getUsersCount() {
-    const query = function (users) {
-        return users.get('User')
-            .cloneDeep()
-            .filter((v) => v.TeamId)
-            .size()
-            .value();
-    };
     return new Promise((resolve, reject) => {
         try {
-            const size = storage.usersStatementQuery(query);
-            let result = [size];
-            resolve({ recordset: result, rowsAffected: [1] });
+            var fn = function(r) {
+                console.log("getUsersCount response:", r);
+                resolve({ recordset: r, rowsAffected: 1 });
+            }
+            mysqlStorage.getUsersCount(fn);
         }
         catch(err) {
             reject(err);

@@ -1,0 +1,10 @@
+{
+  "User": [
+    {
+      "Id": 1,
+      "Username": "Admin",
+      "Password": "Barnabe2018",
+      "TeamId": null,
+      "CreatedAt": "2018-08-01T07:02:41.430Z"
+    }]
+}

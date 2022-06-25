@@ -14,15 +14,19 @@ function getTeams(season) {
 }
 
 function getTeamSteps(season, teamId, invert = false) {
-    return teamsRepo.getTeamSteps(season, teamId, invert)
-        .then((results) => {
-            //console.log(results);
-            return results.recordset;
-        })
-        .catch((err) => {
-            console.error(err);
-            throw 'Unexpected error!';
-        });
+    if (teamId) {
+        return teamsRepo.getTeamSteps(season, teamId, invert)
+            .then((results) => {
+                //console.log(results);
+                return results.recordset;
+            })
+            .catch((err) => {
+                console.error(err);
+                throw 'Unexpected error!';
+            });
+    } else {
+        return [];
+    }
 }
 
 function getStep(stepId, season = null) {

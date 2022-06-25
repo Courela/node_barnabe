@@ -54,8 +54,8 @@ async function getSignSteps(req, res) {
 
 async function getTeamSteps(req, res) {
     let response = '';
-    //console.log('Route params: ', req.params);
-    if (req.params.season && req.params.teamId) {
+    if (req.params.season && req.params.teamId && 
+        parseInt(req.params.season) != NaN && parseInt(req.params.teamId) != NaN) {
         response = await teamsMgr.getTeamSteps(parseInt(req.params.season), parseInt(req.params.teamId));
     }
     else {

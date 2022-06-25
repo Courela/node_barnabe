@@ -1,38 +1,13 @@
 const storage = require('../db/storage');
 
 function getPlayers(season, teamId, stepId, roles) {
-    const query = function (db) {
-        const players = db.get('Player')
-            .cloneDeep()
-            .filter(p => p.Season == season && p.TeamId == teamId && p.StepId == stepId && roles.includes(p.RoleId))
-            .value();
-        let result = []
-        players.forEach(player => {
-            const person = db.get('Person')
-                .cloneDeep()
-                .find({ Id: player.PersonId })
-                .value();
-
-            const caretaker = db.get('Person')
-                .cloneDeep()
-                .find({ Id: player.CareTakerId })
-                .value();
-
-            const role = db.get('Role')
-                .cloneDeep()
-                .find({ Id: player.RoleId })
-                .value();
-            
-            //console.log('Caretaker:', caretaker);
-            result.push(Object.assign(player, {role, role }, { person: person }, caretaker ? { caretaker: caretaker } : null ));
-        });
-        //console.log('Storage persons:'); console.log(result);
-        return { recordset: result, rowsAffected: [result.length] };
-    };
     return new Promise((resolve, reject) => {
         try {
-            const result = storage.statementQuery(query);
-            resolve(result);
+            var fn = function(r) {
+                console.log("getPlayers response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.getPlayers(season, teamId, stepId, roles, fn);
         }
         catch(err) {
             reject(err);
@@ -41,20 +16,13 @@ function getPlayers(season, teamId, stepId, roles) {
 }
 
 function existsPlayer(season, teamId, stepId, roleId, personId) {
-    const query = function (db) {
-        const player = db.get('Player')
-            .cloneDeep()
-            .find({ PersonId: personId, TeamId: teamId, StepId: stepId, Season: season, RoleId: roleId })
-            .value();
-        
-        const result = player ? true : false;
-        //console.log("Exists player: ",result);
-        return result;
-    };
     return new Promise((resolve, reject) => {
         try {
-            const result = storage.statementQuery(query);
-            resolve(result);
+            var fn = function(r) {
+                console.log("existsPlayer response:", r);
+                resolve(r);
+            }
+            mysqlStorage.existsPlayer(season, teamId, stepId, roleId, personId, fn);
         }
         catch(err) {
             reject(err);
@@ -63,52 +31,13 @@ function existsPlayer(season, teamId, stepId, roleId, personId) {
 }
 
 async function getPlayer(season, teamId, stepId, playerId) {
-    const query = function (db) {
-        const player = db.get('Player')
-            .cloneDeep()
-            .find({ Id: playerId, TeamId: teamId, StepId: stepId, Season: season })
-            .value();
-        
-        if (!player) {
-            return { recordset: [ ], rowsAffected: [0] }; 
-        }
-        
-        const person = db.get('Person')
-            .cloneDeep()
-            .find({ Id: player.PersonId })
-            .value();
-        
-        const step = db.get('Step')
-            .cloneDeep()
-            .find({ Id: player.StepId })
-            .value();
-
-        const role = db.get('Role')
-            .cloneDeep()
-            .find({ Id: player.RoleId })
-            .value();
-
-        const birthStepLimit = db.get('BirthStepLimit')
-            .cloneDeep()
-            .find({ Season: player.Season, StepId: player.StepId })
-            .value();
-
-        let caretaker = null;
-        if (player.CareTakerId) {
-            caretaker = db.get('Person')
-            .cloneDeep()
-            .find({ Id: player.CareTakerId })
-            .value();
-        }
-        
-        const result = Object.assign({ step: Object.assign(step, birthStepLimit) }, { role: role } , player, { person: person }, { caretaker: caretaker });
-        console.log("Get Player: ", result);
-        return { recordset: [ result ], rowsAffected: [1] };
-    };
     return new Promise((resolve, reject) => {
         try {
-            const result = storage.statementQuery(query);
-            resolve(result);
+            var fn = function(r) {
+                console.log("getPlayer response:", r);
+                resolve({ recordset: r , rowsAffected: [r.length] });
+            }
+            mysqlStorage.getPlayer(season, teamId, stepId, playerId, fn);
         }
         catch(err) {
             reject(err);
@@ -117,35 +46,13 @@ async function getPlayer(season, teamId, stepId, playerId) {
 }
 
 function addPlayer(teamId, stepId, season, resident, personId, roleId, caretakerId, comments) {
-    const query = function (db) {
-        const last = db.get('Player')
-            .cloneDeep()
-            .last()
-            .value();
-        const id = last && last.Id ? last.Id + 1 : 1;
-        const player = { 
-            Id: id, 
-            Season: season, 
-            TeamId: teamId, 
-            StepId: stepId, 
-            PersonId: personId, 
-            Resident: resident, 
-            RoleId: roleId, 
-            CareTakerId: caretakerId,
-            Comments: comments,
-            PhotoFilename: null,
-            DocFilename: null,
-            CreatedAt: new Date()
-        };
-        db.get('Player')
-            .push(player)
-            .write();
-        return { recordset: [ player ], rowsAffected: [1] };
-    };
     return new Promise((resolve, reject) => {
         try {
-            const result = storage.statementQuery(query);
-            resolve(result);
+            var fn = function(r) {
+                console.log("addPlayer response:", r);
+                resolve({ recordset: r , rowsAffected: [r.length] });
+            }
+            mysqlStorage.addPlayer(teamId, stepId, season, resident, personId, roleId, caretakerId, comments, fn);
         }
         catch(err) {
             reject(err);
@@ -154,18 +61,13 @@ function addPlayer(teamId, stepId, season, resident, personId, roleId, caretaker
 }
 
 function updatePlayer(id, caretakerId, comments, isResident){
-    const query = function (db) {
-        const person = db.get('Player')
-            .find({ Id: id })
-            .assign({ CareTakerId: caretakerId, Resident: isResident, Comments: comments, LastUpdatedAt: new Date() })
-            .write();
-        //console.log('Storage person: ', person);
-        return { rowsAffected: [1] };
-    };
     return new Promise((resolve, reject) => {
         try {
-            const result = storage.statementQuery(query);
-            resolve(result);
+            var fn = function(r) {
+                console.log("updatePlayer response:", r);
+                resolve({ rowsAffected: [r.length] });
+            }
+            mysqlStorage.updatePlayer(id, caretakerId, comments, isResident, fn);
         }
         catch(err) {
             reject(err);
@@ -173,29 +75,19 @@ function updatePlayer(id, caretakerId, comments, isResident){
     });
 }
 
-function removePlayer(teamId, stepId, season, playerId) {
-    const query = function (db) {
-        let result = [];
-        const player = db.get('Player')
-            .find({ Id: playerId })
-            .value();
-        
-        if (player) {
-            if (player.PhotoFilename) { result.push(player.PhotoFilename); }
-            if (player.DocFilename) { result.push(player.DocFilename); }
-        }
-
-        db.get('Player')
-            .remove(player)
-            .write();
-        
-        return result;
-    };
-
+function removePlayer(playerId) {
     return new Promise((resolve, reject) => {
         try {
-            const result = storage.statementQuery(query);
-            resolve(result);
+            var fn = function(r) {
+                console.log("removePlayer response:", r);
+                let result = [];
+                if (r) {
+                    if (r.PhotoFilename) { result.push(r.PhotoFilename); }
+                    if (r.DocFilename) { result.push(r.DocFilename); }
+                }
+                resolve(result);
+            }
+            mysqlStorage.removePlayer(playerId, fn);
         }
         catch(err) {
             reject(err);

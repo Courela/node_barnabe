@@ -1,16 +1,13 @@
-const storage = require('../db/storage');
+const mysqlStorage = require("../db/mysql")
 
 function getRoles() {
-    const query = function (db) {
-        const roles = db.get('Role')
-            .cloneDeep()
-            .value();
-        return { recordset: roles, rowsAffected: [roles.length] };
-    };
     return new Promise((resolve, reject) => {
         try {
-            const result = storage.statementQuery(query);
-            resolve(result);
+            var fn = function(r) {
+                console.log("getRoles response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.getRoles(fn);
         }
         catch(err) {
             reject(err);
@@ -19,17 +16,13 @@ function getRoles() {
 }
 
 function getSeasons() {
-    const query = function (db) {
-        const seasons = db.get('Season')
-            .cloneDeep()
-            .orderBy('Year', 'desc')
-            .value();
-        return { recordset: seasons, rowsAffected: [seasons.length] };
-    };
     return new Promise((resolve, reject) => {
         try {
-            const result = storage.statementQuery(query);
-            resolve(result);
+            var fn = function(r) {
+                console.log("getSeasons response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.getSeasons(fn);
         }
         catch(err) {
             reject(err);
@@ -38,16 +31,13 @@ function getSeasons() {
 }
 
 function getSteps() {
-    const query = function (db) {
-        const roles = db.get('Step')
-            .cloneDeep()
-            .value();
-        return { recordset: roles, rowsAffected: [roles.length] };
-    };
     return new Promise((resolve, reject) => {
         try {
-            const result = storage.statementQuery(query);
-            resolve(result);
+            var fn = function(r) {
+                console.log("getSteps response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.getSteps(fn);
         }
         catch(err) {
             reject(err);
