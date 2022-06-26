@@ -1,9 +1,10 @@
 const mysql = require('mysql');
 
-var pool = mysql.createPool("mysql://lnyowbwh8dhpg606:gaf8s00id5brpipf@sabaik6fx8he7pua.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/qwtdu7nkjca4wh8o");
+var connString = process.env["MYSQL_CONN_STRING"]
+var pool = mysql.createPool(connString);
 
 function ping(responseCallback) {
-    var con = mysql.createConnection("mysql://lnyowbwh8dhpg606:gaf8s00id5brpipf@sabaik6fx8he7pua.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/qwtdu7nkjca4wh8o");
+    var con = mysql.createConnection(connString);
 
     con.connect(function (err) {
         if (err) {
