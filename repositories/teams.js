@@ -64,6 +64,21 @@ function getTeams() {
     });
 }
 
+function getTeamById(id) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                console.log("getTeamById response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.getTeamById(id, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 function getStep(stepId, season = null) {
     return new Promise((resolve, reject) => {
         try {
@@ -123,11 +138,28 @@ function getTeamsBySeason(season) {
     // });
 }
 
+function getTeamsByStep(season, stepId) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                console.log("getTeamsByStep response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.getTeamsByStep(season, stepId, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     addStep,
     getStep,
     getTeams,
+    getTeamById,
     getTeamsBySeason,
+    getTeamsByStep,
     getTeamSteps,
     deleteStep
 }

@@ -3,7 +3,8 @@ const googleApi = require('../authentication/googleApi');
 
 async function getTeams(req, res) {
     const season = req.query.season;
-    const results = await teamsMgr.getTeams(season);
+    const stepId = req.query.stepId;
+    const results = await teamsMgr.getTeams(season, stepId);
     res.send(results);
 }
 

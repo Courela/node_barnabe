@@ -20,7 +20,13 @@ async function getPlayers(season, teamId, stepId, roles) {
         return playersRepo.getPlayers(season, teamId, stepId, roles)
             .then((results) => {
                 //console.log(results);
-                return results.recordset;
+                return results.recordset.map((v) => Object.assign(
+                    v, 
+                    { person: { Id: v.PersonId, Name: v.PlayerName, Gender: v.PlayerGender, Birthdate: v.PlayerBirthdate, IdCardNr: v.PlayerIdCardNr }},
+                    { player: { Id: v.Id, PhotoFilename: v.PhotoFilename, DocFilename: v.DocFilename }},
+                    { caretaker: { CareTakerId: v.CareTakerId, Name: v.CareTakerName }},
+                    { role: { Description: v.RoleDescription }}
+                ));
             })
             .catch((err) => {
                 console.error(err);
@@ -35,22 +41,30 @@ async function getPlayers(season, teamId, stepId, roles) {
 function getPlayer(season, teamId, stepId, playerId) {
     return playersRepo.getPlayer(season, teamId, stepId, playerId)
         .then((results) => {
-            //console.log(results);
+            console.log(results);
             if (results.rowsAffected > 0) {
                 const player = results.recordset[0];
                 let photo = [];
-                if (player.PhotoFilename) {
-                    const folder = [season, teamId, stepId].join('_');
-                    photo = getPhoto(folder, player.PhotoFilename);
-                }
-                if (player.DocFilename) {
-                    var docPath = STORAGE_FOLDER + player.DocFilename;
-                    if (!fs.existsSync(docPath)) {
-                        console.warn('Missing file: ', player.DocFilename);
-                        //player.DocFilename = null;
-                    }
-                }
-                return { player: player, photo: photo };
+                // if (player.PhotoFilename) {
+                //     const folder = [season, teamId, stepId].join('_');
+                //     photo = getPhoto(folder, player.PhotoFilename);
+                // }
+                // if (player.DocFilename) {
+                //     var docPath = STORAGE_FOLDER + player.DocFilename;
+                //     if (!fs.existsSync(docPath)) {
+                //         console.warn('Missing file: ', player.DocFilename);
+                //         //player.DocFilename = null;
+                //     }
+                // }
+
+                return Object.assign(player, 
+                    { player: { Id: player.Id, PhotoFilename: player.PhotoFilename, DocFilename: player.DocFilename, RoleId: player.RoleId }, 
+                      person: { Id: player.PersonId, Name: player.PlayerName, Gender: player.PlayerGender, Birthdate: player.PlayerBirthdate, IdCardNr: player.PlayerIdCardNr, VoterNr: player.PlayerVoterNr },
+                      caretaker: { CareTakerId: player.CareTakerId, Name: player.CareTakerName, VoterNr: player.CareTakerVoterNr },
+                      role: { Id: player.RoleId, Description: player.RoleDescription },
+                      step: { Description: player.StepDescription }}
+                )
+                //return { player: player, photo: photo };
             }
             else {
                 return null;

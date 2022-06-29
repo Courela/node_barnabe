@@ -1,4 +1,4 @@
-const storage = require('../db/storage');
+const mysqlStorage = require("../db/mysql")
 
 function activateSeason(season) {
     return new Promise((resolve, reject) => {

@@ -45,38 +45,44 @@ function addUser(username, password, teamId, callback) {
             " VALUES (" + mysql.escape(username) + "," +
                          mysql.escape(password) + "," +
                          mysql.escape(teamId) + "," +
-                         "CURRENT_TIMESTAMP())"
+                         "CURRENT_TIMESTAMP())";
     query(q, callback);
 }
 
 function getUserById(id, callback) {
     var q = " SELECT * FROM user " + 
-            " WHERE Id = " + mysql.escape(id)
+            " WHERE Id = " + mysql.escape(id);
     query(q, callback);
 }
 
-function getUsersCount(id, callback) {
-    var q = " SELECT COUNT(*) FROM user"
+function getUsersCount(callback) {
+    var q = " SELECT COUNT(*) AS NrUsers FROM user";
     query(q, callback);
 }
 
 function getRoles(callback) {
-    var q = " SELECT * FROM role"
+    var q = " SELECT * FROM role";
     query(q, callback);
 }
 
 function getSeasons(callback) {
-    var q = " SELECT * FROM season"
+    var q = " SELECT * FROM season";
     query(q, callback);
 }
 
 function getSteps(callback) {
-    var q = " SELECT * FROM step"
+    var q = " SELECT * FROM step";
     query(q, callback);
 }
 
 function getTeams(callback) {
-    var q = " SELECT * FROM team"
+    var q = " SELECT * FROM team";
+    query(q, callback);
+}
+
+function getTeamById(id, callback) {
+    var q = " SELECT * FROM team " +
+            " WHERE Id = " + mysql.escape(id);
     query(q, callback);
 }
 
@@ -84,8 +90,9 @@ function getTeamSteps(season, teamId, callback) {
     var q = " SELECT * FROM teamstep st " + 
             "   INNER JOIN team t ON t.Id = st.TeamId " +
             "   INNER JOIN season s ON s.Year = st.Season " + 
+            "   INNER JOIN step stp ON stp.Id = st.StepId " +
             " WHERE s.Year = " + mysql.escape(season) +
-            "   AND t.Id = " + mysql.escape(teamId)
+            "   AND t.Id = " + mysql.escape(teamId);
     query(q, callback);
 }
 
@@ -94,7 +101,7 @@ function getTeamMissingSteps(season, teamId, callback) {
             "   INNER JOIN season s ON s.Year = " + mysql.escape(season) +
             "   LEFT JOIN teamstep ts ON ts.TeamId = t.Id  AND ts.Season = s.Year" +
             " WHERE t.Id = " + mysql.escape(teamId) +
-            "   AND ts.Id IS NULL "
+            "   AND ts.Id IS NULL ";
     query(q, callback);
 }
 
@@ -103,7 +110,7 @@ function addStep(season, teamId, stepId, callback) {
             " VALUES (" + mysql.escape(season) + "," +
                          mysql.escape(teamId) + "," +
                          mysql.escape(stepId) + "," +
-                         "CURRENT_TIMESTAMP())"
+                         "CURRENT_TIMESTAMP())";
     query(q, callback);
 }
 
@@ -139,6 +146,17 @@ function getTeamsBySeason(season, callback) {
     query(q, callback);
 }
 
+function getTeamsByStep(season, stepId, callback) {
+    var q = " SELECT s.Year, ts.TeamId, t.Name, t.ShortDescription " + 
+            " FROM teamstep ts " +
+            "   INNER JOIN season s ON s.Year = ts.Season" +
+            "   INNER JOIN team t ON t.Id = ts.TeamId " +
+            " WHERE ts.Season = " + mysql.escape(season) +
+            "   AND ts.StepId = " + mysql.escape(stepId) +
+            " GROUP BY s.Year, ts.TeamId, t.Name, t.ShortDescription";
+    query(q, callback);
+}
+
 function activateSeason(season, callback) {
     var q = " UPDATE season " + 
             " SET IsActive = 0 " + 
@@ -150,14 +168,18 @@ function activateSeason(season, callback) {
 }
 
 function getPlayers (season, teamId, stepId, roles, callback) {
-    var q = " SELECT * FROM player p " + 
+    var q = " SELECT p.*, " +
+            "     ps.Name AS PlayerName, ps.Gender AS PlayerGender, ps.Birthdate AS PlayerBirthdate, ps.IdCardNr AS PlayerIdCardNr, " +
+            "     r.Description AS RoleDescription, " +
+            "     ct.Name AS CareTakerName, ct.IdCardNr AS CareTakerIdCardNr, ct.VoterNr AS CareTakerVoterNr " +
+            " FROM player p " + 
             "   INNER JOIN step s ON s.Id = p.StepId AND s.Id = " + mysql.escape(stepId) +
             "   INNER JOIN team t ON t.Id = p.TeamId AND t.Id = " + mysql.escape(teamId) + 
             "   INNER JOIN person ps ON ps.Id = p.PersonId " +
             "   INNER JOIN role r ON r.Id = p.RoleId " +
             "   LEFT JOIN person ct ON ct.Id = p.CareTakerId " +
             " WHERE p.Season = " + mysql.escape(season) + 
-            "   AND p.RoleId IN (" + roles.map((i, r) => roles.length > i + 1? mysql.escape(r) + "," : mysql.escape(r)) + ")";
+            "   AND p.RoleId IN (" + roles.map((r, i) => mysql.escape(r)) + ")";
     query(q, callback);
 }
 
@@ -172,7 +194,13 @@ function existsPlayer(season, teamId, stepId, roleId, personId, callback) {
 }
 
 function getPlayer(season, teamId, stepId, playerId, callback) {
-    var q = " SELECT * FROM player p " + 
+    var q = " SELECT p.*, " +
+            "     s.Description AS StepDescription, s.Gender AS StepGender, s.IsCaretakerRequired AS StepIsCaretakerRequired, " +
+            "     t.Name AS TeamName, t.ShortDescription AS TeamShortDescription, " +
+            "     ps.Name AS PlayerName, ps.Gender AS PlayerGender, ps.Birthdate AS PlayerBirthdate, ps.IdCardNr AS PlayerIdCardNr, ps.VoterNr AS PlayerVoterNr, " +
+            "     r.Description AS RoleDescription, " +
+            "     ct.Name AS CareTakerName, ct.IdCardNr AS CareTakerIdCardNr, ct.VoterNr AS CareTakerVoterNr " +
+            " FROM player p " + 
             "   INNER JOIN step s ON s.Id = p.StepId AND s.Id = " + mysql.escape(stepId) +
             "   INNER JOIN team t ON t.Id = p.TeamId AND t.Id = " + mysql.escape(teamId) + 
             "   INNER JOIN person ps ON ps.Id = p.PersonId " +
@@ -220,7 +248,7 @@ function query(q, callback) {
             return callback(result);
         }
 
-        pool.query(q, fn); 
+        pool.query(q, fn);
     } catch(err) {
         throw err;
     }
@@ -238,6 +266,7 @@ module.exports = {
     getSeasons,
     getSteps,
     getTeams,
+    getTeamById,
     getTeamSteps,
     getTeamMissingSteps,
     addStep,
@@ -245,6 +274,7 @@ module.exports = {
     getStepById,
     getStepWithSeason,
     getTeamsBySeason,
+    getTeamsByStep,
     activateSeason,
     getPlayers,
     existsPlayer,

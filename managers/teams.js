@@ -1,11 +1,29 @@
 const teamsRepo = require('../repositories/teams');
 
-function getTeams(season) {
-    let promise = season ? teamsRepo.getTeamsBySeason : teamsRepo.getTeams;
-    return promise(season)
+function getTeams(season, stepId) {
+    let promise = season ? 
+        (stepId ? teamsRepo.getTeamsByStep : teamsRepo.getTeamsBySeason) : 
+        teamsRepo.getTeams;
+    return promise(season, stepId)
         .then((results) => {
             //console.log(results);
             return results.recordset;
+        })
+        .catch((err) => {
+            console.log(err);
+            throw 'Unexpected error!';
+        });
+}
+
+function getTeamById(id) {
+    return teamsRepo.getTeamById(id)
+        .then((results) => {
+            //console.log(results);
+            if (results.recordset && results.recordset.length > 0) {
+                return results.recordset[0];
+            } else {
+                return null;
+            }
         })
         .catch((err) => {
             console.log(err);
@@ -65,6 +83,7 @@ module.exports = {
     getStep,
     addStep,
     getTeams,
+    getTeamById,
     getTeamSteps,
     deleteStep
 }

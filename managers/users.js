@@ -1,9 +1,18 @@
+const teamsMgr = require('./teams');
 const usersRepo = require('../repositories/users');
 
 function getUsers() {
     return usersRepo.getUsers()
-        .then(result => {
-            return result.recordset;
+        .then(async r => {
+            var result = [];
+            if (r.recordset) {
+                for(var u of r.recordset) {
+                    var team = await teamsMgr.getTeamById(u.TeamId);
+                    result.push(Object.assign(u, { team: team }));
+                }
+            }
+            //console.log("getUsers manager response: ", result);
+            return result;
         })
         .catch((err) => {
             console.log(err);
@@ -73,7 +82,7 @@ function getUser(username, password) {
 
 function getUsersCount() {
     return usersRepo.getUsersCount()
-        .then(result => result.recordset[0])
+        .then(result => result.recordset[0] ? result.recordset[0].NrUsers : 0)
         .catch((err) => {
             console.log(err);
             throw 'Unexpected error!';
