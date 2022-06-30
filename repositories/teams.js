@@ -4,7 +4,7 @@ function getTeamSteps(season, teamId, invert = false) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getTeamSteps response:", r);
+                //console.log("getTeamSteps response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             if (invert) {
@@ -23,7 +23,7 @@ function addStep(season, teamId, stepId) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("addStep response:", r);
+                //console.log("addStep response:", r);
                 resolve({ rowsAffected: [r] });
             }
             mysqlStorage.addStep(season, teamId, stepId, fn);
@@ -38,7 +38,7 @@ function deleteStep(season, teamId, stepId) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("deleteStep response:", r);
+                //console.log("deleteStep response:", r);
                 resolve({ rowsAffected: [r] });
             }
             mysqlStorage.deleteStep(season, teamId, stepId, fn);
@@ -53,7 +53,7 @@ function getTeams() {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getTeams response:", r);
+                //console.log("getTeams response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             mysqlStorage.getTeams(fn);
@@ -68,7 +68,7 @@ function getTeamById(id) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getTeamById response:", r);
+                //console.log("getTeamById response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             mysqlStorage.getTeamById(id, fn);
@@ -83,7 +83,7 @@ function getStep(stepId, season = null) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getStep response:", r);
+                //console.log("getStep response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             if (season) {
@@ -102,7 +102,7 @@ function getTeamsBySeason(season) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getTeamsBySeason response:", r);
+                //console.log("getTeamsBySeason response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             mysqlStorage.getTeamsBySeason(season, fn);
@@ -142,7 +142,7 @@ function getTeamsByStep(season, stepId) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getTeamsByStep response:", r);
+                //console.log("getTeamsByStep response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             mysqlStorage.getTeamsByStep(season, stepId, fn);

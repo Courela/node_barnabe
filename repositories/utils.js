@@ -4,7 +4,7 @@ function getRoles() {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getRoles response:", r);
+                //console.log("getRoles response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             mysqlStorage.getRoles(fn);
@@ -19,7 +19,7 @@ function getSeasons() {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getSeasons response:", r);
+                //console.log("getSeasons response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             mysqlStorage.getSeasons(fn);
@@ -34,7 +34,7 @@ function getSteps() {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getSteps response:", r);
+                //console.log("getSteps response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             mysqlStorage.getSteps(fn);

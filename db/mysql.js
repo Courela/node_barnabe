@@ -37,6 +37,7 @@ function getUser(username, password, callback) {
     var q = " SELECT * FROM user " + 
             " WHERE Username = " + mysql.escape(username) +
             "   AND Password = " + mysql.escape(password);
+    //console.log("getUser query: ", q);
     query(q, callback);
 }
 
@@ -124,7 +125,7 @@ function deleteStep(season, teamId, stepId, callback) {
 
 function getStepById(stepId, callback) {
     var q = " SELECT * FROM step " +
-            " WHERE st.Id = " + mysql.escape(stepId);
+            " WHERE Id = " + mysql.escape(stepId);
     query(q, callback);
 }
 

@@ -41,7 +41,7 @@ async function getPlayers(season, teamId, stepId, roles) {
 function getPlayer(season, teamId, stepId, playerId) {
     return playersRepo.getPlayer(season, teamId, stepId, playerId)
         .then((results) => {
-            console.log(results);
+            //console.log(results);
             if (results.rowsAffected > 0) {
                 const player = results.recordset[0];
                 let photo = [];

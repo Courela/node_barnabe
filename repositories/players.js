@@ -5,7 +5,7 @@ function getPlayers(season, teamId, stepId, roles) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getPlayers response:", r);
+                //console.log("getPlayers response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             mysqlStorage.getPlayers(season, teamId, stepId, roles, fn);
@@ -20,7 +20,7 @@ function existsPlayer(season, teamId, stepId, roleId, personId) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("existsPlayer response:", r);
+                //console.log("existsPlayer response:", r);
                 resolve(r);
             }
             mysqlStorage.existsPlayer(season, teamId, stepId, roleId, personId, fn);
@@ -35,7 +35,7 @@ async function getPlayer(season, teamId, stepId, playerId) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getPlayer response:", r);
+                //console.log("getPlayer response:", r);
                 resolve({ recordset: r , rowsAffected: [r.length] });
             }
             mysqlStorage.getPlayer(season, teamId, stepId, playerId, fn);
@@ -50,7 +50,7 @@ function addPlayer(teamId, stepId, season, resident, personId, roleId, caretaker
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("addPlayer response:", r);
+                //console.log("addPlayer response:", r);
                 resolve({ recordset: r , rowsAffected: [r.length] });
             }
             mysqlStorage.addPlayer(teamId, stepId, season, resident, personId, roleId, caretakerId, comments, fn);
@@ -65,7 +65,7 @@ function updatePlayer(id, caretakerId, comments, isResident){
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("updatePlayer response:", r);
+                //console.log("updatePlayer response:", r);
                 resolve({ rowsAffected: [r.length] });
             }
             mysqlStorage.updatePlayer(id, caretakerId, comments, isResident, fn);
@@ -80,7 +80,7 @@ function removePlayer(playerId) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("removePlayer response:", r);
+                //console.log("removePlayer response:", r);
                 let result = [];
                 if (r) {
                     if (r.PhotoFilename) { result.push(r.PhotoFilename); }

@@ -4,7 +4,7 @@ function getUsers() {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getUsers response:", r);
+                //console.log("getUsers response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             mysqlStorage.getUsers(fn);
@@ -19,7 +19,7 @@ function existsUser(username) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("existsUser response:", r);
+                //console.log("existsUser response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             mysqlStorage.existsUser(username, fn);
@@ -35,9 +35,7 @@ function getUser(username, password) {
         try {
             var fn = function(r) {
                 //console.log("getUser response:", r);
-                let result = [];
-                if (r) { result.push(r); }
-                resolve({ recordset: result, rowsAffected: [result.length] });
+                resolve({ recordset: r, rowsAffected: [r.length] });
             }
             mysqlStorage.getUser(username, password, fn);
         }
@@ -51,7 +49,7 @@ function addUser(username, password, teamId) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("addUser response:", r);
+                //console.log("addUser response:", r);
                 resolve({ recordset: [true], rowsAffected: [1] });
             }
             mysqlStorage.addUser(username, password, teamId, fn);
@@ -66,7 +64,7 @@ function getUserById(id) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getUserById response:", r);
+                //console.log("getUserById response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             mysqlStorage.getUserById(id, fn);
@@ -81,7 +79,7 @@ function getUsersCount() {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                console.log("getUsersCount response:", r);
+                //console.log("getUsersCount response:", r);
                 resolve({ recordset: r, rowsAffected: 1 });
             }
             mysqlStorage.getUsersCount(fn);
