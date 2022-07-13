@@ -79,12 +79,12 @@ async function addTeamStep(req, res) {
         res.statusCode = 400;
     }
 
-    if (res.statusCode < 400) {
-        const folder = [season, teamId, stepId].join('_') + googleApi.FOLDER_EXTENSION;
-        googleApi.saveFile(null, folder);
-    }
-    //TODO Remove when saving data handled properly
-    googleApi.saveData();
+    // if (res.statusCode < 400) {
+    //     const folder = [season, teamId, stepId].join('_') + googleApi.FOLDER_EXTENSION;
+    //     googleApi.saveFile(null, folder);
+    // }
+    // //TODO Remove when saving data handled properly
+    // googleApi.saveData();
 
     res.send();
 }
@@ -104,7 +104,7 @@ async function deleteTeamStep(req, res) {
     }
 
     //TODO Remove when saving data handled properly
-    googleApi.saveData((result) => console.log(result));
+    //googleApi.saveData((result) => console.log(result));
 
     res.send();
 }

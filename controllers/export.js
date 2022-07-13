@@ -32,7 +32,7 @@ async function exportSource(req, res) {
 async function exportPlayers(req, res) {
     let response = '';
     try {
-        console.log('Export players: ', req.query);
+        //console.log('Export players: ', req.query);
         const { season, teamId, stepId } = req.query;
         if (season && teamId && stepId) {
             response = await exportMgr.exportPlayers(parseInt(season), parseInt(teamId), parseInt(stepId));

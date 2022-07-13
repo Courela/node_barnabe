@@ -107,7 +107,7 @@ function getFolder(driveClient, folder, callback, responseCallback) {
             return;
         }
 
-        console.log(res.data.files);
+        //console.log(res.data.files);
         if (callback) {
             callback(res.data.files[0], responseCallback);
         }
@@ -126,7 +126,7 @@ function listFiles(folder, driveClient, callback, responseCallback) {
             if (responseCallback) { responseCallback({ isSuccess: false }); }
             return;
         }
-        console.log('Files from Drive: ', res.data.files);
+        //console.log('Files from Drive: ', res.data.files);
         if (callback) { callback(res.data.files); }
     });
     return;
@@ -168,7 +168,7 @@ async function uploadFile(filePath, filename, folder, responseCallback) {
                         if (responseCallback) { responseCallback({ isSuccess: false }); }
                         return;
                     }
-                    console.log('File id: ', res.data.id);
+                    //console.log('File id: ', res.data.id);
                     if (responseCallback) { responseCallback({ isSuccess: true }); }
                     return;
                 });

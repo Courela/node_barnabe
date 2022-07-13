@@ -26,7 +26,7 @@ function ping(req, res) {
 }
 
 function setClientSecret(req, res) {
-    console.log('Client Secret: ', req.body);
+    //console.log('Client Secret: ', req.body);
     const file = req.body.file;
     if (file) {
         oAuth2.saveClientSecret(file);
@@ -39,7 +39,7 @@ function setClientSecret(req, res) {
 
 function setAccessToken(req, res) {
     const code = req.body.authCode;
-    console.log('Code: ' + code);
+    //console.log('Code: ' + code);
     if (code) {
         oAuth2.setAccessToken(code, (result) => {
             res.json(result);
@@ -137,7 +137,7 @@ function setCors(req, res, next) {
 
 async function handleUserSession(req, res, next) {
     if (req.session && req.session.user) {
-        console.log('User in session: ', req.session.user);
+        //console.log('User in session: ', req.session.user);
         let user = await usersMgr.getUserById(req.session.user.Id);
         if (user != null) {
             req.user = user;

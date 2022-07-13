@@ -35,8 +35,10 @@ function getTeamSteps(season, teamId, invert = false) {
     if (teamId) {
         return teamsRepo.getTeamSteps(season, teamId, invert)
             .then((results) => {
-                //console.log(results);
-                return results.recordset;
+                //console.log("getTeamSteps manager: ", results);
+                return results.recordset.map(s => { 
+                    return Object.assign(s, {StepId: s.Id}); 
+                });
             })
             .catch((err) => {
                 console.error(err);
@@ -50,7 +52,7 @@ function getTeamSteps(season, teamId, invert = false) {
 function getStep(stepId, season = null) {
     return teamsRepo.getStep(stepId, season)
         .then(result => {
-            console.log('GetStep '+ stepId + ': ', result); 
+            //console.log('getStep manager '+ stepId + ': ', result); 
             return result.rowsAffected[0] > 0 ? result.recordset[0] : null; 
         })
         .catch((err) => {

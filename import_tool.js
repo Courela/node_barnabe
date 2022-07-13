@@ -44,7 +44,7 @@ if (process.argv.length > 3) {
                 personId = personId + 1;
             }
             else {
-                console.log('Person already exists: ', person);
+                //console.log('Person already exists: ', person);
                 dup = { PersonId: person.Id, IdCardNr: person.IdCardNr };
             }
 
@@ -64,7 +64,7 @@ if (process.argv.length > 3) {
                 };
                 result.Person.push(caretaker);
                 personId = personId + 1;
-                console.log('Caretaker: ', caretaker.Id);
+                //console.log('Caretaker: ', caretaker.Id);
             }
 
             let player = result.Player.find(pl => 
@@ -90,7 +90,7 @@ if (process.argv.length > 3) {
                 playerId = playerId + 1;
             }
             else {
-                console.log('Player already exists: ', player);
+                //console.log('Player already exists: ', player);
             }
             if (dup) {
                 dup.PlayerId = player.Id;
@@ -119,8 +119,8 @@ if (process.argv.length > 3) {
 
         fs.writeFileSync('import.json', JSON.stringify(result));
 
-        console.log('Duplicated entries: ', duplicatePerson.length);
-        console.log(duplicatePerson);
+        //console.log('Duplicated entries: ', duplicatePerson.length);
+        //console.log(duplicatePerson);
 
     } catch(err) {
         console.log(err);

@@ -3,3 +3,4 @@ data/credentials.json
 data/client_secret.json
 .env
 data/
+start_dev.ps1

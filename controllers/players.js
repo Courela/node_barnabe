@@ -96,11 +96,11 @@ async function addPlayer(req, res) {
             );
             if (playerId > 0) {
                 res.statusCode = 201;
-                console.log('PlayerId: ' + playerId);
+                //console.log('PlayerId: ' + playerId);
                 response = { Id: playerId };
             } else {
                 const result = Math.abs(playerId);
-                console.log('Status code result: ' + result);
+                //console.log('Status code result: ' + result);
                 res.statusCode = result;
             }
         } else {
@@ -115,7 +115,7 @@ async function addPlayer(req, res) {
     }
 
     //TODO Remove when saving data handled properly
-    googleApi.saveData();
+    //googleApi.saveData();
 
     res.send(response);
 }
@@ -143,11 +143,11 @@ async function updatePlayer(req, res) {
             );
             if (playerId > 0) {
                 res.statusCode = 200;
-                console.log('PlayerId: ' + playerId);
+                //console.log('PlayerId: ' + playerId);
                 response = { Id: playerId };
             } else {
                 const result = Math.abs(playerId);
-                console.log('Status code result: ' + result);
+                //console.log('Status code result: ' + result);
                 res.statusCode = result;
             }
         } else {
@@ -182,7 +182,7 @@ async function removePlayer(req, res) {
     }
 
     //TODO Remove when saving data handled properly
-    googleApi.saveData((result) => res.json(result));
+    //googleApi.saveData((result) => res.json(result));
 
     res.send();
 }
@@ -204,15 +204,19 @@ async function importPlayers(req, res) {
     }
     else {
         res.statusCode = 400;
+        res.send();
     }
 
-    console.log('Imported players: ', count);
+    //console.log('Imported players: ', count);
     //TODO Remove when saving data handled properly
-    googleApi.saveData((result) => {
-        console.log(result); 
-        res.json({ imported: count, save: result }); 
-        res.send();
-    });
+    // googleApi.saveData((result) => {
+    //     console.log(result); 
+    //     res.json({ imported: count, save: result }); 
+    //     res.send();
+    // });
+    
+    res.json({ imported: count, save: null }); 
+    res.send();
 }
 
 async function getPhoto(req, res) {

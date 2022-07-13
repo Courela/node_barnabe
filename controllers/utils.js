@@ -15,7 +15,6 @@ async function getSeason (req, res) {
     const season = parseInt(req.params.season);
     const seasons = await utilsMgr.getSeasons();
     const result = seasons.find(s => s.Year == season);
-    console.log('Season: ', result);
     res.send(result);
 }
 
@@ -25,15 +24,12 @@ async function getSteps (req, res) {
 }
 
 async function getPerson (req, res) {
-    let result;
+    var result;
     const docId = req.query.docId;
     const multiple = !!req.query.multiple;
     if (docId) {
         result = await personMgr.getPersonByIdCardNr(docId);
-        if (!multiple) {
-            result = result ? result[0] : null;
-        }
-        else {
+        if (multiple) {
             result ? result : [];
         }
     } else {

@@ -1,5 +1,5 @@
 const storage = require('../db/storage');
-const mysqlStorage = require("../db/mysql")
+const mysqlStorage = require("../db/mysql/player")
 
 function getPlayers(season, teamId, stepId, roles) {
     return new Promise((resolve, reject) => {
@@ -21,7 +21,7 @@ function existsPlayer(season, teamId, stepId, roleId, personId) {
         try {
             var fn = function(r) {
                 //console.log("existsPlayer response:", r);
-                resolve(r);
+                resolve(r.length > 0);
             }
             mysqlStorage.existsPlayer(season, teamId, stepId, roleId, personId, fn);
         }
@@ -51,7 +51,7 @@ function addPlayer(teamId, stepId, season, resident, personId, roleId, caretaker
         try {
             var fn = function(r) {
                 //console.log("addPlayer response:", r);
-                resolve({ recordset: r , rowsAffected: [r.length] });
+                resolve({ recordset: r , rowsAffected: r.affectedRows });
             }
             mysqlStorage.addPlayer(teamId, stepId, season, resident, personId, roleId, caretakerId, comments, fn);
         }
@@ -76,19 +76,18 @@ function updatePlayer(id, caretakerId, comments, isResident){
     });
 }
 
-function removePlayer(playerId) {
+function removePlayer(teamId, stepId, season, playerId) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                //console.log("removePlayer response:", r);
                 let result = [];
-                if (r) {
+                if (r.affectedRows && r.affectedRows.length > 0) {
                     if (r.PhotoFilename) { result.push(r.PhotoFilename); }
                     if (r.DocFilename) { result.push(r.DocFilename); }
                 }
                 resolve(result);
             }
-            mysqlStorage.removePlayer(playerId, fn);
+            mysqlStorage.removePlayer(teamId, stepId, season, playerId, fn);
         }
         catch(err) {
             reject(err);
@@ -205,8 +204,8 @@ module.exports = {
     getPlayers,
     updatePlayer,
     removePlayer,
-    importPlayers,
     addDocFile,
     addPhotoFile,
+    importPlayers,
     getPlayersCount
 }

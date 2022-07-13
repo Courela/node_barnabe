@@ -1,4 +1,4 @@
-const mysqlStorage = require("../db/mysql")
+const adapter = require("../db/mysql/teams")
 
 function getTeamSteps(season, teamId, invert = false) {
     return new Promise((resolve, reject) => {
@@ -8,9 +8,9 @@ function getTeamSteps(season, teamId, invert = false) {
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             if (invert) {
-                mysqlStorage.getTeamMissingSteps(season, teamId, fn);
+                adapter.getTeamMissingSteps(season, teamId, fn);
             } else {
-                mysqlStorage.getTeamSteps(season, teamId, fn);
+                adapter.getTeamSteps(season, teamId, fn);
             }
         }
         catch(err) {
@@ -24,9 +24,9 @@ function addStep(season, teamId, stepId) {
         try {
             var fn = function(r) {
                 //console.log("addStep response:", r);
-                resolve({ rowsAffected: [r] });
+                resolve({ rowsAffected: [r.affectedRows] });
             }
-            mysqlStorage.addStep(season, teamId, stepId, fn);
+            adapter.addStep(season, teamId, stepId, fn);
         }
         catch(err) {
             reject(err);
@@ -39,9 +39,9 @@ function deleteStep(season, teamId, stepId) {
         try {
             var fn = function(r) {
                 //console.log("deleteStep response:", r);
-                resolve({ rowsAffected: [r] });
+                resolve({ rowsAffected: [r.affectedRows] });
             }
-            mysqlStorage.deleteStep(season, teamId, stepId, fn);
+            adapter.deleteStep(season, teamId, stepId, fn);
         }
         catch(err) {
             reject(err);
@@ -56,7 +56,7 @@ function getTeams() {
                 //console.log("getTeams response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
-            mysqlStorage.getTeams(fn);
+            adapter.getTeams(fn);
         }
         catch(err) {
             reject(err);
@@ -71,7 +71,7 @@ function getTeamById(id) {
                 //console.log("getTeamById response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
-            mysqlStorage.getTeamById(id, fn);
+            adapter.getTeamById(id, fn);
         }
         catch(err) {
             reject(err);
@@ -87,9 +87,11 @@ function getStep(stepId, season = null) {
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
             if (season) {
-                mysqlStorage.getStepWithSeason(stepId, season, fn);
+                //console.log("calling getStepWithSeason: ", stepId, "; ", season);
+                adapter.getStepWithSeason(stepId, season, fn);
             } else {
-                mysqlStorage.getStepById(stepId, fn);
+                //console.log("calling getStepById: ", stepId);
+                adapter.getStepById(stepId, fn);
             }
         }
         catch(err) {
@@ -105,7 +107,7 @@ function getTeamsBySeason(season) {
                 //console.log("getTeamsBySeason response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
-            mysqlStorage.getTeamsBySeason(season, fn);
+            adapter.getTeamsBySeason(season, fn);
         }
         catch(err) {
             reject(err);
@@ -145,7 +147,7 @@ function getTeamsByStep(season, stepId) {
                 //console.log("getTeamsByStep response:", r);
                 resolve({ recordset: r, rowsAffected: [r.length] });
             }
-            mysqlStorage.getTeamsByStep(season, stepId, fn);
+            adapter.getTeamsByStep(season, stepId, fn);
         }
         catch(err) {
             reject(err);

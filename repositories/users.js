@@ -1,4 +1,4 @@
-const mysqlStorage = require("../db/mysql")
+const mysqlStorage = require("../db/mysql/users")
 
 function getUsers() {
     return new Promise((resolve, reject) => {

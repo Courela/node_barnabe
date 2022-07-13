@@ -9,8 +9,15 @@ function getPersonById(id) {
 function getPersonByIdCardNr(docId){
     return personRepo.getPersonByIdCardNr(docId)
         .then((results) => {
-            //console.log(results);
-            return results.rowsAffected[0] > 0 ? results.recordset : null;
+            if(results.rowsAffected[0] > 0) {
+                //TODO Set datetime to UTC, currently GMT+1 
+                var d = new Date(results.recordset.Birthdate);
+                d.setHours(d.getHours()+1);
+                Object.assign(results.recordset, { Birthdate: d });
+                return results.recordset;
+            } else {
+                return null;
+            }
         })
         .catch((err) => {
             console.error(err);
@@ -44,6 +51,7 @@ function addPerson (name, gender, birthdate, docId, voterNr, phone, email, isLoc
 
 function updatePerson(person) {
     const { id, name, gender, birth, docId, voterNr, phoneNr, email, isLocalBorn, isLocalTown } = person;
+    //console.log("updatePerson manager birthdate:", birth);
     return personRepo.updatePerson(id,
             stringLimit(name, validations.NAME_MAX_LENGTH), 
             gender,
@@ -56,9 +64,9 @@ function updatePerson(person) {
             isLocalTown
         )
         .then((results) => {
-            //console.log(results);
-            return results.recordset && results.recordset.length > 0 ? 
-                results.recordset[0] : null;
+            //console.log("updatePerson manager: ", results);
+            return results.recordset ? 
+                results.affectedRows : 0;
         })
         .catch((err) => {
             console.error(err);

@@ -19,13 +19,14 @@ async function getPlayers(season, teamId, stepId, roles) {
     if (step) {
         return playersRepo.getPlayers(season, teamId, stepId, roles)
             .then((results) => {
-                //console.log(results);
+                //console.log("getPlayers manager: ", results);
                 return results.recordset.map((v) => Object.assign(
                     v, 
                     { person: { Id: v.PersonId, Name: v.PlayerName, Gender: v.PlayerGender, Birthdate: v.PlayerBirthdate, IdCardNr: v.PlayerIdCardNr }},
                     { player: { Id: v.Id, PhotoFilename: v.PhotoFilename, DocFilename: v.DocFilename }},
                     { caretaker: { CareTakerId: v.CareTakerId, Name: v.CareTakerName }},
-                    { role: { Description: v.RoleDescription }}
+                    { role: { Id: v.RoleId, Description: v.RoleDescription }},
+                    { step: { Id: v.StepId, MinDate: v.MinDate, MaxDate: v.MaxDate }}
                 ));
             })
             .catch((err) => {
@@ -58,11 +59,11 @@ function getPlayer(season, teamId, stepId, playerId) {
                 // }
 
                 return Object.assign(player, 
-                    { player: { Id: player.Id, PhotoFilename: player.PhotoFilename, DocFilename: player.DocFilename, RoleId: player.RoleId }, 
-                      person: { Id: player.PersonId, Name: player.PlayerName, Gender: player.PlayerGender, Birthdate: player.PlayerBirthdate, IdCardNr: player.PlayerIdCardNr, VoterNr: player.PlayerVoterNr },
-                      caretaker: { CareTakerId: player.CareTakerId, Name: player.CareTakerName, VoterNr: player.CareTakerVoterNr },
+                    { player: { Id: player.Id, PhotoFilename: player.PhotoFilename, DocFilename: player.DocFilename, RoleId: player.RoleId, CareTakerId: player.CareTakerId, Resident: player.Resident, LocalBorn: player.PlayerLocalBorn, LocalTown: player.PlayerLocalTown, step: { Id: player.StepId, Description: player.StepDescription, IsCaretakerRequired: player.StepIsCaretakerRequired } }, 
+                      person: { Id: player.PersonId, Name: player.PlayerName, Gender: player.PlayerGender, Birthdate: player.PlayerBirthdate, IdCardNr: player.PlayerIdCardNr, VoterNr: player.PlayerVoterNr, Email: player.PlayerEmail, Phone: player.PlayerPhone, },
+                      caretaker: { CareTakerId: player.CareTakerId, Name: player.CareTakerName, IdCardNr: player.CareTakerIdCardNr, VoterNr: player.CareTakerVoterNr, Email: player.CareTakerEmail, Phone: player.CareTakerPhone },
                       role: { Id: player.RoleId, Description: player.RoleDescription },
-                      step: { Description: player.StepDescription }}
+                      step: { Id: player.StepId, Description: player.StepDescription, IsCaretakerRequired: player.StepIsCaretakerRequired, MinDate: player.StepMinDate, MaxDate: player.StepMaxDate }}
                 )
                 //return { player: player, photo: photo };
             }
@@ -98,9 +99,8 @@ function getPhoto(folder, filename) {
 
 async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comments, isResident, photo, doc) {
     let personEntity = await personMgr.getPersonByIdCardNr(person.docId);
-    //console.log('Person: ', personEntity);
+    //console.log('addPlayer person with idCardNr '+ person.docId + ': ', personEntity);
     if (personEntity) {
-        personEntity = personEntity[personEntity.length - 1];
         if (await playersRepo.existsPlayer(season, teamId, stepId, roleId, personEntity.Id)) {
             console.warn('Player already exists!');
             return -409;
@@ -127,21 +127,20 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
         caretakerEntity ? caretakerEntity.Id : null,
         stringLimit(comments, validations.COMMENTS_MAX_LENGTH))
         .then(result => {
-            //console.log('Add Player result:');
-            //console.log(result);
-            if (result.recordset && result.recordset.length > 0) {
-                const playerId = result.recordset[0].Id;
-                if (photo) {
-                    const filename = savePlayerPhoto(photo, season, teamId, stepId, playerId);
-                    playersRepo.addPhotoFile(playerId, filename);
-                }
-                if (doc) {
-                    const filename = savePlayerDoc(doc, season, teamId, stepId, playerId);
-                    playersRepo.addDocFile(playerId, filename);
-                }
-                return result.recordset[0].Id;
+            //console.log('addPlayer manager:', result);
+            if (result.recordset && result.recordset.insertId > 0) {
+                const playerId = result.recordset.insertId;
+                // if (photo) {
+                //     const filename = savePlayerPhoto(photo, season, teamId, stepId, playerId);
+                //     playersRepo.addPhotoFile(playerId, filename);
+                // }
+                // if (doc) {
+                //     const filename = savePlayerDoc(doc, season, teamId, stepId, playerId);
+                //     playersRepo.addDocFile(playerId, filename);
+                // }
+                return playerId;
             }
-            else { return result.rowsAffected[0]; }
+            else { return result.affectedRows; }
         })
         .catch((err) => {
             console.error(err);
@@ -164,7 +163,7 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
             if (caretakerPerson) {
                 caretakerPerson = caretakerPerson[caretakerPerson.length - 1];
 
-                console.log('Updating caretaker: ', caretakerPerson.IdCardNr);
+                //console.log('Updating caretaker: ', caretakerPerson.IdCardNr);
                 const merge = {
                     name: caretaker.name,
                     voterNr: caretaker.voterNr,
@@ -180,7 +179,7 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
                 caretaker = merge;
             }
             else {
-                console.log('New caretaker: ', caretaker.docId);
+                //console.log('New caretaker: ', caretaker.docId);
                 newCaretaker = await personMgr.addPerson(caretaker.name, null, null, caretaker.docId, caretaker.voterNr, caretaker.phoneNr, caretaker.email);
             }
         }
@@ -267,11 +266,12 @@ function saveRawFile(filename, data) {
 function removePlayer(teamId, stepId, season, playerId) {
     return playersRepo.removePlayer(teamId, stepId, season, playerId)
         .then(result => {
-            if (result && result.length > 0) {
-                result.forEach(filename => {
-                    deleteFile(filename);
-                });
-            }
+            console.log("Removed player: ", playerId, result);
+            // if (result && result.length > 0) {
+            //     result.forEach(filename => {
+            //         deleteFile(filename);
+            //     });
+            // }
         })
         .catch(err => {
             console.error(err);
@@ -299,12 +299,15 @@ async function importPlayers(teamId, stepId, season, selectedSeason, playerIds) 
             var playerResult = await playersRepo.getPlayer(selectedSeason, teamId, stepId, playerId);
             if (playerResult.rowsAffected[0] === 1) {
                 var player = playerResult.recordset[0];
-                console.log('Player to import: ', player);
-                if (player && (player.RoleId !== 1 || player.person.Birthdate >= step.MinDate)) {
+                //console.log('Player to import: ', player);
+                if (player && (player.RoleId !== 1 || player.PlayerBirthdate >= step.MinDate)) {
                     if (await addPlayer(teamId, stepId, season, 
-                            { docId: player.person.IdCardNr }, 
+                            { 
+                                id: player.PersonId, name: player.PlayerName, gender: player.PlayerGender, birthdate: player.PlayerBirthdate, 
+                                docId: player.PlayerIdCardNr, voterNr: player.PlayerVoterNr
+                            }, 
                             player.RoleId, 
-                            player.caretaker ? { docId: player.caretaker.IdCardNr }: null , 
+                            player.CareTakerIdCardNr ? { docId: player.CareTakerIdCardNr }: null , 
                             null, 
                             player.Resident) > 0) {
                         count++;
