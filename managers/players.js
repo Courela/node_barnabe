@@ -303,7 +303,7 @@ async function importPlayers(teamId, stepId, season, selectedSeason, playerIds) 
                 if (player && (player.RoleId !== 1 || player.PlayerBirthdate >= step.MinDate)) {
                     if (await addPlayer(teamId, stepId, season, 
                             { 
-                                id: player.PersonId, name: player.PlayerName, gender: player.PlayerGender, birthdate: player.PlayerBirthdate, 
+                                id: player.PersonId, name: player.PlayerName, gender: player.PlayerGender, birth: player.PlayerBirthdate, 
                                 docId: player.PlayerIdCardNr, voterNr: player.PlayerVoterNr
                             }, 
                             player.RoleId, 
