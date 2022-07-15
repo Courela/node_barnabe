@@ -21,12 +21,11 @@ async function getPlayers(season, teamId, stepId, roles) {
             .then((results) => {
                 //console.log("getPlayers manager: ", results);
                 return results.recordset.map((v) => Object.assign(
-                    v, 
-                    { person: { Id: v.PersonId, Name: v.PlayerName, Gender: v.PlayerGender, Birthdate: v.PlayerBirthdate, IdCardNr: v.PlayerIdCardNr }},
-                    { player: { Id: v.Id, PhotoFilename: v.PhotoFilename, DocFilename: v.DocFilename }},
-                    { caretaker: { CareTakerId: v.CareTakerId, Name: v.CareTakerName }},
-                    { role: { Id: v.RoleId, Description: v.RoleDescription }},
-                    { step: { Id: v.StepId, MinDate: v.MinDate, MaxDate: v.MaxDate }}
+                    v,
+                    { Person: { Id: v.PersonId, Name: v.PlayerName, Gender: v.PlayerGender, Birthdate: v.PlayerBirthdate, IdCardNr: v.PlayerIdCardNr }},
+                    { Caretaker: { Id: v.CareTakerId, Name: v.CareTakerName }},
+                    { Role: { Id: v.RoleId, Description: v.RoleDescription }},
+                    { Step: { Id: v.StepId, Season: v.Season, Gender: v.StepGender, IsCaretakerRequired: v.StepIsCareTakerRequired, MinDate: v.MinDate, MaxDate: v.MaxDate }}
                 ));
             })
             .catch((err) => {
@@ -59,11 +58,11 @@ function getPlayer(season, teamId, stepId, playerId) {
                 // }
 
                 return Object.assign(player, 
-                    { player: { Id: player.Id, PhotoFilename: player.PhotoFilename, DocFilename: player.DocFilename, RoleId: player.RoleId, CareTakerId: player.CareTakerId, Resident: player.Resident, LocalBorn: player.PlayerLocalBorn, LocalTown: player.PlayerLocalTown, step: { Id: player.StepId, Description: player.StepDescription, IsCaretakerRequired: player.StepIsCaretakerRequired } }, 
-                      person: { Id: player.PersonId, Name: player.PlayerName, Gender: player.PlayerGender, Birthdate: player.PlayerBirthdate, IdCardNr: player.PlayerIdCardNr, VoterNr: player.PlayerVoterNr, Email: player.PlayerEmail, Phone: player.PlayerPhone, },
-                      caretaker: { CareTakerId: player.CareTakerId, Name: player.CareTakerName, IdCardNr: player.CareTakerIdCardNr, VoterNr: player.CareTakerVoterNr, Email: player.CareTakerEmail, Phone: player.CareTakerPhone },
-                      role: { Id: player.RoleId, Description: player.RoleDescription },
-                      step: { Id: player.StepId, Description: player.StepDescription, IsCaretakerRequired: player.StepIsCaretakerRequired, MinDate: player.StepMinDate, MaxDate: player.StepMaxDate }}
+                    { Player: { Id: player.Id, PhotoFilename: player.PhotoFilename, DocFilename: player.DocFilename, RoleId: player.RoleId, CareTakerId: player.CareTakerId, Resident: player.Resident, LocalBorn: player.PlayerLocalBorn, LocalTown: player.PlayerLocalTown, step: { Id: player.StepId, Description: player.StepDescription, IsCaretakerRequired: player.StepIsCaretakerRequired } }, 
+                      Person: { Id: player.PersonId, Name: player.PlayerName, Gender: player.PlayerGender, Birthdate: player.PlayerBirthdate, IdCardNr: player.PlayerIdCardNr, VoterNr: player.PlayerVoterNr, Email: player.PlayerEmail, Phone: player.PlayerPhone, },
+                      Caretaker: { CareTakerId: player.CareTakerId, Name: player.CareTakerName, IdCardNr: player.CareTakerIdCardNr, VoterNr: player.CareTakerVoterNr, Email: player.CareTakerEmail, Phone: player.CareTakerPhone },
+                      Role: { Id: player.RoleId, Description: player.RoleDescription },
+                      Step: { Id: player.StepId, Description: player.StepDescription, IsCaretakerRequired: player.StepIsCaretakerRequired, MinDate: player.StepMinDate, MaxDate: player.StepMaxDate }}
                 )
                 //return { player: player, photo: photo };
             }

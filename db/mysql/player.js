@@ -6,7 +6,8 @@ function getPlayers (season, teamId, stepId, roles, callback) {
             "     ps.Name AS PlayerName, ps.Gender AS PlayerGender, ps.Birthdate AS PlayerBirthdate, ps.IdCardNr AS PlayerIdCardNr, " +
             "     r.Description AS RoleDescription, " +
             "     ct.Name AS CareTakerName, ct.IdCardNr AS CareTakerIdCardNr, ct.VoterNr AS CareTakerVoterNr, " +
-            "     bsl.MinDate, bsl.MaxDate " +
+            "     bsl.MinDate, bsl.MaxDate, " +
+            "     s.Gender AS StepGender, s.IsCareTakerRequired AS StepIsCareTakerRequired " +
             " FROM player p " + 
             "   INNER JOIN step s ON s.Id = p.StepId AND s.Id = " + mysql.escape(stepId) +
             "   INNER JOIN team t ON t.Id = p.TeamId AND t.Id = " + mysql.escape(teamId) + 

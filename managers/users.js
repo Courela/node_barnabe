@@ -8,7 +8,7 @@ function getUsers() {
             if (r.recordset) {
                 for(var u of r.recordset) {
                     var team = await teamsMgr.getTeamById(u.TeamId);
-                    result.push(Object.assign(u, { team: team }));
+                    result.push(Object.assign(u, { Team: team }));
                 }
             }
             //console.log("getUsers manager response: ", result);
