@@ -115,26 +115,6 @@ function addDocFile(playerId, filename) {
     });
 }
 
-function addPhotoFile(playerId, filename) {
-    const query = function (db) {
-        const player = db.get('Player')
-            .find({ Id: playerId })
-            .assign({ PhotoFilename: filename, LastUpdatedAt: new Date() })
-            .write();
-        //console.log('Storage person: ', player);
-        return { rowsAffected: [1] };
-    };
-    return new Promise((resolve, reject) => {
-        try {
-            const result = storage.statementQuery(query);
-            resolve(result);
-        }
-        catch(err) {
-            reject(err);
-        }
-    });
-}
-
 function importPlayers(teamId, stepId, season, selectedSeason, playerIds) {
     const query = function (db) {
         var newPlayers = 0;
@@ -197,6 +177,20 @@ function getPlayersCount(year) {
     });   
 }
 
+function addPhoto(playerId, filename, photo) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                resolve(r);
+            }
+            mysqlStorage.addPhoto(playerId, filename, photo, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     addPlayer,
     existsPlayer,
@@ -205,7 +199,7 @@ module.exports = {
     updatePlayer,
     removePlayer,
     addDocFile,
-    addPhotoFile,
     importPlayers,
-    getPlayersCount
+    getPlayersCount,
+    addPhoto
 }

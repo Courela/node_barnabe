@@ -3,7 +3,18 @@ const validations = require('../utils/validations');
 const { stringLimit } = validations;
 
 function getPersonById(id) {
-    return personRepo.getPersonById(id);
+    return personRepo.getPersonById(id)
+        .then((results) => {
+            if(results.rowsAffected[0] > 0) {
+                return results.recordset;
+            } else {
+                return null;
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            return null;
+        });
 }
 
 function getPersonByIdCardNr(docId){
@@ -38,9 +49,9 @@ function addPerson (name, gender, birthdate, docId, voterNr, phone, email, isLoc
             isLocalTown
         )
         .then((results) => {
-            //console.log(results);
-            return results.recordset && results.recordset.length > 0 ? 
-                results.recordset[0] : null;
+            //console.log("addPerson manager:", results);
+            return results.recordset && results.recordset.insertId ? 
+                getPersonById(results.recordset.insertId) : null;
         })
         .catch((err) => {
             console.error(err);
@@ -51,7 +62,7 @@ function addPerson (name, gender, birthdate, docId, voterNr, phone, email, isLoc
 
 function updatePerson(person) {
     const { id, name, gender, birth, docId, voterNr, phoneNr, email, isLocalBorn, isLocalTown } = person;
-    //console.log("updatePerson manager birthdate:", birth);
+    //console.log("updatePerson manager person:", person);
     return personRepo.updatePerson(id,
             stringLimit(name, validations.NAME_MAX_LENGTH), 
             gender,

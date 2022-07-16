@@ -117,11 +117,11 @@ async function gameTemplate(req, res) {
             awayTeam: awayTeam.ShortDescription,
             step: step.Description,
             homePlayers: homePlayers,
-            homeStaff1: homeStaff ? homeStaff.slice(0,2).map(p => { return { name: formatName(p.person.Name.toLowerCase(), 3), role: p.role.Description}; }) : [],
-            homeStaff2: homeStaff ? homeStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase(), 3), role: p.role.Description}; }) : [],
+            homeStaff1: homeStaff ? homeStaff.slice(0,2).map(p => { return { name: formatName(p.Person.Name.toLowerCase(), 3), role: p.Role.Description}; }) : [],
+            homeStaff2: homeStaff ? homeStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase(), 3), role: p.Role.Description}; }) : [],
             awayPlayers: awayPlayers,
-            awayStaff1: awayStaff ? awayStaff.slice(0,2).map(p => { return { name: formatName(p.person.Name.toLowerCase(), 3), role: p.role.Description}; }) : [],
-            awayStaff2: awayStaff ? awayStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase(), 3), role: p.role.Description}; }) : []
+            awayStaff1: awayStaff ? awayStaff.slice(0,2).map(p => { return { name: formatName(p.Person.Name.toLowerCase(), 3), role: p.Role.Description}; }) : [],
+            awayStaff2: awayStaff ? awayStaff.slice(2,4).map(p => { return { name: formatName(p.Person.Name.toLowerCase(), 3), role: p.Role.Description}; }) : []
         };
 
         try {

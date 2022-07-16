@@ -44,7 +44,7 @@ function getPlayer(season, teamId, stepId, playerId) {
             //console.log(results);
             if (results.rowsAffected > 0) {
                 const player = results.recordset[0];
-                let photo = [];
+                // let photo = [];
                 // if (player.PhotoFilename) {
                 //     const folder = [season, teamId, stepId].join('_');
                 //     photo = getPhoto(folder, player.PhotoFilename);
@@ -56,6 +56,10 @@ function getPlayer(season, teamId, stepId, playerId) {
                 //         //player.DocFilename = null;
                 //     }
                 // }
+
+                if (player.Photo) {
+                    player.Photo = btoa(player.Photo);
+                }
 
                 return Object.assign(player, 
                     { Player: { Id: player.Id, PhotoFilename: player.PhotoFilename, DocFilename: player.DocFilename, RoleId: player.RoleId, CareTakerId: player.CareTakerId, Resident: player.Resident, LocalBorn: player.PlayerLocalBorn, LocalTown: player.PlayerLocalTown, step: { Id: player.StepId, Description: player.StepDescription, IsCaretakerRequired: player.StepIsCaretakerRequired } }, 
@@ -113,10 +117,10 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
     let caretakerEntity = null;
     if (caretaker && caretaker.docId) {
         caretakerEntity = await personMgr.getPersonByIdCardNr(caretaker.docId);
-        //console.log('Caretaker: ', caretakerEntity);
+        //console.log('addPlayer manager caretaker with docId '+ caretaker.docId + ':', caretakerEntity);
         if (caretakerEntity) {
-            caretakerEntity = caretakerEntity[caretakerEntity.length - 1];
-            personMgr.updatePerson(caretaker);
+            //caretakerEntity = caretakerEntity[caretakerEntity.length - 1];
+            personMgr.updatePerson(Object.assign(caretaker, {id: caretakerEntity.Id}));
         } else {
             caretakerEntity = await personMgr.addPerson(caretaker.name, null, null, caretaker.docId, caretaker.voterNr, caretaker.phoneNr, caretaker.email);
         }
@@ -129,10 +133,16 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
             //console.log('addPlayer manager:', result);
             if (result.recordset && result.recordset.insertId > 0) {
                 const playerId = result.recordset.insertId;
-                // if (photo) {
-                //     const filename = savePlayerPhoto(photo, season, teamId, stepId, playerId);
-                //     playersRepo.addPhotoFile(playerId, filename);
-                // }
+                if (photo) {
+                    const fileType = photo.match(FILE_REGEX);
+                    const fileExtension = fileType && fileType.length > 2 ? '.' + fileType[2] : '';
+                    const filename = [season, teamId, stepId, playerId + fileExtension].join('_');
+                    //playersRepo.addPhotoFile(playerId, filename);
+                    playersRepo.addPhoto(playerId, filename, photo);
+                    
+                    //const filename = savePlayerPhoto(photo, season, teamId, stepId, playerId);
+                    //playersRepo.addPhotoFile(playerId, filename);
+                }
                 // if (doc) {
                 //     const filename = savePlayerDoc(doc, season, teamId, stepId, playerId);
                 //     playersRepo.addDocFile(playerId, filename);
@@ -160,7 +170,7 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
             let caretakerPerson = await personMgr.getPersonByIdCardNr(caretaker.docId);
             
             if (caretakerPerson) {
-                caretakerPerson = caretakerPerson[caretakerPerson.length - 1];
+                //caretakerPerson = caretakerPerson[caretakerPerson.length - 1];
 
                 //console.log('Updating caretaker: ', caretakerPerson.IdCardNr);
                 const merge = {

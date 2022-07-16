@@ -58,7 +58,7 @@ function addStep(season, teamId, stepId, callback) {
                          mysql.escape(stepId) + "," +
                          mysql.escape(season) + "," +
                          "CURRENT_TIMESTAMP())";
-    adapter.query.query(q, callback);
+    adapter.query(q, callback);
 }
 
 function deleteStep(season, teamId, stepId, callback) {

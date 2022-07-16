@@ -82,11 +82,21 @@ function removePlayer(teamId, stepId, season, playerId, callback) {
     adapter.query(q, callback);
 }
 
+function addPhoto(playerId, filename, photo, callback) {
+    var q = " UPDATE player " + 
+            " SET PhotoFilename = " + mysql.escape(filename) + ',' +
+            "     Photo = " + mysql.escape(photo) + ',' +
+            "     LastUpdatedAt = CURRENT_TIMESTAMP() " +
+            " WHERE Id = " + mysql.escape(playerId);
+    adapter.query(q, callback);
+}
+
 module.exports = {
     getPlayers,
     existsPlayer,
     getPlayer,
     addPlayer,
     updatePlayer,
-    removePlayer
+    removePlayer,
+    addPhoto
 }

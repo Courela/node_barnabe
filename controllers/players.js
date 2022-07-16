@@ -162,7 +162,7 @@ async function updatePlayer(req, res) {
     }
     
     //TODO Remove when saving data handled properly
-    googleApi.saveData();
+    //googleApi.saveData();
 
     res.send(response);
 }

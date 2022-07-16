@@ -2,7 +2,19 @@ const storage = require('../db/storage');
 const mysqlStorage = require('../db/mysql/person');
 
 function getPersonById(id) {
-    return storage.getSingle('Person', id);
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                resolve({ recordset: r[0], rowsAffected: [r.length] });
+            }
+            mysqlStorage.getPersonById(id, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+
+    //return storage.getSingle('Person', id);
 }
 
 function getPersonByIdCardNr(idCardNr) {
@@ -47,7 +59,7 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email, isLoca
         try {
             var fn = function(r) {
                 //console.log("addPerson response:", r);
-                resolve({ recordset: r, rowsAffected: [r.length] });
+                resolve({ recordset: r, rowsAffected: [r.affectedRows] });
             }
             mysqlStorage.addPerson(name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn, isLocalTown, fn);
         }
@@ -95,7 +107,7 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email, isLoca
 }
 
 function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn, isLocalTown) {
-    console.log("updatePerson repository birthdate:", birthdate);
+    //console.log("updatePerson repository birthdate:", birthdate);
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
