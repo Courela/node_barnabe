@@ -43,16 +43,11 @@ function getPlayer(season, teamId, stepId, playerId) {
         .then((results) => {
             if (results.rowsAffected > 0) {
                 const player = results.recordset[0];
-                // if (player.DocFilename) {
-                //     var docPath = STORAGE_FOLDER + player.DocFilename;
-                //     if (!fs.existsSync(docPath)) {
-                //         console.warn('Missing file: ', player.DocFilename);
-                //         //player.DocFilename = null;
-                //     }
-                // }
-
                 if (player.Photo) {
                     player.Photo = btoa(player.Photo);
+                }
+                if (player.Doc) {
+                    player.Doc = btoa(player.Doc);
                 }
 
                 return Object.assign(player, 

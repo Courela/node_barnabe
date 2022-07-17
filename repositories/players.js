@@ -150,5 +150,6 @@ module.exports = {
     updatePlayer,
     removePlayer,
     getPlayersCount,
-    addPhoto
+    addPhoto,
+    addDocument
 }

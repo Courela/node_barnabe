@@ -75,7 +75,7 @@ async function addPlayer(req, res) {
     let response = '';
     try {
         const { teamId, stepId, season } = req.params;
-        const { Person, Caretaker, RoleId, Photo, doc, Comments, Resident } = req.body;
+        const { Person, Caretaker, RoleId, Photo, Doc, Comments, Resident } = req.body;
 
         if (season && teamId && stepId && RoleId && isPersonValid(Person) && isCaretakerValid(Caretaker)) {
             const playerId = await playersMgr.addPlayer(
@@ -88,7 +88,7 @@ async function addPlayer(req, res) {
                 Comments,
                 Resident,
                 Photo,
-                doc
+                Doc
             );
             if (playerId > 0) {
                 res.statusCode = 201;
