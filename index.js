@@ -12,6 +12,7 @@ const templatesController = require('./controllers/templates');
 
 const authentication = require('./authentication/authentication');
 const googleApi = require('./authentication/googleApi');
+const errors = require('./errors');
 
 serverController.setup();
 
@@ -127,15 +128,14 @@ async function authenticate(req, res) {
         }
     }
     catch (err) {
-        console.log(err);
+        errors.handleErrors(res, err);
         response = err;
-        res.statusCode = 500;
     }
     res.send(response);
 }
 
 function logout(req, res) {
-    console.log('User logout: ' + req.barnabe.user);
+    console.log("User logout: ", req.body.user);
     req.barnabe.reset();
     res.send();
 }
