@@ -54,16 +54,6 @@ async function teamTemplate(req, res) {
                 const src = "data:application/pdf;base64," + btoa(buffer);
                 res.send({ src: src });
             });
-
-            // pdf.create(result, options).toFile(path.join(basePath, 'doc/team_game_sheet.pdf'), function (err, result) {
-            //     if (err) { 
-            //         return console.log(err); 
-            //     }
-
-            //     console.log('Generated PDF: ', result);
-            //     // const src = "data:application/pdf;base64," + btoa(fs.readFileSync(result.filename));
-            //     // res.send({ src: src });
-            // });
         }
         catch (err) {
             errors.handleErrors(res, err);
@@ -74,13 +64,6 @@ async function teamTemplate(req, res) {
         res.statusCode = 400;
         res.send();
     }
-
-    // console.log(result);
-
-    //res.render('team_game_sheet', data);
-
-    //const src = "data:application/pdf;base64," + btoa(fs.readFileSync());
-    //res.send({ src: src });
 }
 
 function isLocal(player) {
@@ -145,18 +128,6 @@ async function gameTemplate(req, res) {
                 const src = "data:application/pdf;base64," + btoa(buffer);
                 res.send({ src: src });
             });
-
-            // pdf.create(result, options).toFile(path.join(basePath, 'doc/game_sheet.pdf'), function (err, result) {
-            //     if (err) { 
-            //         return console.log(err); 
-            //     }
-
-            //     console.log('Generated PDF: ', result);
-            //     // const src = "data:application/pdf;base64," + btoa(fs.readFileSync(result.filename));
-            //     // res.send({ src: src });
-            // });
-
-            //res.render('game_sheet', data);
         }
         catch (err) {
             console.error(err);
