@@ -17,8 +17,8 @@ function getPersonById(id) {
         });
 }
 
-function getPersonByIdCardNr(docId){
-    return personRepo.getPersonByIdCardNr(docId)
+function getPersonByIdCardNr(idCardNr){
+    return personRepo.getPersonByIdCardNr(idCardNr)
         .then((results) => {
             if(results.rowsAffected[0] > 0) {
                 //TODO Set datetime to UTC, currently GMT+1 
@@ -36,12 +36,12 @@ function getPersonByIdCardNr(docId){
         });
 }
 
-function addPerson (name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn, isLocalTown) {
+function addPerson (name, gender, birthdate, idCardNr, voterNr, phone, email, isLocalBorn, isLocalTown) {
     return personRepo.addPerson(
             stringLimit(name, validations.NAME_MAX_LENGTH), 
             gender,
             birthdate, 
-            stringLimit(docId, validations.DOC_ID_MAX_LENGTH), 
+            stringLimit(idCardNr, validations.DOC_ID_MAX_LENGTH), 
             stringLimit(voterNr, validations.VOTER_NR_MAX_LENGTH),
             stringLimit(phone, validations.PHONE_MAX_LENGTH),
             stringLimit(email, validations.EMAIL_MAX_LENGTH),

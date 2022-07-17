@@ -25,10 +25,10 @@ async function getSteps (req, res) {
 
 async function getPerson (req, res) {
     var result;
-    const docId = req.query.docId;
+    const idCardNr = req.query.idCardNr;
     const multiple = !!req.query.multiple;
-    if (docId) {
-        result = await personMgr.getPersonByIdCardNr(docId);
+    if (idCardNr) {
+        result = await personMgr.getPersonByIdCardNr(idCardNr);
         if (multiple) {
             result ? result : [];
         }

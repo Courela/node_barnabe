@@ -91,6 +91,15 @@ function addPhoto(playerId, filename, photo, callback) {
     adapter.query(q, callback);
 }
 
+function addDocument(playerId, filename, doc, callback) {
+    var q = " UPDATE player " + 
+            " SET DocFilename = " + mysql.escape(filename) + ',' +
+            "     Doc = " + mysql.escape(doc) + ',' +
+            "     LastUpdatedAt = CURRENT_TIMESTAMP() " +
+            " WHERE Id = " + mysql.escape(playerId);
+    adapter.query(q, callback);
+}
+
 module.exports = {
     getPlayers,
     existsPlayer,
@@ -98,5 +107,6 @@ module.exports = {
     addPlayer,
     updatePlayer,
     removePlayer,
-    addPhoto
+    addPhoto,
+    addDocument
 }

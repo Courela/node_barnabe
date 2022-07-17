@@ -95,69 +95,6 @@ function removePlayer(teamId, stepId, season, playerId) {
     });
 }
 
-function addDocFile(playerId, filename) {
-    const query = function (db) {
-        const player = db.get('Player')
-            .find({ Id: playerId })
-            .assign({ DocFilename: filename, LastUpdatedAt: new Date() })
-            .write();
-        //console.log('Storage person: ', player);
-        return { rowsAffected: [1] };
-    };
-    return new Promise((resolve, reject) => {
-        try {
-            const result = storage.statementQuery(query);
-            resolve(result);
-        }
-        catch(err) {
-            reject(err);
-        }
-    });
-}
-
-function importPlayers(teamId, stepId, season, selectedSeason, playerIds) {
-    const query = function (db) {
-        var newPlayers = 0;
-        playerIds.forEach(id => {
-            const player = db.get('Player')
-                .cloneDeep()
-                .find({ Id: id, Season: selectedSeason })
-                .value();
-            
-            if (player) {
-                const last = db.get('Player')
-                    .cloneDeep()
-                    .last()
-                    .value();
-                const id = last && last.Id ? last.Id + 1 : 1;
-                
-                player.Id = id;
-                player.Season = season;
-                player.DocFilename = null;
-                player.PhotoFilename = null;
-                player.CreatedAt = new Date()
-                
-                db.get('Player')
-                    .push(player)
-                    .write();
-
-                newPlayers++;
-            }
-        });
-
-        return { rowsAffected: [newPlayers] };
-    };
-    return new Promise((resolve, reject) => {
-        try {
-            const result = storage.statementQuery(query);
-            resolve(result);
-        }
-        catch(err) {
-            reject(err);
-        }
-    });
-}
-
 function getPlayersCount(year) {
     const query = function (db) {
         const playersCount = db.get('Player')
@@ -191,6 +128,20 @@ function addPhoto(playerId, filename, photo) {
     });
 }
 
+function addDocument(playerId, filename, doc) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                resolve(r);
+            }
+            mysqlStorage.addDocument(playerId, filename, doc, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     addPlayer,
     existsPlayer,
@@ -198,8 +149,6 @@ module.exports = {
     getPlayers,
     updatePlayer,
     removePlayer,
-    addDocFile,
-    importPlayers,
     getPlayersCount,
     addPhoto
 }

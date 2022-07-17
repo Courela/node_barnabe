@@ -109,10 +109,9 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
                 if (photo) {
                     addPhoto(season, teamId, stepId, playerId, photo);
                 }
-                // if (doc) {
-                //     const filename = savePlayerDoc(doc, season, teamId, stepId, playerId);
-                //     playersRepo.addDocFile(playerId, filename);
-                // }
+                if (doc) {
+                    addDocument(season, teamId, stepId, playerId, doc);
+                }
                 return playerId;
             }
             else { return result.rowsAffected; }
@@ -129,6 +128,13 @@ function addPhoto(season, teamId, stepId, playerId, photo) {
     const fileExtension = fileType && fileType.length > 2 ? '.' + fileType[2] : '';
     const filename = [season, teamId, stepId, playerId + fileExtension].join('_');
     playersRepo.addPhoto(playerId, filename, photo);
+}
+
+function addDocument(season, teamId, stepId, playerId, doc) {
+    const fileType = doc.match(FILE_REGEX);
+    const fileExtension = fileType && fileType.length > 2 ? '.' + fileType[2] : '';
+    const filename = [season, teamId, stepId, playerId, "doc" + fileExtension].join('_');
+    playersRepo.addDocument(playerId, filename, doc);
 }
 
 async function updatePlayer(teamId, stepId, season, playerId, person, roleId, caretaker, comments, isResident, photo, doc) {

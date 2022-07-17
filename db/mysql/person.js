@@ -13,12 +13,12 @@ function getPersonByIdCardNr(idCardNr, callback) {
     adapter.query(q, callback);
 }
 
-function addPerson(name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn, isLocalTown, callback) {
+function addPerson(name, gender, birthdate, idCardNr, voterNr, phone, email, isLocalBorn, isLocalTown, callback) {
     var q = " INSERT INTO person (Name, Gender, Birthdate, IdCardNr, VoterNr, Phone, Email, LocalBorn, LocalTown, CreatedAt, LastUpdatedAt) " + 
             " VALUES (" + mysql.escape(name) + "," +
                           mysql.escape(gender) + "," +
                           mysql.escape(birthdate) + "," +
-                          mysql.escape(docId) + "," +
+                          mysql.escape(idCardNr) + "," +
                           mysql.escape(voterNr) + "," +
                           mysql.escape(phone) + "," +
                           mysql.escape(email) + "," +
@@ -29,12 +29,12 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email, isLoca
     adapter.query(q, callback);
 }
 
-function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn, isLocalTown, callback) {
+function updatePerson(id, name, gender, birthdate, idCardNr, voterNr, phone, email, isLocalBorn, isLocalTown, callback) {
     var q = " UPDATE person " +
             " SET Name = " + mysql.escape(name) + "," +
             "     Gender = " + mysql.escape(gender) + "," +
             "     Birthdate = "+ mysql.escape(birthdate) + "," +
-            "     IdCardNr = " + mysql.escape(docId) + "," +
+            "     IdCardNr = " + mysql.escape(idCardNr) + "," +
             "     VoterNr = " + mysql.escape(voterNr) + "," +
             "     Phone = " + mysql.escape(phone) + "," +
             "     Email = " + mysql.escape(email) + "," +

@@ -29,7 +29,7 @@ function getPersonByIdCardNr(idCardNr) {
             reject(err);
         }
     });
-    // //console.log('Search DocId: ' + idCardNr);
+    // //console.log('Search IdCardNr: ' + idCardNr);
     // const query = function (db) {
     //     const persons = db.get('Person')
     //         .cloneDeep()
@@ -54,21 +54,21 @@ function getPersonByIdCardNr(idCardNr) {
     // });
 }
 
-function addPerson(name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn, isLocalTown) {
+function addPerson(name, gender, birthdate, idCardNr, voterNr, phone, email, isLocalBorn, isLocalTown) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
                 //console.log("addPerson response:", r);
                 resolve({ recordset: r, rowsAffected: [r.affectedRows] });
             }
-            mysqlStorage.addPerson(name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn, isLocalTown, fn);
+            mysqlStorage.addPerson(name, gender, birthdate, idCardNr, voterNr, phone, email, isLocalBorn, isLocalTown, fn);
         }
         catch(err) {
             reject(err);
         }
     });
-    // //console.log('Person to insert: ' + name + gender + birthdate + docId + voterNr + phone + email);
-    // console.log('New Person: ', docId);
+    // //console.log('Person to insert: ' + name + gender + birthdate + idCardNr + voterNr + phone + email);
+    // console.log('New Person: ', idCardNr);
     // const query = function (db) {
     //     const last = db.get('Person')
     //         .cloneDeep()
@@ -80,7 +80,7 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email, isLoca
     //         Name: name, 
     //         Gender: gender, 
     //         Birthdate: birthdate, 
-    //         IdCardNr: docId,
+    //         IdCardNr: idCardNr,
     //         IdCardExpireDate: null,
     //         VoterNr: voterNr, 
     //         Phone: phone, 
@@ -106,7 +106,7 @@ function addPerson(name, gender, birthdate, docId, voterNr, phone, email, isLoca
     // });
 }
 
-function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn, isLocalTown) {
+function updatePerson(id, name, gender, birthdate, idCardNr, voterNr, phone, email, isLocalBorn, isLocalTown) {
     //console.log("updatePerson repository birthdate:", birthdate);
     return new Promise((resolve, reject) => {
         try {
@@ -114,13 +114,13 @@ function updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email,
                 //console.log("updatePerson response:", r);
                 resolve({ recordset: r, rowsAffected: r.affectedRows });
             }
-            mysqlStorage.updatePerson(id, name, gender, birthdate, docId, voterNr, phone, email, isLocalBorn, isLocalTown, fn);
+            mysqlStorage.updatePerson(id, name, gender, birthdate, idCardNr, voterNr, phone, email, isLocalBorn, isLocalTown, fn);
         }
         catch(err) {
             reject(err);
         }
     });
-    // console.log('Updating Person: ', docId);
+    // console.log('Updating Person: ', idCardNr);
     // const query = function (db) {
     //     const person = db.get('Person')
     //         .find({ Id: id })
