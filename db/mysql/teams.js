@@ -82,6 +82,22 @@ function getStepWithSeason(stepId, season, callback) {
     adapter.query(q, callback);
 }
 
+function getTeamsWithoutUser(callback) {
+    var q = " SELECT COUNT(t.Id) AS NrTeams FROM team t " +
+            "   LEFT JOIN user u ON u.TeamId = t.Id " +
+            " WHERE u.Id IS NULL ";
+    adapter.query(q, callback);
+}
+
+function getStepsWithoutPlayers(year, callback) {
+    var q = " SELECT COUNT(stp.Id) AS NrSteps FROM teamstep stp " +
+            "   LEFT JOIN player pl ON pl.Season = stp.Season AND pl.TeamId = stp.TeamId AND pl.StepId = stp.StepId AND pl.RoleId = 1 " +
+            " WHERE stp.Season = " + mysql.escape(year) +
+            "   AND pl.Id IS NULL " + 
+            " GROUP BY stp.Season ";
+    adapter.query(q, callback);
+}
+
 module.exports = {
     getTeams,
     getTeamById,
@@ -92,5 +108,7 @@ module.exports = {
     addStep,
     deleteStep,
     getStepById,
-    getStepWithSeason
+    getStepWithSeason,
+    getTeamsWithoutUser,
+    getStepsWithoutPlayers
 }

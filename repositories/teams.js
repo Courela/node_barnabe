@@ -130,6 +130,34 @@ function getTeamsByStep(season, stepId) {
     });
 }
 
+function getTeamsWithoutUser() {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                resolve({ recordset: r[0], rowsAffected: [r.length] });
+            }
+            adapter.getTeamsWithoutUser(fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
+function getStepsWithoutPlayers(year) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                resolve({ recordset: r[0], rowsAffected: [r.length] });
+            }
+            adapter.getStepsWithoutPlayers(year, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     addStep,
     getStep,
@@ -138,5 +166,7 @@ module.exports = {
     getTeamsBySeason,
     getTeamsByStep,
     getTeamSteps,
-    deleteStep
+    deleteStep,
+    getTeamsWithoutUser,
+    getStepsWithoutPlayers
 }

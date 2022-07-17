@@ -1,4 +1,5 @@
 const usersMgr = require('../managers/users');
+const teamsMgr = require('../managers/teams');
 const utilsMgr = require('../managers/utils');
 const playersMgr = require('../managers/players');
 const serverMgr = require('../managers/server');
@@ -116,14 +117,18 @@ async function activateSeason(req, res) {
     res.send();
 }
 
-async function getStatistics(req, res) {
+async function getStatistics(_, res) {
     const activeSeason = await utilsMgr.getSeasons()
         .then(res => res.find(s => s.IsActive));
     const usersCount = await usersMgr.getUsersCount();
+    const teamsCount = await teamsMgr.getTeamsWithoutUser();
     const playersCount = await playersMgr.getPlayersCount(activeSeason.Year);
+    const stepsCount = await teamsMgr.getStepsWithoutPlayers(activeSeason.Year);
     const result = {
-        nrUsers: usersCount,
-        nrPlayers: playersCount
+        NrUsers: usersCount,
+        NrTeamsWithoutUser: teamsCount,
+        NrPlayers: playersCount,
+        NrStepsWithoutPlayers: stepsCount
     }
     res.send(result);
 }

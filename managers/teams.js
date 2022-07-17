@@ -81,11 +81,31 @@ function deleteStep(season, teamId, stepId) {
         });
 }
 
+function getTeamsWithoutUser() {
+    return teamsRepo.getTeamsWithoutUser()
+        .then(result => result.recordset.NrTeams)
+        .catch(err => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
+function getStepsWithoutPlayers(year) {
+    return teamsRepo.getStepsWithoutPlayers(year)
+        .then(result => result.recordset.NrSteps)
+        .catch(err => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
 module.exports = {
     getStep,
     addStep,
     getTeams,
     getTeamById,
     getTeamSteps,
-    deleteStep
+    deleteStep,
+    getTeamsWithoutUser,
+    getStepsWithoutPlayers
 }
