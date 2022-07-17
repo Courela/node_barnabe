@@ -45,11 +45,10 @@ function addPerson (name, gender, birthdate, docId, voterNr, phone, email, isLoc
             stringLimit(voterNr, validations.VOTER_NR_MAX_LENGTH),
             stringLimit(phone, validations.PHONE_MAX_LENGTH),
             stringLimit(email, validations.EMAIL_MAX_LENGTH),
-            isLocalBorn,
-            isLocalTown
+            isLocalBorn ? isLocalBorn : 0,
+            isLocalTown ? isLocalTown : 0
         )
         .then((results) => {
-            //console.log("addPerson manager:", results);
             return results.recordset && results.recordset.insertId ? 
                 getPersonById(results.recordset.insertId) : null;
         })
@@ -61,21 +60,19 @@ function addPerson (name, gender, birthdate, docId, voterNr, phone, email, isLoc
 }
 
 function updatePerson(person) {
-    const { id, name, gender, birth, docId, voterNr, phoneNr, email, isLocalBorn, isLocalTown } = person;
-    //console.log("updatePerson manager person:", person);
-    return personRepo.updatePerson(id,
-            stringLimit(name, validations.NAME_MAX_LENGTH), 
-            gender,
-            birth, 
-            stringLimit(docId, validations.DOC_ID_MAX_LENGTH), 
-            stringLimit(voterNr, validations.VOTER_NR_MAX_LENGTH),
-            stringLimit(phoneNr, validations.PHONE_MAX_LENGTH),
-            stringLimit(email, validations.EMAIL_MAX_LENGTH),
-            isLocalBorn,
-            isLocalTown
+    const { Id, Name, Gender, Birthdate, IdCardNr, VoterNr, Phone, Email, LocalBorn, LocalTown } = person;
+    return personRepo.updatePerson(Id,
+            stringLimit(Name, validations.NAME_MAX_LENGTH), 
+            Gender,
+            Birthdate, 
+            stringLimit(IdCardNr, validations.DOC_ID_MAX_LENGTH), 
+            stringLimit(VoterNr, validations.VOTER_NR_MAX_LENGTH),
+            stringLimit(Phone, validations.PHONE_MAX_LENGTH),
+            stringLimit(Email, validations.EMAIL_MAX_LENGTH),
+            LocalBorn ? LocalBorn : 0,
+            LocalTown ? LocalTown : 0
         )
         .then((results) => {
-            //console.log("updatePerson manager: ", results);
             return results.recordset ? 
                 results.affectedRows : 0;
         })

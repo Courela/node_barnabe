@@ -5,6 +5,7 @@ const pug = require('pug');
 const pdf = require('html-pdf');
 const playersMgr = require('../managers/players');
 const teamsMgr = require('../managers/teams');
+const errors = require('../errors');
 
 const MAX_EMPTY_LINES = 5;
 const MAX_PLAYER_LINES = 19;
@@ -65,8 +66,7 @@ async function teamTemplate(req, res) {
             // });
         }
         catch (err) {
-            console.error(err);
-            res.statusCode = 500;
+            errors.handleErrors(res, err);
             res.send();
         }
     }

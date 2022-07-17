@@ -23,7 +23,7 @@ async function exportSource(req, res) {
         }
     }
     catch (err) {
-        errors.handleErrors(res);
+        errors.handleErrors(res, err);
         response = err;
     }
     res.send(response);
@@ -50,7 +50,7 @@ async function exportPlayers(req, res) {
         }
     }
     catch (err) {
-        errors.handleErrors(res);
+        errors.handleErrors(res, err);
         response = err;
     }
     res.send(response);

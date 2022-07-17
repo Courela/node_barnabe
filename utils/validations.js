@@ -11,7 +11,7 @@ function stringLimit(str, limit) {
 }
 
 function isValidGender(gender) {
-    return gender && ['M','F'].indexOf(gender.toUpperCase()) >= 0;
+    return !gender || ['M','F'].indexOf(gender.toUpperCase()) >= 0;
 }
 
 function isValidEmail(email) {

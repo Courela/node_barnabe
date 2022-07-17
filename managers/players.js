@@ -1,16 +1,16 @@
 //const atob = require('atob');
 const btoa = require('btoa');
-const fs = require('fs');
+// const fs = require('fs');
 
 const playersRepo = require('../repositories/players');
 const teamsMgr = require('../managers/teams');
 const personMgr = require('../managers/person');
 //const teamsMgr = require('../managers/teams');
-const googleApi = require('../authentication/googleApi');
+// const googleApi = require('../authentication/googleApi');
 const validations = require('../utils/validations');
 const { stringLimit } = validations;
 
-const STORAGE_FOLDER = './data/storage/';
+// const STORAGE_FOLDER = './data/storage/';
 const FILE_REGEX = /^data:(.+)\/(.+);base64,/;
 
 async function getPlayers(season, teamId, stepId, roles) {
@@ -41,14 +41,8 @@ async function getPlayers(season, teamId, stepId, roles) {
 function getPlayer(season, teamId, stepId, playerId) {
     return playersRepo.getPlayer(season, teamId, stepId, playerId)
         .then((results) => {
-            //console.log(results);
             if (results.rowsAffected > 0) {
                 const player = results.recordset[0];
-                // let photo = [];
-                // if (player.PhotoFilename) {
-                //     const folder = [season, teamId, stepId].join('_');
-                //     photo = getPhoto(folder, player.PhotoFilename);
-                // }
                 // if (player.DocFilename) {
                 //     var docPath = STORAGE_FOLDER + player.DocFilename;
                 //     if (!fs.existsSync(docPath)) {
@@ -68,7 +62,6 @@ function getPlayer(season, teamId, stepId, playerId) {
                       Role: { Id: player.RoleId, Description: player.RoleDescription },
                       Step: { Id: player.StepId, Description: player.StepDescription, IsCaretakerRequired: player.StepIsCaretakerRequired, MinDate: player.StepMinDate, MaxDate: player.StepMaxDate }}
                 )
-                //return { player: player, photo: photo };
             }
             else {
                 return null;
@@ -80,49 +73,30 @@ function getPlayer(season, teamId, stepId, playerId) {
         });
 }
 
-function getPhoto(folder, filename) {
-    var photoPath = STORAGE_FOLDER + filename;
-    const mimeType = googleApi.getMimeType(filename);
-
-    let result = { src: null, existsLocally: fs.existsSync(photoPath) };
-    if (result.existsLocally) {
-        result.src = "data:" + mimeType + ";base64," + btoa(fs.readFileSync(photoPath));
-    }
-    else {
-        console.warn('Missing file: ', filename);
-        //TODO Remove when saving data handled properly
-        console.log('Restoring photo ' + folder + '/'+ filename +'...');
-
-        googleApi.getRemoteFile(folder, filename, mimeType, true, (data) => saveRawFile(filename, data));
-        result.src = '/show_loader.gif';
-    }
-    //console.log('Photo: ' + photo.length);
-    return result;
-}
-
 async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comments, isResident, photo, doc) {
-    let personEntity = await personMgr.getPersonByIdCardNr(person.docId);
-    //console.log('addPlayer person with idCardNr '+ person.docId + ': ', personEntity);
+    let personEntity = await personMgr.getPersonByIdCardNr(person.IdCardNr);
     if (personEntity) {
         if (await playersRepo.existsPlayer(season, teamId, stepId, roleId, personEntity.Id)) {
-            console.warn('Player already exists!');
+            console.warn('Player already exists ' +
+                '[Person.Id: ' + personEntity.Id + 
+                '; Season.Year: ' + season + 
+                '; Team.Id: ' + teamId + 
+                '; Step.Id: ' + stepId + ']!');
             return -409;
         }
         await personMgr.updatePerson(person);
     } else {
-        const { name, gender, birth, docId, voterNr, phoneNr, email, isLocalBorn, isLocalTown } = person;
-        personEntity = await personMgr.addPerson(name, gender, birth, docId, voterNr, phoneNr, email, isLocalBorn, isLocalTown);
+        const { Name, Gender, Birthdate, IdCardNr, VoterNr, Phone, Email, LocalBorn, LocalTown } = person;
+        personEntity = await personMgr.addPerson(Name, Gender, Birthdate, IdCardNr, VoterNr, Phone, Email, LocalBorn, LocalTown);
     }
 
     let caretakerEntity = null;
-    if (caretaker && caretaker.docId) {
-        caretakerEntity = await personMgr.getPersonByIdCardNr(caretaker.docId);
-        //console.log('addPlayer manager caretaker with docId '+ caretaker.docId + ':', caretakerEntity);
+    if (caretaker && caretaker.IdCardNr) {
+        caretakerEntity = await personMgr.getPersonByIdCardNr(caretaker.IdCardNr);
         if (caretakerEntity) {
-            //caretakerEntity = caretakerEntity[caretakerEntity.length - 1];
-            personMgr.updatePerson(Object.assign(caretaker, {id: caretakerEntity.Id}));
+            personMgr.updatePerson(Object.assign(caretaker, { Id: caretakerEntity.Id}));
         } else {
-            caretakerEntity = await personMgr.addPerson(caretaker.name, null, null, caretaker.docId, caretaker.voterNr, caretaker.phoneNr, caretaker.email);
+            caretakerEntity = await personMgr.addPerson(caretaker.Name, null, '1970-01-01', caretaker.IdCardNr, caretaker.VoterNr, caretaker.Phone, caretaker.Email);
         }
     }
 
@@ -130,18 +104,10 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
         caretakerEntity ? caretakerEntity.Id : null,
         stringLimit(comments, validations.COMMENTS_MAX_LENGTH))
         .then(result => {
-            //console.log('addPlayer manager:', result);
             if (result.recordset && result.recordset.insertId > 0) {
                 const playerId = result.recordset.insertId;
                 if (photo) {
-                    const fileType = photo.match(FILE_REGEX);
-                    const fileExtension = fileType && fileType.length > 2 ? '.' + fileType[2] : '';
-                    const filename = [season, teamId, stepId, playerId + fileExtension].join('_');
-                    //playersRepo.addPhotoFile(playerId, filename);
-                    playersRepo.addPhoto(playerId, filename, photo);
-                    
-                    //const filename = savePlayerPhoto(photo, season, teamId, stepId, playerId);
-                    //playersRepo.addPhotoFile(playerId, filename);
+                    addPhoto(season, teamId, stepId, playerId, photo);
                 }
                 // if (doc) {
                 //     const filename = savePlayerDoc(doc, season, teamId, stepId, playerId);
@@ -149,7 +115,7 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
                 // }
                 return playerId;
             }
-            else { return result.affectedRows; }
+            else { return result.rowsAffected; }
         })
         .catch((err) => {
             console.error(err);
@@ -158,53 +124,54 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
         });
 }
 
+function addPhoto(season, teamId, stepId, playerId, photo) {
+    const fileType = photo.match(FILE_REGEX);
+    const fileExtension = fileType && fileType.length > 2 ? '.' + fileType[2] : '';
+    const filename = [season, teamId, stepId, playerId + fileExtension].join('_');
+    playersRepo.addPhoto(playerId, filename, photo);
+}
+
 async function updatePlayer(teamId, stepId, season, playerId, person, roleId, caretaker, comments, isResident, photo, doc) {
     try {
-        //console.log('Person: ', person);
-        //console.log('Caretaker: ', caretaker);
-
         let newCaretaker = null;
         await personMgr.updatePerson(person);
 
         if (caretaker) {
-            let caretakerPerson = await personMgr.getPersonByIdCardNr(caretaker.docId);
+            let caretakerPerson = await personMgr.getPersonByIdCardNr(caretaker.IdCardNr);
             
             if (caretakerPerson) {
-                //caretakerPerson = caretakerPerson[caretakerPerson.length - 1];
-
-                //console.log('Updating caretaker: ', caretakerPerson.IdCardNr);
                 const merge = {
-                    name: caretaker.name,
-                    voterNr: caretaker.voterNr,
-                    phoneNr: caretaker.phoneNr,
-                    email: caretaker.email,
+                    Name: caretaker.Name,
+                    VoterNr: caretaker.VoterNr,
+                    Phone: caretaker.Phone,
+                    Email: caretaker.Email,
 
-                    id: caretakerPerson.Id,
-                    gender: caretakerPerson.Gender,
-                    birth: caretakerPerson.Birthdate,
-                    docId: caretakerPerson.IdCardNr
+                    Id: caretakerPerson.Id,
+                    Gender: caretakerPerson.Gender,
+                    Birthdate: caretakerPerson.Birthdate,
+                    IdCardNr: caretakerPerson.IdCardNr,
+                    LocalBorn: caretakerPerson.LocalBorn,
+                    LocalTown: caretakerPerson.LocalTown
                 };
                 await personMgr.updatePerson(merge);
                 caretaker = merge;
             }
             else {
-                //console.log('New caretaker: ', caretaker.docId);
-                newCaretaker = await personMgr.addPerson(caretaker.name, null, null, caretaker.docId, caretaker.voterNr, caretaker.phoneNr, caretaker.email);
+                newCaretaker = await personMgr.addPerson(caretaker.Name, null, caretaker.Birthdate ? caretaker.Birthdate : '1900-01-01', caretaker.IdCardNr, caretaker.VoterNr, caretaker.Phone, caretaker.Email, caretaker.LocalBorn, caretaker.LocalTown);
             }
         }
 
-        const caretakerId = newCaretaker ? newCaretaker.Id : (caretaker ? caretaker.id : null);
+        const caretakerId = newCaretaker ? newCaretaker.Id : (caretaker ? caretaker.Id : null);
         await playersRepo.updatePlayer(playerId, caretakerId,
             stringLimit(comments, validations.COMMENTS_MAX_LENGTH), isResident);
 
         if (photo) {
-            const filename = savePlayerPhoto(photo, season, teamId, stepId, playerId);
-            playersRepo.addPhotoFile(playerId, filename);
+            addPhoto(season, teamId, stepId, playerId, photo);
         }
-        if (doc) {
-            const filename = savePlayerDoc(doc, season, teamId, stepId, playerId);
-            playersRepo.addDocFile(playerId, filename);
-        }
+        // if (doc) {
+        //     const filename = savePlayerDoc(doc, season, teamId, stepId, playerId);
+        //     playersRepo.addDocFile(playerId, filename);
+        // }
     }
     catch (err) {
         console.error(err);
@@ -212,75 +179,10 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
     }
 }
 
-function savePlayerPhoto(photo, season, teamId, stepId, playerId) {
-    const fileExtension = getFileExtension(photo);
-    const folder = [season, teamId, stepId].join('_');
-    const filename = [season, teamId, stepId, playerId + fileExtension].join('_');
-    saveBuffer(filename, photo);
-    
-    //saveStream(filename, photo);
-
-    googleApi.uploadFile(STORAGE_FOLDER, filename, folder, null);
-    return filename;
-}
-
-function savePlayerDoc(doc, season, teamId, stepId, playerId) {
-    const fileExtension = getFileExtension(doc);
-    const filename = [season, teamId, stepId, playerId, 'doc' + fileExtension].join('_');
-    
-    saveBuffer(filename, doc);
-    googleApi.saveFile(STORAGE_FOLDER, filename, null);
-    return filename;
-}
-
-function getFileExtension(doc) {
-    const fileType = doc.match(FILE_REGEX);
-    return fileType && fileType.length > 2 ? '.' + fileType[2] : '';
-}
-
-function saveBuffer(filename, photo) {
-    var buf = Buffer.from(photo.replace(FILE_REGEX, ''), 'base64');
-    saveRawFile(filename, buf);
-}
-
-// function saveStream(filename, photo) {
-//     let writeStream = fs.createWriteStream(STORAGE_FOLDER + filename);
-//     writeStream.write(photo.replace(FILE_REGEX, ''), 'base64');
-// }
-
-function saveRawFile(filename, data) {
-    console.log('Saving file ' + filename)
-    fs.writeFile(STORAGE_FOLDER + filename, data, function (err) {
-        if (err) {
-            return console.error(err);
-        }
-        console.log("The file was saved!");
-    });
-}
-
-// function convertDataUrltoBinary(data) {
-//     data = data.replace(FILE_REGEX, '');
-//     var byteCharacters = atob(data);
-//     return str2ab(byteCharacters);
-// }
-
-// function str2ab(str) {
-//     var idx, len = str.length, arr = new Array(len);
-//     for (idx = 0; idx < len; ++idx) {
-//         arr[idx] = str.charCodeAt(idx) & 0xFF;
-//     }
-//     return new Uint8Array(arr);
-// };
-
 function removePlayer(teamId, stepId, season, playerId) {
     return playersRepo.removePlayer(teamId, stepId, season, playerId)
         .then(result => {
             console.log("Removed player: ", playerId, result);
-            // if (result && result.length > 0) {
-            //     result.forEach(filename => {
-            //         deleteFile(filename);
-            //     });
-            // }
         })
         .catch(err => {
             console.error(err);
@@ -288,60 +190,36 @@ function removePlayer(teamId, stepId, season, playerId) {
         });
 }
 
-function deleteFile(filename) {
-    var filePath = STORAGE_FOLDER + filename;
-    if (fs.existsSync(filePath)) {
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                return console.error(err);
-            }
-            console.log("The file was deleted!");
-        });
-    }
-}
-
 async function importPlayers(teamId, stepId, season, selectedSeason, playerIds) {
+    var count = 0;
     try {
         var step = await teamsMgr.getStep(stepId, season);
-        var count = 0;
-        await playerIds.forEach(async playerId => {
-            var playerResult = await playersRepo.getPlayer(selectedSeason, teamId, stepId, playerId);
-            if (playerResult.rowsAffected[0] === 1) {
-                var player = playerResult.recordset[0];
-                //console.log('Player to import: ', player);
-                if (player && (player.RoleId !== 1 || player.PlayerBirthdate >= step.MinDate)) {
-                    if (await addPlayer(teamId, stepId, season, 
-                            { 
-                                id: player.PersonId, name: player.PlayerName, gender: player.PlayerGender, birth: player.PlayerBirthdate, 
-                                docId: player.PlayerIdCardNr, voterNr: player.PlayerVoterNr
-                            }, 
-                            player.RoleId, 
-                            player.CareTakerIdCardNr ? { docId: player.CareTakerIdCardNr }: null , 
-                            null, 
-                            player.Resident) > 0) {
-                        count++;
-                    }
+        for (let index = 0; index < playerIds.length; index++) {
+            const playerId = playerIds[index];            
+            var player = await getPlayer(selectedSeason, teamId, stepId, playerId);
+            if (player && (player.RoleId !== 1 || player.Person.Birthdate >= step.MinDate)) {
+                var id = await addPlayer(teamId, stepId, season, 
+                    player.Person, 
+                    player.RoleId, 
+                    player.CareTaker,
+                    player.Comments, 
+                    player.Resident);
+                if (id > 0) {
+                    count++;
+                    console.log("Added player " + id);
+                } else {
+                    console.log("Player not added: " + playerId);
                 }
             }
-        });
+        };
     }
     catch(err){
         console.error(err);
-        return Promise.reject(err);        
+        return err;        
     }
     
-    return Promise.resolve(count);
-
-    // return playersRepo.importPlayers(teamId, stepId, season, selectedSeason, playerIds)
-    //     .then(result => {
-    //         if (result.rowsAffected && result.rowsAffected.length > 0) {
-
-    //         }
-    //     })
-    //     .catch(err => {
-    //         console.error(err);
-    //         throw 'Unexpected error!';
-    //     });
+    console.log("Imported players: " + count);
+    return count;
 }
 
 function getPlayersCount(year) {

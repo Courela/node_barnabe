@@ -1,7 +1,6 @@
 const errors = require('../errors');
 const playersMgr = require('../managers/players');
 const { isValidGender, isValidEmail, isValidPhone, isValidDate } = require('../utils/validations');
-const googleApi = require('../authentication/googleApi');
 
 async function getTeamPlayers(req, res) {
     let response = '';
@@ -20,8 +19,7 @@ async function getTeamPlayers(req, res) {
         }
     }
     catch (err) {
-        console.error(err);
-        errors.handleErrors(res);
+        errors.handleErrors(res, err);
         response = err;
     }
     if (!response) {
@@ -47,8 +45,7 @@ async function getStaff(req, res) {
         }
     }
     catch (err) {
-        console.error(err);
-        errors.handleErrors(res);
+        errors.handleErrors(res, err);
         response = err;
     }
     res.send(response);
@@ -68,8 +65,7 @@ async function getPlayer(req, res) {
         }
     }
     catch (err) {
-        console.error(err);
-        errors.handleErrors(res);
+        errors.handleErrors(res, err);
         response = err;
     }
     res.send(response);
@@ -79,19 +75,19 @@ async function addPlayer(req, res) {
     let response = '';
     try {
         const { teamId, stepId, season } = req.params;
-        const { person, caretaker, role, photo, doc, comments, isResident } = req.body;
+        const { Person, Caretaker, RoleId, Photo, doc, Comments, Resident } = req.body;
 
-        if (season && teamId && stepId && role && isPersonValid(person) && isCaretakerValid(caretaker)) {
+        if (season && teamId && stepId && RoleId && isPersonValid(Person) && isCaretakerValid(Caretaker)) {
             const playerId = await playersMgr.addPlayer(
                 parseInt(teamId),
                 parseInt(stepId),
                 parseInt(season),
-                person,
-                parseInt(role),
-                caretaker,
-                comments,
-                isResident,
-                photo,
+                Person,
+                parseInt(RoleId),
+                Caretaker,
+                Comments,
+                Resident,
+                Photo,
                 doc
             );
             if (playerId > 0) {
@@ -109,8 +105,7 @@ async function addPlayer(req, res) {
         }
     }
     catch (err) {
-        console.error(err);
-        errors.handleErrors(res);
+        errors.handleErrors(res, err);
         response = err;
     }
 
@@ -124,21 +119,20 @@ async function updatePlayer(req, res) {
     let response = '';
     try {
         const { teamId, stepId, season, playerId } = req.params;
-        const { person, caretaker } = req.body;
-        const { roleId, comments, doc, photo, isResident } = req.body.player;
+        const { Person, Caretaker, RoleId, Comments, doc, Photo, Resident } = req.body;
 
-        if (person.id && teamId && stepId && season && isPersonValid(person) && isCaretakerValid(caretaker)) {
+        if (teamId && stepId && season && isPersonValid(Person, RoleId) && Person.Id && isCaretakerValid(Caretaker)) {
             await playersMgr.updatePlayer(
                 parseInt(teamId),
                 parseInt(stepId),
                 parseInt(season),
                 parseInt(playerId),
-                person,
-                parseInt(roleId),
-                caretaker,
-                comments,
-                isResident,
-                photo,
+                Person,
+                parseInt(RoleId),
+                Caretaker,
+                Comments,
+                Resident,
+                Photo,
                 doc
             );
             if (playerId > 0) {
@@ -156,8 +150,7 @@ async function updatePlayer(req, res) {
         }
     }
     catch (err) {
-        console.error(err);
-        errors.handleErrors(res);
+        errors.handleErrors(res, err);
         response = err;
     }
     
@@ -201,10 +194,10 @@ async function importPlayers(req, res) {
                 playerIds
             );
         }
+        res.json({ Imported: count, Total: playerIds.length }); 
     }
     else {
         res.statusCode = 400;
-        res.send();
     }
 
     //console.log('Imported players: ', count);
@@ -215,7 +208,6 @@ async function importPlayers(req, res) {
     //     res.send();
     // });
     
-    res.json({ imported: count, save: null }); 
     res.send();
 }
 
@@ -232,33 +224,32 @@ async function getPhoto(req, res) {
         }
     }
     catch (err) {
-        console.error(err);
-        errors.handleErrors(res);
+        errors.handleErrors(res, err);
         response = err;
     }
     res.send(response);
 }
 
-function isPersonValid(person) {
-    let result = false;
+function isPersonValid(person, roleId) {
+    var result = false;
     if (person) {
-        const { name, gender, birth, docId, email, phoneNr } = person;
-        result = (name ? true : false) && (docId ? true : false) &&
-            isValidDate(birth) &&
-            isValidGender(gender) &&
-            isValidEmail(email) &&
-            isValidPhone(phoneNr);
+        const { Name, Gender, Birthdate, IdCardNr, Email, Phone } = person;
+        result = Name && IdCardNr &&
+            (roleId > 1 || isValidDate(Birthdate)) &&
+            isValidGender(Gender) &&
+            isValidEmail(Email) &&
+            isValidPhone(Phone);
     }
     return result;
 }
 
 function isCaretakerValid(caretaker) {
-    let result = false;
+    var result = false;
     if (caretaker) {
-        const { name, docId, email, phoneNr } = caretaker;
-        result = name && docId &&
-            isValidEmail(email) &&
-            isValidPhone(phoneNr);
+        const { Name, IdCardNr, Email, Phone } = caretaker;
+        result = Name && IdCardNr &&
+            isValidEmail(Email) &&
+            isValidPhone(Phone);
     }
     else { result = true; }
     return result;

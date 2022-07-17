@@ -113,31 +113,6 @@ function getTeamsBySeason(season) {
             reject(err);
         }
     });
-    // const query = function (db) {
-    //     const stepsBySeason = db.get('TeamStep')
-    //         .cloneDeep()
-    //         .filter({ Season: season })
-    //         .value();
-
-    //     if (!stepsBySeason) { stepsBySeason = [] };
-    //     let result = [];
-    //     result = db.get('Team')
-    //             .cloneDeep()
-    //             .intersectionWith(stepsBySeason, (obj1, obj2) => obj1.Id === obj2.TeamStepId)
-    //             .value();
-    //     result.forEach(t => { t.TeamId = t.Id; t.Season = season });
-    //     console.log('Teams by season: ', result);
-    //     return result;
-    // };
-    // return new Promise((resolve, reject) => {
-    //     try {
-    //         const result = storage.statementQuery(query);
-    //         resolve({ recordset: result, rowsAffected: result.length });
-    //     }
-    //     catch (err) {
-    //         reject(err);
-    //     }
-    // });
 }
 
 function getTeamsByStep(season, stepId) {
