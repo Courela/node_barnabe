@@ -20,13 +20,18 @@ async function getPlayers(season, teamId, stepId, roles) {
         return playersRepo.getPlayers(season, teamId, stepId, roles)
             .then((results) => {
                 //console.log("getPlayers manager: ", results);
-                return results.recordset.map((v) => Object.assign(
-                    v,
-                    { Person: { Id: v.PersonId, Name: v.PlayerName, Gender: v.PlayerGender, Birthdate: v.PlayerBirthdate, IdCardNr: v.PlayerIdCardNr }},
-                    { Caretaker: { Id: v.CareTakerId, Name: v.CareTakerName }},
-                    { Role: { Id: v.RoleId, Description: v.RoleDescription }},
-                    { Step: { Id: v.StepId, Season: v.Season, Gender: v.StepGender, IsCaretakerRequired: v.StepIsCareTakerRequired, MinDate: v.MinDate, MaxDate: v.MaxDate }}
-                ));
+                
+                return results.recordset.map((v) => {
+                    delete v.Photo;
+                    delete v.Doc;
+                    return Object.assign(
+                        v,
+                        { Person: { Id: v.PersonId, Name: v.PlayerName, Gender: v.PlayerGender, Birthdate: v.PlayerBirthdate, IdCardNr: v.PlayerIdCardNr }},
+                        { Caretaker: { Id: v.CareTakerId, Name: v.CareTakerName }},
+                        { Role: { Id: v.RoleId, Description: v.RoleDescription }},
+                        { Step: { Id: v.StepId, Season: v.Season, Gender: v.StepGender, IsCaretakerRequired: v.StepIsCareTakerRequired, MinDate: v.MinDate, MaxDate: v.MaxDate }}
+                    );
+                });
             })
             .catch((err) => {
                 console.error(err);
@@ -43,12 +48,15 @@ function getPlayer(season, teamId, stepId, playerId) {
         .then((results) => {
             if (results.rowsAffected > 0) {
                 const player = results.recordset[0];
-                if (player.Photo) {
-                    player.Photo = btoa(player.Photo);
-                }
-                if (player.Doc) {
-                    player.Doc = btoa(player.Doc);
-                }
+                // if (player.Photo) {
+                //     player.Photo = btoa(player.Photo);
+                // }
+                // if (player.Doc) {
+                //     player.Doc = btoa(player.Doc);
+                // }
+
+                delete player.Photo;
+                delete player.Doc;
 
                 return Object.assign(player, 
                     { Player: { Id: player.Id, PhotoFilename: player.PhotoFilename, DocFilename: player.DocFilename, RoleId: player.RoleId, CareTakerId: player.CareTakerId, Resident: player.Resident, LocalBorn: player.PlayerLocalBorn, LocalTown: player.PlayerLocalTown, step: { Id: player.StepId, Description: player.StepDescription, IsCaretakerRequired: player.StepIsCaretakerRequired } }, 
@@ -169,10 +177,9 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
         if (photo) {
             addPhoto(season, teamId, stepId, playerId, photo);
         }
-        // if (doc) {
-        //     const filename = savePlayerDoc(doc, season, teamId, stepId, playerId);
-        //     playersRepo.addDocFile(playerId, filename);
-        // }
+        if (doc) {
+            addDocument(season, teamId, stepId, playerId, doc);
+        }
     }
     catch (err) {
         console.error(err);
@@ -232,13 +239,21 @@ function getPlayersCount(year) {
         });
 }
 
-function getLocalPhoto(season, teamId, stepId, playerId) {
-    return getPlayer(season, teamId, stepId, playerId)
-        .then(result => {
-            if (result) {
-                return result.photo;
-            }
-            else return null;
+function getPhoto(playerId) {
+    return playersRepo.getPhoto(playerId)
+        .then(r => btoa(r.recordset.Photo))
+        .catch((err) => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
+function getDocument(playerId) {
+    return playersRepo.getDocument(playerId)
+        .then(r => btoa(r.recordset.Doc))
+        .catch((err) => {
+            console.error(err);
+            throw 'Unexpected error!';
         });
 }
 
@@ -250,5 +265,6 @@ module.exports = {
     removePlayer,
     importPlayers,
     getPlayersCount,
-    getLocalPhoto
+    getPhoto,
+    getDocument
 }

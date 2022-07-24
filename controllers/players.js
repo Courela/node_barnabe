@@ -214,9 +214,28 @@ async function importPlayers(req, res) {
 async function getPhoto(req, res) {
     let response = '';
     try {
-        const { teamId, stepId, season, playerId } = req.params;
-        if (teamId && stepId && season && playerId) {
-            response = await playersMgr.getLocalPhoto(parseInt(season), parseInt(teamId), parseInt(stepId), parseInt(playerId));
+        const { playerId } = req.params;
+        if (playerId) {
+            response = await playersMgr.getPhoto(parseInt(playerId));
+            //console.log(response);
+            if (!response) { res.statusCode = 404 }
+        } else {
+            res.statusCode = 400;
+        }
+    }
+    catch (err) {
+        errors.handleErrors(res, err);
+        response = err;
+    }
+    res.send(response);
+}
+
+async function getDocument(req, res) {
+    let response = '';
+    try {
+        const { playerId } = req.params;
+        if (playerId) {
+            response = await playersMgr.getDocument(parseInt(playerId));
             //console.log(response);
             if (!response) { res.statusCode = 404 }
         } else {
@@ -263,5 +282,6 @@ module.exports = {
     updatePlayer,
     removePlayer,
     importPlayers,
-    getPhoto
+    getPhoto,
+    getDocument
 }
