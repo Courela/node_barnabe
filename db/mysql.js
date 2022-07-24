@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 
-var connString = process.env["MYSQL_CONN_STRING"]
+var connString = process.env["JAWSDB_URL"]
 var pool = mysql.createPool(connString);
 
 function ping(responseCallback) {
