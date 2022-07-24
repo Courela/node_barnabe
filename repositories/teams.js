@@ -148,7 +148,11 @@ function getStepsWithoutPlayers(year) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
-                resolve({ recordset: r[0], rowsAffected: [r.length] });
+                var result = { NrSteps: 0 };
+                if (Array.isArray(r) && r.length > 0) {
+                    result = r[0];
+                }
+                resolve({ recordset: result, rowsAffected: [1] });
             }
             adapter.getStepsWithoutPlayers(year, fn);
         }
