@@ -241,7 +241,12 @@ function getPlayersCount(year) {
 
 function getPhoto(playerId) {
     return playersRepo.getPhoto(playerId)
-        .then(r => btoa(r.recordset.Photo))
+        .then(r => { 
+            if (r.recordset.Photo) {
+                return btoa(r.recordset.Photo);
+            }
+            return null;
+        })
         .catch((err) => {
             console.error(err);
             throw 'Unexpected error!';
@@ -250,7 +255,12 @@ function getPhoto(playerId) {
 
 function getDocument(playerId) {
     return playersRepo.getDocument(playerId)
-        .then(r => btoa(r.recordset.Doc))
+        .then(r => { 
+            if (r.recordset.Doc) {
+                return btoa(r.recordset.Doc);
+            }
+            return null;
+        })
         .catch((err) => {
             console.error(err);
             throw 'Unexpected error!';
