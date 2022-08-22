@@ -237,7 +237,8 @@ async function getDocument(req, res) {
         if (playerId) {
             const iPlayerId = parseInt(playerId);
             const filename = await playersMgr.getDocumentFilename(iPlayerId);
-            response = await playersMgr.getDocument(iPlayerId, filename);
+            const folder = filename.split('_', 3).join('_');
+            response = await playersMgr.getDocument(folder, filename);
             //console.log(response);
             if (!response) { res.statusCode = 404 }
         } else {

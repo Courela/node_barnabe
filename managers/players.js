@@ -271,7 +271,7 @@ function savePlayerDoc(doc, season, teamId, stepId, playerId) {
     const filename = [season, teamId, stepId, playerId, 'doc' + fileExtension].join('_');
     
     saveBuffer(filename, doc);
-    googleApi.saveFile(googleApi.STORAGE_FOLDER, filename, folder, null);
+    googleApi.saveFile(googleApi.STORAGE_FOLDER, filename, null);
     return filename;
 }
 
