@@ -68,7 +68,7 @@ function getPlayer(season, teamId, stepId, playerId) {
 
                 return Object.assign(player, 
                     { Player: { Id: player.Id, PhotoFilename: player.PhotoFilename, DocFilename: player.DocFilename, RoleId: player.RoleId, CareTakerId: player.CareTakerId, Resident: player.Resident, LocalBorn: player.PlayerLocalBorn, LocalTown: player.PlayerLocalTown, step: { Id: player.StepId, Description: player.StepDescription, IsCaretakerRequired: player.StepIsCaretakerRequired } }, 
-                      Person: { Id: player.PersonId, Name: player.PlayerName, Gender: player.PlayerGender, Birthdate: player.PlayerBirthdate, IdCardNr: player.PlayerIdCardNr, VoterNr: player.PlayerVoterNr, Email: player.PlayerEmail, Phone: player.PlayerPhone, },
+                      Person: { Id: player.PersonId, Name: player.PlayerName, Gender: player.PlayerGender, Birthdate: player.PlayerBirthdate, IdCardNr: player.PlayerIdCardNr, VoterNr: player.PlayerVoterNr, Email: player.PlayerEmail, Phone: player.PlayerPhone, LocalBorn: player.PlayerLocalBorn, LocalTown: player.PlayerLocalTown },
                       Caretaker: { CareTakerId: player.CareTakerId, Name: player.CareTakerName, IdCardNr: player.CareTakerIdCardNr, VoterNr: player.CareTakerVoterNr, Email: player.CareTakerEmail, Phone: player.CareTakerPhone },
                       Role: { Id: player.RoleId, Description: player.RoleDescription },
                       Step: { Id: player.StepId, Description: player.StepDescription, IsCaretakerRequired: player.StepIsCaretakerRequired, MinDate: player.StepMinDate, MaxDate: player.StepMaxDate }}
@@ -267,7 +267,7 @@ function getPhoto(playerId) {
 
 function savePlayerDoc(doc, season, teamId, stepId, playerId) {
     const fileExtension = getFileExtension(doc);
-    const folder = [season, teamId, stepId].join('_');
+    //const folder = [season, teamId, stepId].join('_');
     const filename = [season, teamId, stepId, playerId, 'doc' + fileExtension].join('_');
     
     saveBuffer(filename, doc);

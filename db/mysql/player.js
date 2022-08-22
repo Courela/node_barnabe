@@ -3,7 +3,7 @@ const adapter = require('../mysql');
 
 function getPlayers (season, teamId, stepId, roles, callback) {
     var q = " SELECT p.*, " +
-            "     ps.Name AS PlayerName, ps.Gender AS PlayerGender, ps.Birthdate AS PlayerBirthdate, ps.IdCardNr AS PlayerIdCardNr, " +
+            "     ps.Name AS PlayerName, ps.Gender AS PlayerGender, ps.Birthdate AS PlayerBirthdate, ps.IdCardNr AS PlayerIdCardNr, ps.LocalBorn AS PlayerLocalBorn, ps.LocalTown AS PlayerLocalTown, " +
             "     r.Description AS RoleDescription, " +
             "     ct.Name AS CareTakerName, ct.IdCardNr AS CareTakerIdCardNr, ct.VoterNr AS CareTakerVoterNr, " +
             "     bsl.MinDate, bsl.MaxDate, " +
