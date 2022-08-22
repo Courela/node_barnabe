@@ -311,20 +311,20 @@ function getDocumentFilename(playerId) {
 }
 
 function getDocument(folder, filename) {
-    var photoPath = googleApi.STORAGE_FOLDER + filename;
+    var docPath = googleApi.STORAGE_FOLDER + filename;
     const mimeType = googleApi.getMimeType(filename);
 
-    let result = { src: null, existsLocally: fs.existsSync(photoPath) };
-    if (result.existsLocally) {
-        result.src = "data:" + mimeType + ";base64," + btoa(fs.readFileSync(photoPath));
+    let result = { Src: null, ExistsLocally: fs.existsSync(docPath) };
+    if (result.ExistsLocally) {
+        result.Src = "data:" + mimeType + ";base64," + btoa(fs.readFileSync(docPath));
     }
     else {
         console.warn('Missing file: ', filename);
         //TODO Remove when saving data handled properly
-        console.log('Restoring photo ' + folder + '/'+ filename +'...');
+        console.log('Restoring document ' + folder + '/'+ filename +'...');
 
         googleApi.getRemoteFile(folder, filename, mimeType, true, (data) => saveRawFile(filename, data));
-        result.src = '/show_loader.gif';
+        result.Src = '/show_loader.gif';
     }
     //console.log('Photo: ' + photo.length);
     return result;
