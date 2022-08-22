@@ -1,4 +1,3 @@
-const storage = require('../db/storage');
 const mysqlStorage = require("../db/mysql/player")
 
 function getPlayers(season, teamId, stepId, roles) {
@@ -136,7 +135,7 @@ function addDocument(playerId, filename, doc) {
             var fn = function(r) {
                 resolve(r);
             }
-            mysqlStorage.addDocument(playerId, filename, doc, fn);
+            mysqlStorage.addDocument(playerId, filename, null, fn);
         }
         catch(err) {
             reject(err);
@@ -158,7 +157,7 @@ function getPhoto(playerId) {
     });
 }
 
-function getDocument(playerId) {
+function getDocumentFilename(playerId) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
@@ -183,5 +182,5 @@ module.exports = {
     addPhoto,
     addDocument,
     getPhoto,
-    getDocument
+    getDocumentFilename
 }

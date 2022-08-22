@@ -235,7 +235,9 @@ async function getDocument(req, res) {
     try {
         const { playerId } = req.params;
         if (playerId) {
-            response = await playersMgr.getDocument(parseInt(playerId));
+            const iPlayerId = parseInt(playerId);
+            const filename = await playersMgr.getDocumentFilename(iPlayerId);
+            response = await playersMgr.getDocument(iPlayerId, filename);
             //console.log(response);
             if (!response) { res.statusCode = 404 }
         } else {

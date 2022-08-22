@@ -108,7 +108,7 @@ function getPhoto(playerId, callback) {
 }
 
 function getDocument(playerId, callback) {
-    var q = " SELECT p.Doc " +
+    var q = " SELECT p.DocFilename " +
             " FROM player p " + 
             " WHERE p.Id = " + mysql.escape(playerId);
     adapter.query(q, callback);

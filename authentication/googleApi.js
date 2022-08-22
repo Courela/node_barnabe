@@ -396,5 +396,6 @@ module.exports = {
     saveFile,
     uploadFile,
     getMimeType,
-    FOLDER_EXTENSION
+    FOLDER_EXTENSION,
+    STORAGE_FOLDER
 }
