@@ -28,7 +28,7 @@ async function teamTemplate(req, res) {
             team: team.Name,
             step: step.Description,
             players: players,
-            staff: staff ? staff.map(p => { return { name: formatName(p.person.Name.toLowerCase()), role: p.role.Description}; }) : []
+            staff: staff ? staff.map(p => { return { name: formatName(p.Person.Name.toLowerCase()), role: p.Tole.Description}; }) : []
         };
 
         try {
@@ -68,13 +68,13 @@ async function teamTemplate(req, res) {
 
 function isLocal(player) {
     //console.log('Row:',row);
-    const { person, caretaker } = player;
-    const result = person.LocalBorn || player.Resident || (caretaker && caretaker.VoterNr) ? true : (person.VoterNr ? true : false);
+    const { Person, Caretaker } = player;
+    const result = Person.LocalBorn || player.Resident || (Caretaker && Caretaker.VoterNr) ? true : (Person.VoterNr ? true : false);
     return result;
 }
 
 function mapPlayers(players) {
-    return players.map(p => { return { name: formatName(p.person.Name.toLowerCase()), isLocal: isLocal(p), isTown: !!p.person.LocalTown }; });
+    return players.map(p => { return { name: formatName(p.Person.Name.toLowerCase()), isLocal: isLocal(p), isTown: !!p.person.LocalTown }; });
 }
 
 async function gameTemplate(req, res) {
@@ -203,6 +203,18 @@ function getTeamLogoFilename(teamId) {
             break;
         case 11:
             result = 'camaroes.jpg';
+            break;
+        case 12:
+            result = 'maceira.jpg';
+            break;
+        case 13:
+            result = 'montelavar.jpg';
+            break;
+        case 14:
+            result = 'pero_pinheiro.jpg';
+            break;
+        case 15:
+            result = 'ancos.jpg';
             break;
     }
     return result;
