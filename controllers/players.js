@@ -119,7 +119,7 @@ async function updatePlayer(req, res) {
     let response = '';
     try {
         const { teamId, stepId, season, playerId } = req.params;
-        const { Person, Caretaker, RoleId, Comments, doc, Photo, Resident } = req.body;
+        const { Person, Caretaker, RoleId, Comments, Doc, Photo, Resident } = req.body;
 
         if (teamId && stepId && season && isPersonValid(Person, RoleId) && Person.Id && isCaretakerValid(Caretaker)) {
             await playersMgr.updatePlayer(
@@ -133,7 +133,7 @@ async function updatePlayer(req, res) {
                 Comments,
                 Resident,
                 Photo,
-                doc
+                Doc
             );
             if (playerId > 0) {
                 res.statusCode = 200;
