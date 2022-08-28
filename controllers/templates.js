@@ -28,7 +28,7 @@ async function teamTemplate(req, res) {
             team: team.Name,
             step: step.Description,
             players: players,
-            staff: staff ? staff.map(p => { return { name: formatName(p.Person.Name.toLowerCase()), role: p.Tole.Description}; }) : []
+            staff: staff ? staff.map(p => { return { name: formatName(p.Person.Name.toLowerCase()), role: p.Role.Description}; }) : []
         };
 
         try {
@@ -74,7 +74,7 @@ function isLocal(player) {
 }
 
 function mapPlayers(players) {
-    return players.map(p => { return { name: formatName(p.Person.Name.toLowerCase()), isLocal: isLocal(p), isTown: !!p.person.LocalTown }; });
+    return players.map(p => { return { name: formatName(p.Person.Name.toLowerCase()), isLocal: isLocal(p), isTown: !!p.Person.LocalTown }; });
 }
 
 async function gameTemplate(req, res) {
