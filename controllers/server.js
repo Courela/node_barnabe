@@ -13,10 +13,6 @@ function setup() {
     console.log("Starting server...");
     if (process.env.NODE_ENV === 'production') {
         storageAdapter.createFolders();
-        googleApi.restoreUsers();
-        googleApi.restoreData();
-        storageAdapter.initUsers();
-        storageAdapter.initData();
     } else {
         console.log("Not production environment: ", process.env.NODE_ENV || "none");
     }
@@ -60,16 +56,8 @@ function saveData(req, res) {
     googleApi.saveData((result) => res.json(result));
 }
 
-function restoreData(req, res) {
-    googleApi.restoreData((result) => res.json(result));
-}
-
 function saveUsers(req, res) {
     googleApi.saveUsers((result) => res.json(result));
-}
-
-function restoreUsers(req, res) {
-    googleApi.restoreUsers((result) => res.json(result));
 }
 
 function saveDocuments(req, res) {
@@ -172,10 +160,8 @@ module.exports = {
     setAccessToken,
     resetAuth,
     saveData,
-    restoreData,
     getUsers,
     saveUsers,
-    restoreUsers,
     saveDocuments,
     restoreDocuments,
     testDrive,
