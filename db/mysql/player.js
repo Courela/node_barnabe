@@ -114,6 +114,14 @@ function getDocument(playerId, callback) {
     adapter.query(q, callback);
 }
 
+function getPlayersCount(year, callback) {
+    var q = " SELECT COUNT(p.Id) AS NrPlayers " +
+            " FROM player p " + 
+            " WHERE p.Season = " + mysql.escape(year) +
+            "   AND p.RoleId = 1 ";
+    adapter.query(q, callback);
+}
+
 module.exports = {
     getPlayers,
     existsPlayer,
@@ -124,5 +132,6 @@ module.exports = {
     addPhoto,
     addDocument,
     getPhoto,
-    getDocument
+    getDocument,
+    getPlayersCount
 }
