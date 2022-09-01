@@ -21,12 +21,12 @@ const port = process.env.PORT || 8001;
 
 process.on('SIGINT', function() {
     console.log('Shutting down...');
-    googleApi.saveData(() => process.exit(0));
+    //googleApi.saveData(() => process.exit(0));
 });
 
 process.on('SIGTERM', function () {
     console.log('Shutting down...');
-    googleApi.saveData(() => process.exit(0));
+    //googleApi.saveData(() => process.exit(0));
 });
 
 const templatesRouter = express.Router();
