@@ -216,7 +216,7 @@ async function importPlayers(teamId, stepId, season, selectedSeason, playerIds) 
         var step = await teamsMgr.getStep(stepId, season);
         for (let index = 0; index < playerIds.length; index++) {
             const playerId = playerIds[index];            
-            var player = await getPlayer(selectedSeason, teamId, stepId, playerId);
+            var player = await getPlayer(selectedSeason, teamId, null, playerId);
             if (player && (player.RoleId !== 1 || player.Person.Birthdate >= step.MinDate)) {
                 var id = await addPlayer(teamId, stepId, season, 
                     player.Person, 

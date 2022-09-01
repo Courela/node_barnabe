@@ -38,7 +38,7 @@ function getPlayer(season, teamId, stepId, playerId, callback) {
             "     r.Description AS RoleDescription, " +
             "     ct.Name AS CareTakerName, ct.IdCardNr AS CareTakerIdCardNr, ct.VoterNr AS CareTakerVoterNr, ct.Email AS CareTakerEmail, ct.Phone AS CareTakerPhone " +
             " FROM player p " + 
-            "   INNER JOIN step s ON s.Id = p.StepId AND s.Id = " + mysql.escape(stepId) +
+            "   INNER JOIN step s ON s.Id = p.StepId " + (stepId ? " AND s.Id = " + mysql.escape(stepId) : "") +
             "   INNER JOIN birthsteplimit bsl ON bsl.StepId = s.Id AND bsl.Season = " + mysql.escape(season) +
             "   INNER JOIN team t ON t.Id = p.TeamId AND t.Id = " + mysql.escape(teamId) + 
             "   INNER JOIN person ps ON ps.Id = p.PersonId " +
