@@ -267,11 +267,16 @@ function getPhoto(playerId) {
 
 function savePlayerDoc(doc, season, teamId, stepId, playerId) {
     const fileExtension = getFileExtension(doc);
-    //const folder = [season, teamId, stepId].join('_');
     const filename = [season, teamId, stepId, playerId, 'doc' + fileExtension].join('_');
-    
-    saveBuffer(filename, doc);
-    googleApi.saveFile(googleApi.STORAGE_FOLDER, filename, null);
+    return new Promise((_, reject) => {
+        try {
+            //const folder = [season, teamId, stepId].join('_');
+            saveBuffer(filename, doc);
+            googleApi.saveFile(googleApi.STORAGE_FOLDER, filename, null);
+        } catch(err) {
+            reject(err);
+        }
+    });
     return filename;
 }
 
