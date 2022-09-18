@@ -87,7 +87,7 @@ apiRouter.use('/admin', adminRouter)
 app.set('view engine', 'pug')
     .set('views', './views')    
     .use(serverController.setCors)
-    .use(bodyParser.json({limit: '2mb'}))
+    .use(bodyParser.json({limit: '5mb'}))
     //.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
     .use(session({
         cookieName: 'barnabe',
