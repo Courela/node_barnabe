@@ -4,6 +4,7 @@ const settings = process.env.NODE_ENV !== 'production' ?
 
 settings.API_URL = settings.API_PROTOCOL + '://' + settings.API_HOST + ':' + settings.API_PORT + '';
 settings.CORS_HOST = process.env.NODE_ENV !== 'production' ? '*' : settings.API_PROTOCOL + '://' + settings.API_HOST;
+// settings.PLAYER_RESPONSE_TIMEOUT = 300;
 
 module.exports = {
      settings

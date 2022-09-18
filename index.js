@@ -11,7 +11,7 @@ const utilsController = require('./controllers/utils');
 const templatesController = require('./controllers/templates');
 
 const authentication = require('./authentication/authentication');
-const googleApi = require('./authentication/googleApi');
+// const googleApi = require('./authentication/googleApi');
 const errors = require('./errors');
 
 serverController.setup();
@@ -97,6 +97,10 @@ app.set('view engine', 'pug')
     }))
     .use(serverController.handleUserSession)
     .use(serverController.logRequest)
+    // .use(function(req, res, next) {
+    //     res.setTimeout(300);
+    //     next();
+    //   })
     .use('/api', apiRouter)
     .use(express.static('public'))
     .listen(port, () => {

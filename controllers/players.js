@@ -1,4 +1,5 @@
 const errors = require('../errors');
+// const settings = require('../settings')
 const playersMgr = require('../managers/players');
 const { isValidGender, isValidEmail, isValidPhone, isValidDate } = require('../utils/validations');
 
@@ -72,6 +73,7 @@ async function getPlayer(req, res) {
 }
 
 async function addPlayer(req, res) {
+    // res.setTimeout(settings.PLAYER_RESPONSE_TIMEOUT);
     let response = '';
     try {
         const { teamId, stepId, season } = req.params;
@@ -116,6 +118,7 @@ async function addPlayer(req, res) {
 }
 
 async function updatePlayer(req, res) {
+    // res.setTimeout(settings.PLAYER_RESPONSE_TIMEOUT);
     let response = '';
     try {
         const { teamId, stepId, season, playerId } = req.params;
@@ -231,6 +234,7 @@ async function getPhoto(req, res) {
 }
 
 async function getDocument(req, res) {
+    // res.setTimeout(settings.PLAYER_RESPONSE_TIMEOUT);
     let response = '';
     try {
         const { playerId } = req.params;
