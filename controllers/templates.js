@@ -150,7 +150,7 @@ function addEmptyPlayerLines(arr) {
     return arr;
 }
 
-function formatName(val, nrNames = 4) {
+function formatName(val, nrNames = 3) {
     var name = val.toLowerCase();
     var names = name.split(' ');
     while(names.length > nrNames) {
