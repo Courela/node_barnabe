@@ -52,6 +52,7 @@ function getPlayer(season, teamId, stepId, playerId) {
                     var docPath = googleApi.STORAGE_FOLDER + player.DocFilename;
                     if (!fs.existsSync(docPath)) {
                         console.warn('Missing file: ', player.DocFilename);
+                        console.log('Getting file ' + player.DocFilename);
                         //player.DocFilename = null;
                     }
                 }
@@ -266,23 +267,33 @@ function getPhoto(playerId) {
 }
 
 function savePlayerDoc(doc, season, teamId, stepId, playerId) {
-    const fileExtension = getFileExtension(doc);
+    const fileExtension = getFileExtension(doc ? doc.substring(0, 50) : '');
     const filename = [season, teamId, stepId, playerId, 'doc' + fileExtension].join('_');
-    return new Promise((_, reject) => {
-        try {
-            //const folder = [season, teamId, stepId].join('_');
-            saveBuffer(filename, doc);
-            googleApi.saveFile(googleApi.STORAGE_FOLDER, filename, null);
-        } catch(err) {
-            reject(err);
-        }
-    });
+    console.log("Going to save file " + filename + "...")
+    new Promise((resolve, _) => resolve(saveFile(filename, doc)));
     return filename;
 }
 
 function getFileExtension(doc) {
+    console.log("Getting file extension...");
     const fileType = doc.match(FILE_REGEX);
+    console.log('File type is ' + fileType);
     return fileType && fileType.length > 2 ? '.' + fileType[2] : '';
+}
+
+function saveFile(filename, doc) {
+    return new Promise((resolve, reject) => {
+        try {
+            //const folder = [season, teamId, stepId].join('_');
+            saveBuffer(filename, doc);
+            googleApi.saveFile(googleApi.STORAGE_FOLDER, filename, () => {
+                console.log("File " + filename + " saved.");
+            });
+        } catch(err) {
+            reject(err);
+        }
+        resolve();
+    });
 }
 
 function saveBuffer(filename, photo) {
@@ -292,7 +303,7 @@ function saveBuffer(filename, photo) {
 
 function saveRawFile(filename, data) {
     console.log('Saving file ' + filename)
-    fs.writeFile(googleApi.STORAGE_FOLDER + filename, data, function (err) {
+    fs.writeFile(googleApi.STORAGE_FOLDER + filename, Buffer.from(data), function (err) {
         if (err) {
             return console.error(err);
         }
@@ -326,9 +337,9 @@ function getDocument(folder, filename) {
     else {
         console.warn('Missing file: ', filename);
         //TODO Remove when saving data handled properly
-        console.log('Restoring document ' + folder + '/'+ filename +'...');
+        console.log('Restoring document '+ filename +'...');
 
-        googleApi.getRemoteFile(folder, filename, mimeType, true, (data) => saveRawFile(filename, data));
+        googleApi.getFile(filename, mimeType, true, (data) => saveRawFile(filename, data));
         result.Src = '/show_loader.gif';
     }
     //console.log('Photo: ' + photo.length);
