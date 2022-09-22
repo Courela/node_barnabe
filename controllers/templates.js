@@ -34,7 +34,7 @@ async function teamTemplate(req, res) {
             team: team.Name,
             step: step.Description,
             players: players,
-            staff: staff ? staff.map(p => { return { name: formatName(p.Person.Name.toLowerCase()), role: p.Role.Description}; }) : [],
+            staff: staff ? staff.map(p => { return { name: formatName(getPersonName(p)), role: p.Role.Description}; }) : [],
             teamLogo: 'data:image/jpg;base64,' + btoa(teamLogo),
             logo: 'data:image/png;base64,' + btoa(logo)
         };
@@ -106,11 +106,11 @@ async function gameTemplate(req, res) {
             awayTeam: awayTeam.ShortDescription,
             step: step.Description,
             homePlayers: homePlayers,
-            homeStaff1: homeStaff ? homeStaff.slice(0,2).map(p => { return { name: formatName(p.Person.Name.toLowerCase(), 3), role: p.Role.Description}; }) : [],
-            homeStaff2: homeStaff ? homeStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase(), 3), role: p.Role.Description}; }) : [],
+            homeStaff1: homeStaff ? homeStaff.slice(0,2).map(p => { return { name: formatName(getPersonName(p), 3), role: p.Role.Description}; }) : [],
+            homeStaff2: homeStaff ? homeStaff.slice(2,4).map(p => { return { name: formatName(getPersonName(p), 3), role: p.Role.Description}; }) : [],
             awayPlayers: awayPlayers,
-            awayStaff1: awayStaff ? awayStaff.slice(0,2).map(p => { return { name: formatName(p.Person.Name.toLowerCase(), 3), role: p.Role.Description}; }) : [],
-            awayStaff2: awayStaff ? awayStaff.slice(2,4).map(p => { return { name: formatName(p.Person.Name.toLowerCase(), 3), role: p.Role.Description}; }) : [],
+            awayStaff1: awayStaff ? awayStaff.slice(0,2).map(p => { return { name: formatName(getPersonName(p), 3), role: p.Role.Description}; }) : [],
+            awayStaff2: awayStaff ? awayStaff.slice(2,4).map(p => { return { name: formatName(getPersonName(p), 3), role: p.Role.Description}; }) : [],
             logo: 'data:image/png;base64,' + btoa(logo)
         };
 
@@ -144,6 +144,10 @@ async function gameTemplate(req, res) {
         res.statusCode = 400;
         res.send();
     }
+}
+
+function getPersonName(p) {
+    return p && p.Person && p.Person.Name ? p.Person.Name.toLowerCase() : '';
 }
 
 function addEmptyPlayerLines(arr) {
