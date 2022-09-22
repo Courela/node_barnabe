@@ -24,19 +24,22 @@ async function teamTemplate(req, res) {
 
         const staff = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [2, 3, 4, 5, 6]);
 
+        var teamLogoFilename = getTeamLogoFilename(parseInt(teamId));
+        const basePath = path.join(__dirname, '..', 'public' + path.sep);
+        //console.log('Base path: ', basePath);
+        var teamLogo = fs.readFileSync(basePath + teamLogoFilename);
+        var logo = fs.readFileSync(basePath + 'logo.png');
+
         const data = {
             team: team.Name,
             step: step.Description,
             players: players,
-            staff: staff ? staff.map(p => { return { name: formatName(p.Person.Name.toLowerCase()), role: p.Role.Description}; }) : []
+            staff: staff ? staff.map(p => { return { name: formatName(p.Person.Name.toLowerCase()), role: p.Role.Description}; }) : [],
+            teamLogo: 'data:image/jpg;base64,' + btoa(teamLogo),
+            logo: 'data:image/png;base64,' + btoa(logo)
         };
 
         try {
-            const basePath = path.join(__dirname, '..', 'public' + path.sep);
-            //console.log('Base path: ', basePath);
-
-            fs.copyFileSync(path.join(basePath, getTeamLogoFilename(parseInt(teamId))), path.join(basePath, 'team.jpg'));
-
             const compiledFunction = pug.compileFile('./views/team_game_sheet.pug');
             const result = compiledFunction(data);
 
@@ -95,7 +98,8 @@ async function gameTemplate(req, res) {
         awayPlayers = addEmptyPlayerLines(awayPlayers ? mapPlayers(awayPlayers) : []);
         const awayStaff = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
         
-        var logo = fs.readFileSync(__dirname + path.sep + '..' + path.sep + 'public' + path.sep + 'logo.png')
+        const basePath = path.join(__dirname, '..', 'public' + path.sep);
+        var logo = fs.readFileSync(basePath + 'logo.png');
 
         const data = {
             homeTeam: homeTeam.ShortDescription,
@@ -114,7 +118,6 @@ async function gameTemplate(req, res) {
             const compiledFunction = pug.compileFile('./views/game_sheet.pug');
             const result = compiledFunction(data);
             
-            const basePath = path.join(__dirname, '..', 'public' + path.sep);
             //console.log('Base path: ', basePath);
             var options = {
                 format: 'A4',
