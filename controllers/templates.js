@@ -8,7 +8,7 @@ const teamsMgr = require('../managers/teams');
 const errors = require('../errors');
 
 const MAX_EMPTY_LINES = 5;
-const MAX_PLAYER_LINES = 19;
+const MAX_PLAYER_LINES = 18;
 
 async function teamTemplate(req, res) {
     const { season, teamId, stepId } = req.query;
