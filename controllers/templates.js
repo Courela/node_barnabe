@@ -95,6 +95,8 @@ async function gameTemplate(req, res) {
         awayPlayers = addEmptyPlayerLines(awayPlayers ? mapPlayers(awayPlayers) : []);
         const awayStaff = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
         
+        var logo = fs.readFileSync(__dirname + path.sep + '..' + path.sep + 'public' + path.sep + 'logo.png')
+
         const data = {
             homeTeam: homeTeam.ShortDescription,
             awayTeam: awayTeam.ShortDescription,
@@ -104,16 +106,16 @@ async function gameTemplate(req, res) {
             homeStaff2: homeStaff ? homeStaff.slice(2,4).map(p => { return { name: formatName(p.person.Name.toLowerCase(), 3), role: p.Role.Description}; }) : [],
             awayPlayers: awayPlayers,
             awayStaff1: awayStaff ? awayStaff.slice(0,2).map(p => { return { name: formatName(p.Person.Name.toLowerCase(), 3), role: p.Role.Description}; }) : [],
-            awayStaff2: awayStaff ? awayStaff.slice(2,4).map(p => { return { name: formatName(p.Person.Name.toLowerCase(), 3), role: p.Role.Description}; }) : []
+            awayStaff2: awayStaff ? awayStaff.slice(2,4).map(p => { return { name: formatName(p.Person.Name.toLowerCase(), 3), role: p.Role.Description}; }) : [],
+            logo: 'data:image/png;base64,' + btoa(logo)
         };
 
         try {
-            const basePath = path.join(__dirname, '..', 'public' + path.sep);
-            //console.log('Base path: ', basePath);
-
             const compiledFunction = pug.compileFile('./views/game_sheet.pug');
             const result = compiledFunction(data);
-
+            
+            const basePath = path.join(__dirname, '..', 'public' + path.sep);
+            //console.log('Base path: ', basePath);
             var options = {
                 format: 'A4',
                 orientation: "landscape",
