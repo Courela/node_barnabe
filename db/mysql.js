@@ -2,7 +2,7 @@ const mysql = require('mysql');
 
 var connString = process.env["JAWSDB_URL"]
 var pool = mysql.createPool(connString);
-pool.config.connectionLimit = 20;
+//pool.config.connectionLimit = 20;
 
 function ping(responseCallback) {
     var con = mysql.createConnection(connString);
