@@ -105,6 +105,18 @@ async function activateSeason(req, res) {
     res.send();
 }
 
+async function updateSeason(req, res) {
+    const { season, isActive, signUpDueDate, startDate, signUpExtraDueDate } = req.body;
+    if (season, isActive, signUpDueDate, startDate, signUpExtraDueDate) {
+        await serverMgr.updateSeason(parseInt(season), isActive, signUpDueDate, startDate, signUpExtraDueDate);
+    }
+    else {
+        console.warn("Missing info: ", req.body);
+        res.statusCode = 400;
+    }
+    res.send();
+}
+
 async function getStatistics(_, res) {
     const activeSeason = await utilsMgr.getSeasons()
         .then(res => res.find(s => s.IsActive));
@@ -167,5 +179,6 @@ module.exports = {
     testDrive,
     addUser,
     activateSeason,
+    updateSeason,
     getStatistics
 }
