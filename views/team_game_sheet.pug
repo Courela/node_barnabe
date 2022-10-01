@@ -5,14 +5,14 @@ html
         title= title
     body
         
-        img(src='team.jpg' style={ 'float': 'left', 'width': '50px' })
+        img(src=teamLogo style={ 'float': 'left', 'width': '50px' })
         div(style={'display': 'inline', 'float': 'left' })
             div(style={ 'margin-left': '20px', 'font-size': '12px' })= team
             div(style={ 'height': '10px' })
             div(style={ 'margin-left': '20px', 'font-size': '12px', 'display': 'inline' })= step
             div(style={ 'margin-left': '20px', 'font-size': '12px', 'display': 'inline' }) Adversário: ___________________________________________________________
-        img(src='logo.jpg' style={ 'float': 'right', 'width': '50px' })
-        table(style={ 'clear': 'both', 'padding-top': '10px'})
+        img(src=logo style={ 'float': 'right', 'width': '50px' })
+        table(style={ 'clear': 'both', 'padding-top': '10px', 'border-collapse': 'collapse'})
             thead
                 tr 
                     th(colspan=15 style={ 'border': '1px solid black', 'font-size': '12px', 'text-align': 'center'}) JOGADORES
@@ -66,7 +66,7 @@ html
                         td(style={ 'border': '1px solid black','width': '30px'})
         div(style={ 'height': '15px'})
         div
-            table(style={ 'border': '1px solid black', 'border-collapse': 'collapse', 'display': 'inline' })
+            table(style={ 'border': '1px solid black', 'border-collapse': 'collapse', 'display': 'inline', 'border-collapse': 'collapse' })
                 thead
                     tr 
                         th(colspan=2 style={ 'border': '1px solid black', 'font-size': '12px', 'text-align': 'center'}) EQUIPA TÉCNICA
@@ -78,7 +78,7 @@ html
                         tr
                             td(style={ 'border': '1px solid black', 'font-size': '10px' })= elem.role
                             td(style={ 'border': '1px solid black', 'font-size': '10px' })= elem.name
-            table(style={ 'border': '1px solid black', 'border-collapse': 'collapse', 'display': 'inline', 'margin-left': '15px' })
+            table(style={ 'border': '1px solid black', 'border-collapse': 'collapse', 'display': 'inline', 'margin-left': '15px', 'border-collapse': 'collapse' })
                 tbody
                     tr
                         td(style={ 'border': '1px solid black', 'font-size': '11px', 'font-weight': 'bold' }) Faltas próprias
@@ -138,7 +138,7 @@ html
                         td(style={ 'border': '1px solid black', 'width': '18px'})
         div(style={ 'clear': 'both'})
             div(style={ 'height': '15px'})
-            table(style={ 'border': 'none', 'padding-top': '15px'})
+            table(style={ 'border': 'none', 'padding-top': '15px', 'border-collapse': 'collapse'})
                 thead
                     tr
                         th(style={ 'border': 'none', 'font-size': '13px'}) Resultado: 
