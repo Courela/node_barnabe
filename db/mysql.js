@@ -48,6 +48,16 @@ function activateSeason(season, callback) {
     query(q, callback);
 }
 
+function updateSeason(season, isActive, signUpDueDate, startDate, signUpExtraDueDate, callback) {
+    var q = " UPDATE season " + 
+            " SET IsActive = " + mysql.escape(isActive) + 
+            "   , SignUpDueDate = " + mysql.escape(signUpDueDate) +
+            "   , StartDate = " + mysql.escape(startDate) +
+            "   , SignUpExtraDueDate = " + mysql.escape(signUpExtraDueDate) +
+            " WHERE Year = " + mysql.escape(season) + ";";
+    query(q, callback);
+}
+
 function query(q, callback) {
     try {
         var fn = function(err, result) {
@@ -69,5 +79,6 @@ module.exports = {
     getRoles,
     getSeasons,
     getSteps,
-    activateSeason
+    activateSeason,
+    updateSeason
 }

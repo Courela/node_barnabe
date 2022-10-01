@@ -1,4 +1,3 @@
-const errors = require('../errors');
 const serverRepo = require('../repositories/server');
 
 function activateSeason(season) {
@@ -13,6 +12,19 @@ function activateSeason(season) {
         });
 }
 
+function updateSeason(season, isActive, signUpDueDate, startDate, signUpExtraDueDate) {
+    return serverRepo.updateSeason(season, isActive, signUpDueDate, startDate, signUpExtraDueDate)
+        .then((results) => {
+            //console.log(results);
+            return results;
+        })
+        .catch((err) => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
 module.exports = {
-    activateSeason
+    activateSeason,
+    updateSeason
 }
