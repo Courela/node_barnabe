@@ -2,7 +2,7 @@ const fs = require('fs');
 const btoa = require('btoa');
 const path = require('path');
 const pug = require('pug');
-const pdf = require('html-pdf');
+const puppeteer = require('puppeteer');
 const playersMgr = require('../managers/players');
 const teamsMgr = require('../managers/teams');
 const errors = require('../errors');
@@ -14,49 +14,12 @@ async function teamTemplate(req, res) {
     const { season, teamId, stepId } = req.query;
 
     if (season && teamId && stepId) {
-        const teams = await teamsMgr.getTeams();
-        const team = teams.find(t => t.Id == parseInt(teamId));
-
-        const step = await teamsMgr.getStep(parseInt(stepId));
-
-        var players = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [1]);
-        players = addEmptyPlayerLines(players ? mapPlayers(players) : []);
-
-        const staff = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [2, 3, 4, 5, 6]);
-
-        var teamLogoFilename = getTeamLogoFilename(parseInt(teamId));
-        const basePath = path.join(__dirname, '..', 'public' + path.sep);
-        //console.log('Base path: ', basePath);
-        var teamLogo = fs.readFileSync(basePath + teamLogoFilename);
-        var logo = fs.readFileSync(basePath + 'logo.png');
-
-        const data = {
-            team: team.Name,
-            step: step.Description,
-            players: players,
-            staff: staff ? staff.map(p => { return { name: formatName(getPersonName(p)), role: p.Role.Description}; }) : [],
-            teamLogo: 'data:image/jpg;base64,' + btoa(teamLogo),
-            logo: 'data:image/png;base64,' + btoa(logo)
-        };
+        var data = await getTeamDataForTemplate(season, teamId, stepId);
 
         try {
-            const compiledFunction = pug.compileFile('./views/team_game_sheet.pug');
-            const result = compiledFunction(data);
-
-            var options = {
-                format: 'A4',
-                orientation: "landscape",
-                base: "file:///" + basePath,
-                border: "8mm"
-            };
-
-            pdf.create(result, options).toBuffer(function (err, buffer) {
-                if (err) { 
-                    return console.log(err); 
-                }
-                const src = "data:application/pdf;base64," + btoa(buffer);
-                res.send({ src: src });
-            });
+            const html = parseTemplate(data, './views/team_game_sheet.pug');
+            const src = await getPdf(html);
+            res.send({ src: src });
         }
         catch (err) {
             errors.handleErrors(res, err);
@@ -67,6 +30,35 @@ async function teamTemplate(req, res) {
         res.statusCode = 400;
         res.send();
     }
+}
+
+async function getTeamDataForTemplate(season, teamId, stepId) {
+    const teams = await teamsMgr.getTeams();
+    const team = teams.find(t => t.Id == parseInt(teamId));
+
+    const step = await teamsMgr.getStep(parseInt(stepId));
+
+    var players = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [1]);
+    players = addEmptyPlayerLines(players ? mapPlayers(players) : []);
+
+    const staff = await playersMgr.getPlayers(parseInt(season), parseInt(teamId), parseInt(stepId), [2, 3, 4, 5, 6]);
+
+    var teamLogoFilename = getTeamLogoFilename(parseInt(teamId));
+    const basePath = path.join(__dirname, '..', 'public' + path.sep);
+    //console.log('Base path: ', basePath);
+    var teamLogo = fs.readFileSync(basePath + teamLogoFilename);
+    var logo = fs.readFileSync(basePath + 'logo.png');
+
+    const data = {
+        team: team.Name,
+        step: step.Description,
+        players: players,
+        staff: staff ? staff.map(p => { return { name: formatName(getPersonName(p)), role: p.Role.Description}; }) : [],
+        teamLogo: 'data:image/jpg;base64,' + btoa(teamLogo),
+        logo: 'data:image/png;base64,' + btoa(logo)
+    };
+
+    return data;
 }
 
 function isLocal(player) {
@@ -82,57 +74,16 @@ function mapPlayers(players) {
 
 async function gameTemplate(req, res) {
     const { season, homeTeamId, awayTeamId, stepId } = req.query;
-
+    
     if (season && homeTeamId && awayTeamId && stepId) {
-        const teams = await teamsMgr.getTeams();
-        const homeTeam = teams.find(t => t.Id == parseInt(homeTeamId));
-        const awayTeam = teams.find(t => t.Id == parseInt(awayTeamId));
-
-        const step = await teamsMgr.getStep(parseInt(stepId));
-
-        var homePlayers = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [1]);
-        homePlayers = addEmptyPlayerLines(homePlayers ? mapPlayers(homePlayers) : []);
-        const homeStaff = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
-
-        var awayPlayers = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [1]);
-        awayPlayers = addEmptyPlayerLines(awayPlayers ? mapPlayers(awayPlayers) : []);
-        const awayStaff = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
+        const data = await getGameDataForTemplate(season, homeTeamId, awayTeamId, stepId);
         
-        const basePath = path.join(__dirname, '..', 'public' + path.sep);
-        var logo = fs.readFileSync(basePath + 'logo.png');
-
-        const data = {
-            homeTeam: homeTeam.ShortDescription,
-            awayTeam: awayTeam.ShortDescription,
-            step: step.Description,
-            homePlayers: homePlayers,
-            homeStaff1: homeStaff ? homeStaff.slice(0,2).map(p => { return { name: formatName(getPersonName(p), 3), role: p.Role.Description}; }) : [],
-            homeStaff2: homeStaff ? homeStaff.slice(2,4).map(p => { return { name: formatName(getPersonName(p), 3), role: p.Role.Description}; }) : [],
-            awayPlayers: awayPlayers,
-            awayStaff1: awayStaff ? awayStaff.slice(0,2).map(p => { return { name: formatName(getPersonName(p), 3), role: p.Role.Description}; }) : [],
-            awayStaff2: awayStaff ? awayStaff.slice(2,4).map(p => { return { name: formatName(getPersonName(p), 3), role: p.Role.Description}; }) : [],
-            logo: 'data:image/png;base64,' + btoa(logo)
-        };
-
         try {
-            const compiledFunction = pug.compileFile('./views/game_sheet.pug');
-            const result = compiledFunction(data);
-            
+            const html = parseTemplate(data, './views/game_sheet.pug');
             //console.log('Base path: ', basePath);
-            var options = {
-                format: 'A4',
-                orientation: "landscape",
-                base: "file:///" + basePath,
-                border: "8mm"
-            };
-
-            pdf.create(result, options).toBuffer(function (err, buffer) {
-                if (err) { 
-                    return console.log(err); 
-                }
-                const src = "data:application/pdf;base64," + btoa(buffer);
-                res.send({ src: src });
-            });
+            const src = await getPdf(html);
+            
+            res.send({ src: src });
         }
         catch (err) {
             console.error(err);
@@ -144,6 +95,40 @@ async function gameTemplate(req, res) {
         res.statusCode = 400;
         res.send();
     }
+}
+
+async function getGameDataForTemplate(season, homeTeamId, awayTeamId, stepId) {
+    const teams = await teamsMgr.getTeams();
+    const homeTeam = teams.find(t => t.Id == parseInt(homeTeamId));
+    const awayTeam = teams.find(t => t.Id == parseInt(awayTeamId));
+    
+    const step = await teamsMgr.getStep(parseInt(stepId));
+    
+    var homePlayers = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [1]);
+    homePlayers = addEmptyPlayerLines(homePlayers ? mapPlayers(homePlayers) : []);
+    const homeStaff = await playersMgr.getPlayers(parseInt(season), parseInt(homeTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
+    
+    var awayPlayers = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [1]);
+    awayPlayers = addEmptyPlayerLines(awayPlayers ? mapPlayers(awayPlayers) : []);
+    const awayStaff = await playersMgr.getPlayers(parseInt(season), parseInt(awayTeamId), parseInt(stepId), [2, 3, 4, 5, 6]);
+    
+    const basePath = path.join(__dirname, '..', 'public' + path.sep);
+    var logo = fs.readFileSync(basePath + 'logo.png');
+    
+    const data = {
+        homeTeam: homeTeam.ShortDescription,
+        awayTeam: awayTeam.ShortDescription,
+        step: step.Description,
+        homePlayers: homePlayers,
+        homeStaff1: homeStaff ? homeStaff.slice(0,2).map(p => { return { name: formatName(getPersonName(p), 3), role: p.Role.Description}; }) : [],
+        homeStaff2: homeStaff ? homeStaff.slice(2,4).map(p => { return { name: formatName(getPersonName(p), 3), role: p.Role.Description}; }) : [],
+        awayPlayers: awayPlayers,
+        awayStaff1: awayStaff ? awayStaff.slice(0,2).map(p => { return { name: formatName(getPersonName(p), 3), role: p.Role.Description}; }) : [],
+        awayStaff2: awayStaff ? awayStaff.slice(2,4).map(p => { return { name: formatName(getPersonName(p), 3), role: p.Role.Description}; }) : [],
+        logo: 'data:image/png;base64,' + btoa(logo)
+    };
+
+    return data;
 }
 
 function getPersonName(p) {
@@ -227,6 +212,21 @@ function getTeamLogoFilename(teamId) {
             break;
     }
     return result;
+}
+   
+async function getPdf(data) {
+    const browser = await puppeteer.launch();     // run browser
+    const page = await browser.newPage();         // create new tab
+    await page.setContent(data);
+    var teamPdf = await page.pdf({ format: 'A4', landscape: true });           // generate pdf and save it in page.pdf file
+    await browser.close();                        // close browser
+    
+    return "data:application/pdf;base64," + btoa(teamPdf);
+}
+
+function parseTemplate(data, template) {
+    const compiledFunction = pug.compileFile(template);
+    return compiledFunction(data);
 }
 
 module.exports = {
