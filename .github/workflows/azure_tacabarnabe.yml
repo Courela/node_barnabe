@@ -23,7 +23,9 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+          export NODE_CHROMIUM_REVISION=1056772
           npm install
+          npm install chromium
           npm install puppeteer --unsafe-perm=true --allow-root
           npm run build --if-present
           npm run test --if-present
