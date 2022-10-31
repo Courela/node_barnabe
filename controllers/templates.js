@@ -2,7 +2,7 @@ const fs = require('fs');
 const btoa = require('btoa');
 const path = require('path');
 const pug = require('pug');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const playersMgr = require('../managers/players');
 const teamsMgr = require('../managers/teams');
 const errors = require('../errors');
@@ -215,7 +215,19 @@ function getTeamLogoFilename(teamId) {
 }
    
 async function getPdf(data) {
-    const browser = await puppeteer.launch({ headless: true, args: [ '--no-sandbox' ] });     // run browser
+    puppeteer.defaultDownloadPath = '/chromium';
+    const browserFetcher = puppeteer.createBrowserFetcher({});
+    let revisionInfo = await browserFetcher.download('1056772');
+
+    const browser = await puppeteer.launch(
+      {
+        headless: true,
+        executablePath: revisionInfo.executablePath,
+        args: ['--no-sandbox', "--disabled-setupid-sandbox"]
+      }
+    );
+
+    // const browser = await puppeteer.launch({ headless: true, args: [ '--no-sandbox' ] });     // run browser
     const page = await browser.newPage();         // create new tab
     await page.setContent(data);
     var teamPdf = await page.pdf({ format: 'A4', landscape: true });           // generate pdf and save it in page.pdf file
