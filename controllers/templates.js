@@ -215,7 +215,7 @@ function getTeamLogoFilename(teamId) {
 }
    
 async function getPdf(data) {
-    const browser = await puppeteer.launch();     // run browser
+    const browser = await puppeteer.launch({ headless: true, args: [ '--no-sandbox' ] });     // run browser
     const page = await browser.newPage();         // create new tab
     await page.setContent(data);
     var teamPdf = await page.pdf({ format: 'A4', landscape: true });           // generate pdf and save it in page.pdf file
