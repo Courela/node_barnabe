@@ -25,7 +25,7 @@ jobs:
         run: |
           export NODE_CHROMIUM_REVISION=1056772
           npm install
-          npm install chromium
+          npm install -g chromium
           npm install puppeteer --unsafe-perm=true --allow-root
           npm run build --if-present
           npm run test --if-present
@@ -45,7 +45,7 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: node-app
 
