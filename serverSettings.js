@@ -20,6 +20,7 @@ var serverSettings = process.env.NODE_ENV !== 'production' ?
 
 serverSettings.CORS_HOST = process.env.NODE_ENV !== 'production' ? '*' : serverSettings.API_PROTOCOL + '://' + serverSettings.API_HOST;
 serverSettings.API_URL = serverSettings.API_PROTOCOL + '://' + serverSettings.API_HOST + ':' + serverSettings.API_PORT;
+serverSettings.CHROMIUM_REVISION = '1056772';
 // settings.PLAYER_RESPONSE_TIMEOUT = 300;
 
 module.exports = {
