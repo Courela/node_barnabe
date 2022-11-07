@@ -25,6 +25,7 @@ function getApiRoutes() {
         .use('/files', filesRouter)
         .get('/teams', teamsController.getTeams)
         .get('/steps', utilsController.getSteps)
+        .get('/phases', utilsController.getPhases)
         .get('/teams/:teamId', teamsController.getTeam)
         .get('/steps/:stepId', teamsController.getStep)
         .get('/persons', utilsController.getPerson)

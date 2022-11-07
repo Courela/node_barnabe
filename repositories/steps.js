@@ -1,6 +1,6 @@
 const mysqlStorage = require("../db/mysql/steps")
 
-function insertMatch(season, stepId, phase, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals) {
+function insertMatch(season, stepId, phaseId, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
@@ -10,7 +10,7 @@ function insertMatch(season, stepId, phase, homeTeamId, awayTeamId, homeTeamGoal
                     reject(r);
                 }
             }
-            mysqlStorage.insertMatch(season, stepId, phase, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals, fn);
+            mysqlStorage.insertMatch(season, stepId, phaseId, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals, fn);
         }
         catch(err) {
             reject(err);

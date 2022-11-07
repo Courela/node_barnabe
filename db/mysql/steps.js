@@ -1,11 +1,11 @@
 const mysql = require('mysql');
 const adapter = require('../mysql');
 
-function insertMatch(season, stepId, phase, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals, callback) {
-    var q = " INSERT INTO `match` (Season, StepId, Phase, HomeTeamId, AwayTeamId, HomeTeamGoals, AwayTeamGoals, CreatedAt, LastUpdatedAt) " + 
+function insertMatch(season, stepId, phaseId, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals, callback) {
+    var q = " INSERT INTO `match` (Season, StepId, PhaseId, HomeTeamId, AwayTeamId, HomeTeamGoals, AwayTeamGoals, CreatedAt, LastUpdatedAt) " + 
             " VALUES (" + mysql.escape(season) + ", " + 
                           mysql.escape(stepId) + ", " + 
-                          mysql.escape(phase) + ", " + 
+                          mysql.escape(phaseId) + ", " + 
                           mysql.escape(homeTeamId) + ", " + 
                           mysql.escape(awayTeamId) + ", " + 
                           mysql.escape(homeTeamGoals) + ", " +
