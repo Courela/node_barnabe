@@ -15,7 +15,7 @@ function insertMatch(season, stepId, phase, homeTeamId, awayTeamId, homeTeamGoal
 }
 
 function getMatches(season, stepId, callback) {
-    var q = " SELECT m.Season, m.StepId, m.PhaseId, m.HomeTeamId, m.AwayTeamId, m.HomeTeamGoals, m.AwayTeamGoals, " +
+    var q = " SELECT m.Id, m.Season, m.StepId, m.PhaseId, m.HomeTeamId, m.AwayTeamId, m.HomeTeamGoals, m.AwayTeamGoals, " +
             "   p.Name AS PhaseName, " +
             "   t1.ShortDescription AS HomeTeamName, t2.ShortDescription AS AwayTeamName " +
             " FROM `match` m " +
@@ -27,7 +27,16 @@ function getMatches(season, stepId, callback) {
     adapter.query(q, callback);
 }
 
+function deleteMatch(matchId, season, stepId, callback) {
+    var q = " DELETE FROM `match` " +
+            " WHERE Id = " + mysql.escape(matchId) +
+            "   AND Season = " + mysql.escape(season) +
+            "   AND StepId = " + mysql.escape(stepId);
+    adapter.query(q, callback);
+}
+
 module.exports = {
     insertMatch,
-    getMatches
+    getMatches,
+    deleteMatch
 }

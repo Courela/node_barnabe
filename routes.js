@@ -35,6 +35,7 @@ function getApiRoutes() {
         .get('/seasons/:season/steps/:stepId', teamsController.getStep)
         .post('/seasons/:season/steps/:stepId/add-match', stepsController.addMatch)
         .get('/seasons/:season/steps/:stepId/matches', stepsController.getMatches)
+        .delete('/seasons/:season/steps/:stepId/matches/:matchId', stepsController.removeMatch)
         .get('/seasons/:season/steps/:stepId/standings', stepsController.getStandings)
         .get('/seasons/:season/teams/:teamId/sign-steps', teamsController.getSignSteps)
         .get('/seasons/:season/teams/:teamId/steps', teamsController.getTeamSteps)

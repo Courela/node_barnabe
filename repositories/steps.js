@@ -36,7 +36,26 @@ function getMatches(season, stepId) {
     });
 }
 
+function removeMatch(matchId, season, stepId) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                if (r && r.affectedRows !== undefined) {
+                    resolve({ rowsAffected: r.affectedRows });
+                } else {
+                    reject(r);
+                }
+            }
+            mysqlStorage.deleteMatch(matchId, season, stepId, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     insertMatch,
-    getMatches
+    getMatches,
+    removeMatch
 }

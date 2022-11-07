@@ -23,16 +23,6 @@ async function getMatches(req, res) {
     var result;
     try {
         result = await stepsMgr.getMatches(season, stepId);
-    // const results = [{
-    //     season: 2022,
-    //     phase: 'Campeonato',
-    //     homeTeamId: 2,
-    //     homeTeamName: 'Negrais',
-    //     homeTeamGoals: 0,
-    //     awayTeamId: 2,
-    //     awayTeamName: 'Aruil',
-    //     awayTeamGoals: 10,
-    // }];
     } catch (err) {
         errors.handleErrors(res, err);
         result = err;
@@ -62,8 +52,24 @@ async function addMatch(req, res) {
     res.send(result);
 }
 
+async function removeMatch(req, res) {
+    const { matchId, season, stepId } = req.params;
+    if (matchId && season && stepId) {
+        try {
+            await stepsMgr.removeMatch(matchId, season, stepId);
+        } catch (err) {
+            errors.handleErrors(res, err);
+            result = err;
+        }
+    } else {
+        res.statusCode = 400;
+    }
+    res.send();
+}
+
 module.exports = {
     getMatches,
     getStandings,
-    addMatch
+    addMatch,
+    removeMatch
 }

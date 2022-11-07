@@ -18,7 +18,21 @@ function getMatches(season, stepId) {
         });
 }
 
+function removeMatch(matchId, season, stepId) {
+    return stepsRepo.removeMatch(matchId, season, stepId)
+        .then((results) => {
+            if (!results || !results.rowsAffected || results.rowsAffected < 1) {
+                throw 'Unexpected error!';
+            }
+        })
+        .catch((err) => {
+            //console.error(err);
+            throw err;
+        });
+}
+
 module.exports = {
     insertMatch,
-    getMatches
+    getMatches,
+    removeMatch
 }
