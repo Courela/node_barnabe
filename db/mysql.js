@@ -69,6 +69,7 @@ function query(q, callback) {
         var fn = function(err, result) {
             if (err) {
                 console.error(err);
+                result = err.code;
             }
             return callback(result);
         }
