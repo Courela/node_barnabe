@@ -1,1 +1,4 @@
 runtime: nodejs16
+
+env_variables:
+  REACT_APP_APP_HOST: "tacabarnabe.ew.r.appspot.com"
