@@ -4,11 +4,11 @@ const utilsMgr = require('../managers/utils');
 const playersMgr = require('../managers/players');
 const serverMgr = require('../managers/server');
 const mysqlAdapter = require('../db/mysql');
-const storageAdapter = require('../db/storage');
+// const storageAdapter = require('../db/storage');
 const oAuth2 = require('../authentication/oAuth2');
 const googleApi = require('../authentication/googleApi');
 const { settings: serverSettings } = require('../serverSettings');
-// var puppeteer = require('puppeteer-core');
+var puppeteer = require('puppeteer-core');
 
 function setup() {
     console.log("Starting server...");
@@ -17,11 +17,11 @@ function setup() {
     } else {
         console.log("Not production environment: ", process.env.NODE_ENV || "none");
     }
-    // var browserFetcher = new puppeteer.BrowserFetcher({
-    //     path: '/chromium'
-    // });
-    // browserFetcher.download(serverSettings.CHROMIUM_REVISION)
-    //     .then(() => console.log("Chromium revision " + serverSettings.CHROMIUM_REVISION + " downloaded."));
+    var browserFetcher = new puppeteer.BrowserFetcher({
+        path: '/tmp'
+    });
+    browserFetcher.download(serverSettings.CHROMIUM_REVISION)
+        .then(() => console.log("Chromium revision " + serverSettings.CHROMIUM_REVISION + " downloaded."));
 }
 
 function ping(req, res) {
