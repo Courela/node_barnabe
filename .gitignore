@@ -6,3 +6,4 @@ data/
 start_dev.ps1
 public/team.jpg
 .vscode/
+app.yaml
