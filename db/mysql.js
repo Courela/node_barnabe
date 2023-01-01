@@ -44,6 +44,11 @@ function getSteps(callback) {
     query(q, callback);
 }
 
+function getPhases(callback) {
+    var q = " SELECT * FROM `phase`";
+    query(q, callback);
+}
+
 function activateSeason(season, callback) {
     var q = " UPDATE season " + 
             " SET IsActive = 0 " + 
@@ -69,6 +74,7 @@ function query(q, callback) {
         var fn = function(err, result) {
             if (err) {
                 console.error(err);
+                result = err.code;
             }
             return callback(result);
         }
@@ -85,6 +91,7 @@ module.exports = {
     getRoles,
     getSeasons,
     getSteps,
+    getPhases,
     activateSeason,
     updateSeason
 }
