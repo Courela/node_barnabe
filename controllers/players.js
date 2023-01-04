@@ -1,5 +1,5 @@
 const errors = require('../errors');
-// const settings = require('../settings')
+// const { settings: serverSettings } = require('../serverSettings')
 const playersMgr = require('../managers/players');
 const { isValidGender, isValidEmail, isValidPhone, isValidDate } = require('../utils/validations');
 

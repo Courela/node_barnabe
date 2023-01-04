@@ -45,8 +45,24 @@ function getSteps() {
     });
 }
 
+function getPhases() {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                //console.log("getPhases response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.getPhases(fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     getRoles,
     getSeasons,
-    getSteps
+    getSteps,
+    getPhases
 }

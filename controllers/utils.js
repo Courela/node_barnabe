@@ -38,10 +38,16 @@ async function getPerson (req, res) {
     res.send(result);
 }
 
+async function getPhases (_, res) {
+    const result = await utilsMgr.getPhases();
+    res.send(result);
+}
+
 module.exports = {
     getRoles,
     getSeasons,
     getSeason,
     getSteps,
+    getPhases,
     getPerson
 }

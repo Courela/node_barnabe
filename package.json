@@ -1,6 +1,6 @@
 {
   "name": "node_barnabe",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -21,17 +21,17 @@
   "dependencies": {
     "atob": "*2.1.2",
     "base-64": "*0.1.0",
-    "body-parser": "*1.19.0",
+    "body-parser": "*1.20.1",
     "btoa": "*1.2.1",
     "client-sessions": "*0.8.0",
-    "express": "*4.17.1",
+    "express": "*4.18.2",
     "googleapis": "*100.0.0",
-    "html-pdf": "*3.0.1",
     "json2csv": "*4.5.1",
     "lowdb": "*1.0.0",
     "mssql": "*4.3.7",
     "mysql": "*2.17.1",
-    "pug": "*3.0.2",
+    "pug": "^3.0.2",
+    "puppeteer": "^19.2.0",
     "utf8": "*3.0.0"
   },
   "devDependencies": {

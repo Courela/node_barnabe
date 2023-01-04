@@ -1,0 +1,171 @@
+CREATE TABLE `season` (
+	`Year` SMALLINT(5) NOT NULL,
+	`IsActive` BIT(1) NOT NULL,
+	`SignUpDueDate` TIMESTAMP NOT NULL,
+	`StartDate` TIMESTAMP NOT NULL,
+	`SignUpExtraDueDate` TIMESTAMP NULL DEFAULT NULL,
+	PRIMARY KEY `PK_Season` (`Year`) USING BTREE
+)
+COLLATE='latin1_general_cs'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `team` (
+	`Id` SMALLINT(5) NOT NULL,
+	`Name` VARCHAR(255) NOT NULL COLLATE 'latin1_general_cs',
+	`ShortDescription` VARCHAR(127) NOT NULL COLLATE 'latin1_general_cs',
+	PRIMARY KEY `PK_Team` (`Id`) USING BTREE
+)
+COLLATE='latin1_general_cs'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `step` (
+	`Id` TINYINT(3) NOT NULL,
+	`Description` VARCHAR(50) NOT NULL COLLATE 'latin1_general_cs',
+	`Gender` CHAR(1) NOT NULL COLLATE 'latin1_general_cs',
+	`IsCaretakerRequired` BIT(1) NOT NULL,
+	PRIMARY KEY `PK_Step` (`Id`) USING BTREE
+)
+COLLATE='latin1_general_cs'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `role` (
+	`Id` SMALLINT(5) NOT NULL,
+	`Description` VARCHAR(127) NOT NULL COLLATE 'latin1_general_cs',
+	PRIMARY KEY (`Id`) USING BTREE
+)
+COLLATE='latin1_general_cs'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `phase` (
+	`Id` TINYINT(3) NOT NULL,
+	`Name` VARCHAR(50) NOT NULL COLLATE 'latin1_general_cs',
+	PRIMARY KEY (`Id`) USING BTREE
+)
+COLLATE='latin1_general_cs'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `user` (
+	`Username` VARCHAR(50) NOT NULL COLLATE 'latin1_general_cs',
+	`Password` VARCHAR(50) NOT NULL COLLATE 'latin1_general_cs',
+	`TeamId` SMALLINT(5) NULL,
+	PRIMARY KEY `PK_User` (`Username`) USING BTREE,
+	INDEX `FK_User_Team` (`TeamId`) USING BTREE,
+	CONSTRAINT `FK_User_Team` FOREIGN KEY (`TeamId`) REFERENCES `team` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+COLLATE='latin1_general_cs'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `birthsteplimit` (
+	`Season` SMALLINT(5) NOT NULL,
+	`StepId` TINYINT(3) NOT NULL,
+	`MinDate` TIMESTAMP NOT NULL,
+	`MaxDate` TIMESTAMP NOT NULL,
+	PRIMARY KEY (`Season`, `StepId`) USING BTREE,
+	INDEX `FK_BirthStepLimit_StepId` (`StepId`) USING BTREE,
+	CONSTRAINT `FK_BirthStepLimit_Season` FOREIGN KEY (`Season`) REFERENCES `season` (`Year`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_BirthStepLimit_StepId` FOREIGN KEY (`StepId`) REFERENCES `step` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+COLLATE='latin1_general_cs'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `teamstep` (
+	`Id` INT(10) NOT NULL AUTO_INCREMENT,
+	`Season` SMALLINT(5) NOT NULL,
+	`TeamId` SMALLINT(5) NOT NULL,
+	`StepId` TINYINT(3) NOT NULL,
+	`CreatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`LastUpdatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`Id`) USING BTREE,
+	INDEX `FK_TeamStep_Season` (`Season`) USING BTREE,
+	INDEX `FK_TeamStep_Team` (`TeamId`) USING BTREE,
+	INDEX `FK_TeamStep_Step` (`StepId`) USING BTREE,
+	CONSTRAINT `FK_TeamStep_Season` FOREIGN KEY (`Season`) REFERENCES `season` (`Year`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_TeamStep_Step` FOREIGN KEY (`StepId`) REFERENCES `step` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_TeamStep_Team` FOREIGN KEY (`TeamId`) REFERENCES `team` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+COLLATE='latin1_general_cs'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `person` (
+	`Id` INT(10) NOT NULL AUTO_INCREMENT,
+	`Name` VARCHAR(256) NOT NULL COLLATE 'latin1_general_cs',
+	`Gender` CHAR(1) NULL DEFAULT NULL COLLATE 'latin1_general_cs',
+	`Birthdate` DATE NULL DEFAULT NULL,
+	`IdCardNr` VARCHAR(16) NOT NULL COLLATE 'latin1_general_cs',
+	`IdCardExpireDate` DATE NULL DEFAULT NULL,
+	`VoterNr` VARCHAR(16) NULL DEFAULT NULL COLLATE 'latin1_general_cs',
+	`Phone` VARCHAR(16) NULL DEFAULT NULL COLLATE 'latin1_general_cs',
+	`Email` VARCHAR(64) NULL DEFAULT NULL COLLATE 'latin1_general_cs',
+	`LocalBorn` BIT(1) NOT NULL,
+	`LocalTown` BIT(1) NOT NULL,
+	`CreatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`LastUpdatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`Id`) USING BTREE,
+	UNIQUE INDEX `UQ_IdCardNr` (`IdCardNr`) USING BTREE
+)
+COLLATE='latin1_general_cs'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `player` (
+	`Id` INT(10) NOT NULL,
+	`Season` SMALLINT(5) NOT NULL,
+	`TeamId` SMALLINT(5) NOT NULL,
+	`StepId` TINYINT(3) NOT NULL,
+	`PersonId` INT(10) NOT NULL,
+	`RoleId` TINYINT(3) NOT NULL,
+	`Resident` BIT(1) NOT NULL,
+	`CareTakerId` INT(10) NULL DEFAULT NULL,
+	`Comments` TEXT NULL DEFAULT NULL COLLATE 'latin1_general_cs',
+	`PhotoFilename` VARCHAR(256) NULL DEFAULT NULL COLLATE 'latin1_general_cs',
+	`DocFilename` VARCHAR(256) NULL DEFAULT NULL COLLATE 'latin1_general_cs',
+	`CreatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`LastUpdatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`Id`) USING BTREE,
+	INDEX `FK_Player_Season` (`Season`) USING BTREE,
+	INDEX `FK_Player_Team` (`TeamId`) USING BTREE,
+	INDEX `FK_Player_step` (`StepId`) USING BTREE,
+	INDEX `FK_Player_Person` (`PersonId`) USING BTREE,
+	INDEX `FK_Player_Caretaker` (`CareTakerId`) USING BTREE,
+	CONSTRAINT `FK_Player_Caretaker` FOREIGN KEY (`CareTakerId`) REFERENCES `person` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_Player_Person` FOREIGN KEY (`PersonId`) REFERENCES `person` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_Player_Season` FOREIGN KEY (`Season`) REFERENCES `season` (`Year`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_Player_step` FOREIGN KEY (`StepId`) REFERENCES `step` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_Player_Team` FOREIGN KEY (`TeamId`) REFERENCES `team` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+COLLATE='latin1_general_cs'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `match` (
+	`Id` INT(10) NOT NULL AUTO_INCREMENT,
+	`Season` SMALLINT(5) NOT NULL,
+	`StepId` TINYINT(3) NOT NULL,
+	`PhaseId` TINYINT(3) NOT NULL,
+	`HomeTeamId` SMALLINT(5) NOT NULL,
+	`AwayTeamId` SMALLINT(5) NOT NULL,
+	`HomeTeamGoals` TINYINT(3) NOT NULL,
+	`AwayTeamGoals` TINYINT(3) NOT NULL,
+	PRIMARY KEY (`Id`) USING BTREE,
+	INDEX `FK_Match_Phase` (`PhaseId`) USING BTREE,
+	INDEX `FK_Match_HomeTeam` (`HomeTeamId`) USING BTREE,
+	INDEX `FK_Match_AwayTeam` (`AwayTeamId`) USING BTREE,
+	INDEX `FK_Match_Season` (`Season`) USING BTREE,
+	INDEX `FK_Match_Step` (`StepId`) USING BTREE,
+	CONSTRAINT `FK_Match_AwayTeam` FOREIGN KEY (`AwayTeamId`) REFERENCES `team` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_Match_HomeTeam` FOREIGN KEY (`HomeTeamId`) REFERENCES `team` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_Match_Phase` FOREIGN KEY (`PhaseId`) REFERENCES `phase` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_Match_Season` FOREIGN KEY (`Season`) REFERENCES `season` (`Year`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_Match_Step` FOREIGN KEY (`StepId`) REFERENCES `step` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+COLLATE='latin1_general_cs'
+ENGINE=InnoDB
+;
