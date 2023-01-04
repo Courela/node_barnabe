@@ -51,15 +51,17 @@ ENGINE=InnoDB
 
 CREATE TABLE `user` (
 	`Username` VARCHAR(50) NOT NULL COLLATE 'latin1_general_cs',
-	`Password` VARCHAR(50) NOT NULL COLLATE 'latin1_general_cs',
+	`Password` VARCHAR(64) NOT NULL COLLATE 'latin1_general_cs',
 	`TeamId` SMALLINT(5) NULL,
-	PRIMARY KEY `PK_User` (`Username`) USING BTREE,
-	INDEX `FK_User_Team` (`TeamId`) USING BTREE,
-	CONSTRAINT `FK_User_Team` FOREIGN KEY (`TeamId`) REFERENCES `team` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+	`CreatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`Username`) USING BTREE,
+	INDEX `FK_user_team` (`TeamId`) USING BTREE,
+	CONSTRAINT `FK_user_team` FOREIGN KEY (`TeamId`) REFERENCES `team` (`Id`) ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 COLLATE='latin1_general_cs'
 ENGINE=InnoDB
 ;
+
 
 CREATE TABLE `birthsteplimit` (
 	`Season` SMALLINT(5) NOT NULL,

@@ -1,3 +1,6 @@
+const bcrypt = require('bcrypt');
+const puppeteer = require('puppeteer-core');
+
 const usersMgr = require('../managers/users');
 const teamsMgr = require('../managers/teams');
 const utilsMgr = require('../managers/utils');
@@ -8,7 +11,7 @@ const mysqlAdapter = require('../db/mysql');
 const oAuth2 = require('../authentication/oAuth2');
 const googleApi = require('../authentication/googleApi');
 const { settings: serverSettings } = require('../serverSettings');
-var puppeteer = require('puppeteer-core');
+const authentication = require('../authentication/authentication');
 
 function setup() {
     console.log("Starting server...");
@@ -88,7 +91,8 @@ async function addUser(req, res) {
     if (username && password && teamId) {
         const exists = await usersMgr.existsUser(username);
         if (!exists) {
-            await usersMgr.addUser(username, password, parseInt(teamId));
+            var hashPassword = await bcrypt.hash(password, authentication.salt);
+            await usersMgr.addUser(username, hashPassword, parseInt(teamId));
         }
         else {
             res.statusCode = 409;
