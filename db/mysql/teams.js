@@ -85,7 +85,7 @@ function getStepWithSeason(stepId, season, callback) {
 function getTeamsWithoutUser(callback) {
     var q = " SELECT COUNT(t.Id) AS NrTeams FROM team t " +
             "   LEFT JOIN user u ON u.TeamId = t.Id " +
-            " WHERE u.Id IS NULL ";
+            " WHERE u.Username IS NULL ";
     adapter.query(q, callback);
 }
 
