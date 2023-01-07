@@ -87,12 +87,12 @@ async function getUsers(req, res) {
 }
 
 async function addUser(req, res) {
-    const { username, password, teamId } = req.body;
+    const { username, password, teamId, email } = req.body;
     if (username && password && teamId) {
         const exists = await usersMgr.existsUser(username);
         if (!exists) {
             var hashPassword = await bcrypt.hash(password, authentication.salt);
-            await usersMgr.addUser(username, hashPassword, parseInt(teamId));
+            await usersMgr.addUser(username, hashPassword, parseInt(teamId), email);
         }
         else {
             res.statusCode = 409;

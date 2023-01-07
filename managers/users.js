@@ -35,8 +35,8 @@ function existsUser(username) {
         });
 }
 
-function addUser(username, password, teamId) {
-    return usersRepo.addUser(username, password, teamId)
+function addUser(username, password, teamId, email) {
+    return usersRepo.addUser(username, password, teamId, email)
         .then(result => {
             if (result.recordset && result.recordset.length > 0) {
                 return result.recordset[0];

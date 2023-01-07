@@ -52,7 +52,8 @@ ENGINE=InnoDB
 CREATE TABLE `user` (
 	`Username` VARCHAR(50) NOT NULL COLLATE 'latin1_general_cs',
 	`Password` VARCHAR(64) NOT NULL COLLATE 'latin1_general_cs',
-	`TeamId` SMALLINT(5) NULL,
+	`Email` VARCHAR(256) NULL DEFAULT NULL COLLATE 'latin1_general_cs',
+	`TeamId` SMALLINT(5) NULL DEFAULT NULL,
 	`CreatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`Username`) USING BTREE,
 	INDEX `FK_user_team` (`TeamId`) USING BTREE,
@@ -61,7 +62,6 @@ CREATE TABLE `user` (
 COLLATE='latin1_general_cs'
 ENGINE=InnoDB
 ;
-
 
 CREATE TABLE `birthsteplimit` (
 	`Season` SMALLINT(5) NOT NULL,

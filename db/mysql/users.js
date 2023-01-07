@@ -19,11 +19,12 @@ function getUser(username, password, callback) {
     adapter.query(q, callback);
 }
 
-function addUser(username, password, teamId, callback) {
-    var q = " INSERT INTO user (Username, Password, TeamId, CreatedAt) " + 
+function addUser(username, password, teamId, email, callback) {
+    var q = " INSERT INTO user (Username, Password, TeamId, Email, CreatedAt) " + 
             " VALUES (" + mysql.escape(username) + "," +
                          mysql.escape(password) + "," +
                          mysql.escape(teamId) + "," +
+                         mysql.escape(email) + "," +
                          "CURRENT_TIMESTAMP())";
     adapter.query(q, callback);
 }

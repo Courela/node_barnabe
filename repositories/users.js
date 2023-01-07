@@ -45,14 +45,14 @@ function getUser(username, password) {
     });
 }
 
-function addUser(username, password, teamId) {
+function addUser(username, password, teamId, email) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
                 //console.log("addUser response:", r);
                 resolve({ recordset: [true], rowsAffected: [1] });
             }
-            mysqlStorage.addUser(username, password, teamId, fn);
+            mysqlStorage.addUser(username, password, teamId, email, fn);
         }
         catch(err) {
             reject(err);
