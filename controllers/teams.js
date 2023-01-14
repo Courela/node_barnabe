@@ -10,12 +10,10 @@ async function getTeams(req, res) {
 
 async function getTeam(req, res) {
     let result = null;
-    const { teamId } = req.params;
-    if (teamId) {
-        const teams = await teamsMgr.getTeams();
-        const team = teams.find(t => t.Id == parseInt(teamId));
-        //console.log('Selected Team: ', team);
-        result = team;
+    var { teamId } = req.params;
+    teamId = parseInt(teamId, 10);
+    if (teamId && !isNaN(teamId)) {
+        result = await teamsMgr.getTeamById(teamId);
     }
     else { res.statusCode = 400; }
     res.send(result);
@@ -55,9 +53,10 @@ async function getSignSteps(req, res) {
 
 async function getTeamSteps(req, res) {
     let response = '';
-    if (req.params.season && req.params.teamId && 
-        parseInt(req.params.season) != NaN && parseInt(req.params.teamId) != NaN) {
-        response = await teamsMgr.getTeamSteps(parseInt(req.params.season), parseInt(req.params.teamId));
+    var season = parseInt(req.params.season, 10);
+    var teamId = parseInt(req.params.teamId, 10);
+    if (!isNaN(season) && !isNaN(teamId)) {
+           response = await teamsMgr.getTeamSteps(parseInt(req.params.season), parseInt(req.params.teamId));
     }
     else {
         res.statusCode = 400;
