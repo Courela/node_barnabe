@@ -101,7 +101,7 @@ CREATE TABLE `person` (
 	`Name` VARCHAR(256) NOT NULL COLLATE 'latin1_general_cs',
 	`Gender` CHAR(1) NULL DEFAULT NULL COLLATE 'latin1_general_cs',
 	`Birthdate` DATE NULL DEFAULT NULL,
-	`IdCardNr` VARCHAR(16) NOT NULL COLLATE 'latin1_general_cs',
+	`IdCardNr` VARCHAR(64) NOT NULL COLLATE 'latin1_general_cs',
 	`IdCardExpireDate` DATE NULL DEFAULT NULL,
 	`VoterNr` VARCHAR(16) NULL DEFAULT NULL COLLATE 'latin1_general_cs',
 	`Phone` VARCHAR(16) NULL DEFAULT NULL COLLATE 'latin1_general_cs',
