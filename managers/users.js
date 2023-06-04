@@ -89,11 +89,31 @@ function getUsersCount() {
         });
 }
 
+function getUserByEmail(email) {
+    return usersRepo.getUserByEmail(email)
+        .then(result => result.recordset[0] ? result.recordset[0] : null)
+        .catch((err) => {
+            console.log(err);
+            throw 'Unexpected error!';
+        });
+}
+
+function savePassword(username, password) {
+    return usersRepo.savePassword(username, password)
+        .then(result => result.recordset[0] ? result.recordset[0] : null)
+        .catch((err) => {
+            console.log(err);
+            throw 'Unexpected error!';
+        });
+}
+
 module.exports = {
     getUsers,
     addUser,
     existsUser,
     getUserById,
     getUser,
-    getUsersCount
+    getUsersCount,
+    getUserByEmail,
+    savePassword
 }

@@ -43,11 +43,17 @@ async function getPhases (_, res) {
     res.send(result);
 }
 
+async function recoverPassword(req, res) {
+    utilsMgr.recoverPassword(req.body.email);
+    res.send();
+}
+
 module.exports = {
     getRoles,
     getSeasons,
     getSeason,
     getSteps,
     getPhases,
-    getPerson
+    getPerson,
+    recoverPassword
 }

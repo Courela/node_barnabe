@@ -31,6 +31,7 @@ function getApiRoutes() {
         .get('/persons', utilsController.getPerson)
         .get('/roles', utilsController.getRoles)
         .post('/authenticate', authenticate)
+        .post('/recoverPassword', utilsController.recoverPassword)
         .post('/logout', logout)
         .get('/seasons/:season', utilsController.getSeason)
         .get('/seasons/:season/steps/:stepId', teamsController.getStep)

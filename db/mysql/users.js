@@ -40,11 +40,27 @@ function getUsersCount(callback) {
     adapter.query(q, callback);
 }
 
+function getUserByEmail(email, callback) {
+    var q = " SELECT Username, Password, Email, TeamId, CreatedAt " +
+            " FROM user " + 
+            " WHERE Email = " + mysql.escape(email);
+    adapter.query(q, callback);
+}
+
+function savePassword(username, password, callback) {
+    var q = " UPDATE user " +
+            " SET Password = " + mysql.escape(password) + 
+            " WHERE Username = " + mysql.escape(username);
+    adapter.query(q, callback);
+}
+
 module.exports = {
     getUsers,
     existsUser,
     getUser,
     addUser,
     getUserById,
-    getUsersCount
+    getUsersCount,
+    getUserByEmail,
+    savePassword
 }

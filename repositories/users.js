@@ -90,11 +90,44 @@ function getUsersCount() {
     });
 }
 
+function getUserByEmail(email) {
+    console.log("Searching user for email", email);
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                //console.log("getUserByEmail response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.getUserByEmail(email, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
+function savePassword(username, password) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                //console.log("savePassword response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.savePassword(username, password, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     getUsers,
     addUser,
     existsUser,
     getUserById,
     getUser,
-    getUsersCount
+    getUsersCount,
+    getUserByEmail,
+    savePassword
 }

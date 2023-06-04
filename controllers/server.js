@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const puppeteer = require('puppeteer-core');
 
 const usersMgr = require('../managers/users');
@@ -11,7 +10,6 @@ const mysqlAdapter = require('../db/mysql');
 const oAuth2 = require('../authentication/oAuth2');
 const googleApi = require('../authentication/googleApi');
 const { settings: serverSettings } = require('../serverSettings');
-const authentication = require('../authentication/authentication');
 
 function setup() {
     console.log("Starting server...");
@@ -91,7 +89,7 @@ async function addUser(req, res) {
     if (username && password && teamId) {
         const exists = await usersMgr.existsUser(username);
         if (!exists) {
-            var hashPassword = await bcrypt.hash(password, authentication.salt);
+            var hashPassword = generatePasswordHash(password);
             await usersMgr.addUser(username, hashPassword, parseInt(teamId), email);
         }
         else {
