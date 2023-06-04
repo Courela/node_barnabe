@@ -35,7 +35,7 @@ function getRoles(callback) {
 }
 
 function getSeasons(callback) {
-    var q = " SELECT * FROM season";
+    var q = " SELECT Year, IsActive, SignUpDueDate, StartDate, SignUpExtraDueDate FROM season ";
     query(q, callback);
 }
 
@@ -46,6 +46,15 @@ function getSteps(callback) {
 
 function getPhases(callback) {
     var q = " SELECT * FROM `phase`";
+    query(q, callback);
+}
+
+function addSeason(season, isActive, signUpDueDate, startDate, callback) {
+    var q = " INSERT season (Year, IsActive, SignUpDueDate, StartDate) " + 
+            " VALUES (" + mysql.escape(season) +
+            "        ," + mysql.escape(isActive) +
+            "        ," + mysql.escape(signUpDueDate) + 
+            "        ," + mysql.escape(startDate) + ") "; 
     query(q, callback);
 }
 
@@ -92,6 +101,7 @@ module.exports = {
     getSeasons,
     getSteps,
     getPhases,
+    addSeason,
     activateSeason,
     updateSeason
 }

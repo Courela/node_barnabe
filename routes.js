@@ -77,6 +77,7 @@ function getAdminRoutes() {
         .get('/drive', serverController.testDrive)
         .get('/users', serverController.getUsers)
         .put('/users', serverController.addUser)
+        .post('/seasons/add', serverController.addSeason)
         .post('/seasons/activate', serverController.activateSeason)
         .put('/seasons/update', serverController.updateSeason);
 

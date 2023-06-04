@@ -1,6 +1,6 @@
 CREATE TABLE `season` (
 	`Year` SMALLINT(5) NOT NULL,
-	`IsActive` BIT(1) NOT NULL,
+	`IsActive` TINYINT(1) NOT NULL,
 	`SignUpDueDate` TIMESTAMP NOT NULL,
 	`StartDate` TIMESTAMP NOT NULL,
 	`SignUpExtraDueDate` TIMESTAMP NULL DEFAULT NULL,

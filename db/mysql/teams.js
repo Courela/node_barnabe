@@ -13,7 +13,10 @@ function getTeamById(id, callback) {
 }
 
 function getTeamSteps(season, teamId, callback) {
-    var q = " SELECT * FROM teamstep st " + 
+    var q = " SELECT st.Id, st.Season, st.TeamId, st.StepId, st.CreatedAt, st.LastUpdatedAt, " +
+            "        stp.Description, stp.Gender, " +
+            "        bsl.MinDate, bsl.MaxDate " +
+            " FROM teamstep st " + 
             "   INNER JOIN team t ON t.Id = st.TeamId AND t.Id = " + mysql.escape(teamId) + 
             "   INNER JOIN season s ON s.Year = st.Season AND s.Year = " + mysql.escape(season) + 
             "   INNER JOIN step stp ON stp.Id = st.StepId " +
