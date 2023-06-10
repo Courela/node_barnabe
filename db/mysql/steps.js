@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const adapter = require('../mysql');
 
 function insertMatch(season, stepId, phaseId, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals, callback) {
