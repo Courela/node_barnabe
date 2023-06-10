@@ -1,3 +1,4 @@
+START TRANSACTION;
 INSERT INTO `user` (`Username`, `Password`, `TeamId`) VALUES ('Admin', '$2b$10$q/h.cC/Ct3XC14Zm6BAXDOjzaAwyTf5kogrlJMT9MJvznGXd8FTYu', NULL);
 INSERT INTO `season` (`Year`, `IsActive`, `SignUpDueDate`, `StartDate`) VALUES (2017, b'0', '2017-09-01 00:00:00', '2017-09-20 00:00:00');
 INSERT INTO `season` (`Year`, `IsActive`, `SignUpDueDate`, `StartDate`) VALUES (2018, b'0', '2018-09-01 00:00:00', '2018-09-20 00:00:00');
@@ -41,3 +42,4 @@ INSERT INTO `birthsteplimit` (`Season`, `StepId`, `MinDate`, `MaxDate`) VALUES (
 INSERT INTO `birthsteplimit` (`Season`, `StepId`, `MinDate`, `MaxDate`) VALUES (2017, 3, '1970-01-01 00:00:01', '1999-11-20 23:59:59');
 INSERT INTO `birthsteplimit` (`Season`, `StepId`, `MinDate`, `MaxDate`) VALUES (2017, 2, '1999-11-21 00:00:00', '2004-11-20 23:59:59');
 INSERT INTO `birthsteplimit` (`Season`, `StepId`, `MinDate`, `MaxDate`) VALUES (2017, 1, '2004-11-21 00:00:00', '2008-11-20 23:59:59');
+COMMIT;
