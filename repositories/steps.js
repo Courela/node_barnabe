@@ -18,7 +18,7 @@ function insertMatch(season, stepId, phaseId, homeTeamId, awayTeamId, homeTeamGo
     });
 }
 
-function getMatches(season, stepId) {
+function getMatches(season, stepId, phaseId) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
@@ -28,7 +28,7 @@ function getMatches(season, stepId) {
                     reject(r);
                 }
             }
-            mysqlStorage.getMatches(season, stepId, fn);
+            mysqlStorage.getMatches(season, stepId, phaseId, fn);
         }
         catch(err) {
             reject(err);

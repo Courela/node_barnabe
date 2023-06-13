@@ -11,8 +11,8 @@ function insertMatch(season, stepId, phaseId, homeTeamId, awayTeamId, homeTeamGo
         });
 }
 
-function getMatches(season, stepId) {
-    return stepsRepo.getMatches(season, stepId)
+function getMatches(season, stepId, phaseId) {
+    return stepsRepo.getMatches(season, stepId, phaseId != 99 ? phaseId : null)
         .then((results) => results.recordset)
         .catch((err) => {
             //console.error(err);
@@ -33,8 +33,8 @@ function removeMatch(matchId, season, stepId) {
         });
     }
     
-    async function getStandings(season, stepId) {
-        var result = await stepsRepo.getMatches(season, stepId)
+    async function getStandings(season, stepId, phaseId) {
+        var result = await stepsRepo.getMatches(season, stepId, phaseId)
             .then(async (matches) => {
                 if (!matches || !matches.recordset) {
                     throw 'Unexpected error!';

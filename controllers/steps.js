@@ -2,11 +2,11 @@ const stepsMgr = require("../managers/steps");
 const errors = require('../errors');
 
 async function getStandings(req, res) {
-    const { season, stepId } = req.params;
+    const { season, stepId, phaseId } = req.params;
     var results;
-    if (season && stepId) {
+    if (season && stepId, phaseId) {
         try {
-            results = await stepsMgr.getStandings(season, stepId)
+            results = await stepsMgr.getStandings(season, stepId, phaseId)
         } catch(err) {
             errors.handleErrors(res, err);
             results = err;
@@ -18,11 +18,11 @@ async function getStandings(req, res) {
 }
 
 async function getMatches(req, res) {
-    const { season, stepId } = req.params;
+    const { season, stepId, phaseId } = req.params;
     var result;
-    if (season && stepId) {
+    if (season && stepId, phaseId) {
         try {
-            result = await stepsMgr.getMatches(season, stepId);
+            result = await stepsMgr.getMatches(season, stepId, phaseId);
         } catch (err) {
             errors.handleErrors(res, err);
             result = err;
@@ -40,7 +40,7 @@ async function addMatch(req, res) {
     var result;
     try {
         result = await stepsMgr.insertMatch(
-            parseInt(season, 10), 
+            parseInt(season, 10),
             parseInt(stepId, 10), 
             parseInt(phaseId, 10), 
             parseInt(homeTeamId, 10), 

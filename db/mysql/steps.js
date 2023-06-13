@@ -14,7 +14,7 @@ function insertMatch(season, stepId, phaseId, homeTeamId, awayTeamId, homeTeamGo
     adapter.query(q, callback);
 }
 
-function getMatches(season, stepId, callback) {
+function getMatches(season, stepId, phaseId, callback) {
     var q = " SELECT m.Id, m.Season, m.StepId, m.PhaseId, m.HomeTeamId, m.AwayTeamId, m.HomeTeamGoals, m.AwayTeamGoals, " +
             "   p.Name AS PhaseName, " +
             "   t1.ShortDescription AS HomeTeamName, t2.ShortDescription AS AwayTeamName " +
@@ -23,7 +23,8 @@ function getMatches(season, stepId, callback) {
             "   INNER JOIN team t1 ON t1.Id = m.HomeTeamId " +
             "   INNER JOIN team t2 ON t2.Id = m.AwayTeamId " + 
             " WHERE m.Season = " + mysql.escape(season) +
-            "   AND m.StepId = " + mysql.escape(stepId);
+            "   AND m.StepId = " + mysql.escape(stepId) +
+            "   AND m.PhaseId = COALESCE(" + mysql.escape(phaseId) + ",m.PhaseId)";
     adapter.query(q, callback);
 }
 
