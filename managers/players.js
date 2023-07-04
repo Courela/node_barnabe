@@ -15,7 +15,7 @@ const FILE_REGEX = /^data:(.+)\/(.+);base64,/;
 
 async function getPlayers(season, teamId, stepId, roles) {
     const teamSteps = await teamsMgr.getTeamSteps(season, teamId, false);
-    const step = teamSteps.find(s => s.Id === stepId);
+    const step = teamSteps.find(s => s.StepId === stepId);
     if (step) {
         return playersRepo.getPlayers(season, teamId, stepId, roles)
             .then((results) => {

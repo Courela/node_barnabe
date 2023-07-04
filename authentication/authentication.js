@@ -1,10 +1,8 @@
 const usersMgr = require('../managers/users');
-const bcrypt = require('bcrypt');
-
-var salt = "$"+process.env.SALT_VERSION+"$"+process.env.SALT_ROUNDS+"$"+process.env.SALT_VALUE;
+const utilsMgr = require('../managers/utils');
 
 async function authenticateUser(username, password) {
-    var hashPassword = await generatePasswordHash(password);
+    var hashPassword = await utilsMgr.generatePasswordHash(password);
     console.debug("Hash password for user '"+username+"': ", hashPassword);
     const user = await usersMgr.getUser(username, hashPassword)
     if (user != null) {
@@ -24,11 +22,6 @@ async function authenticateUser(username, password) {
     }
 }
 
-async function generatePasswordHash(password) {
-    return await bcrypt.hash(password, salt);
-}
-
 module.exports = {
     authenticateUser,
-    generatePasswordHash
 }

@@ -16,7 +16,12 @@ async function authorize() {
     }
     else {
         const fs = require('fs');
-        keysEnvVar = fs.readFileSync(DATA_FOLDER + 'tacabarnabe-1533670876618-cc2fe43f4084.json');
+        if (fs.existsSync(DATA_FOLDER + 'tacabarnabe-1533670876618-cc2fe43f4084.json')) {
+            keysEnvVar = fs.readFileSync(DATA_FOLDER + 'tacabarnabe-1533670876618-cc2fe43f4084.json');
+        } else {
+            console.error('No such file: ', DATA_FOLDER + 'tacabarnabe-1533670876618-cc2fe43f4084.json');
+            return null;
+        }
     }
     const keys = JSON.parse(keysEnvVar);
     //console.log(keys);

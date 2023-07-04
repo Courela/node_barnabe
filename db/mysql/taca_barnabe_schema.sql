@@ -26,7 +26,7 @@ CREATE TABLE `step` (
 	`Id` TINYINT(3) NOT NULL,
 	`Description` VARCHAR(50) NOT NULL COLLATE 'latin1_general_cs',
 	`Gender` CHAR(1) NOT NULL COLLATE 'latin1_general_cs',
-	`IsCaretakerRequired` BIT(1) NOT NULL,
+	`IsCaretakerRequired` TINYINT(1) NOT NULL,
 	PRIMARY KEY `PK_Step` (`Id`) USING BTREE
 )
 COLLATE='latin1_general_cs'

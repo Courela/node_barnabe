@@ -30,7 +30,7 @@ function ping(responseCallback) {
 }
 
 function getRoles(callback) {
-    var q = " SELECT * FROM role";
+    var q = " SELECT Id, Description FROM role";
     query(q, callback);
 }
 
@@ -40,12 +40,12 @@ function getSeasons(callback) {
 }
 
 function getSteps(callback) {
-    var q = " SELECT * FROM step";
+    var q = " SELECT Id, Description, Gender, IsCaretakerRequired FROM step";
     query(q, callback);
 }
 
 function getPhases(callback) {
-    var q = " SELECT * FROM `phase`";
+    var q = " SELECT Id, Name FROM `phase`";
     query(q, callback);
 }
 

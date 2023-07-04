@@ -2,6 +2,7 @@ const express = require('express');
 const teamsController = require('./controllers/teams');
 const stepsController = require('./controllers/steps');
 const playersController = require('./controllers/players');
+const usersController = require('./controllers/users');
 const utilsController = require('./controllers/utils');
 const exportController = require('./controllers/export');
 const templatesController = require('./controllers/templates');
@@ -31,7 +32,7 @@ function getApiRoutes() {
         .get('/persons', utilsController.getPerson)
         .get('/roles', utilsController.getRoles)
         .post('/authenticate', authenticate)
-        .post('/recoverPassword', utilsController.recoverPassword)
+        .post('/recoverPassword', usersController.recoverPassword)
         .post('/logout', logout)
         .get('/seasons/:season', utilsController.getSeason)
         .get('/seasons/:season/steps/:stepId', teamsController.getStep)
@@ -41,6 +42,7 @@ function getApiRoutes() {
         .get('/seasons/:season/steps/:stepId/standings/:phaseId', stepsController.getStandings)
         .get('/seasons/:season/teams/:teamId/sign-steps', teamsController.getSignSteps)
         .get('/seasons/:season/teams/:teamId/steps', teamsController.getTeamSteps)
+        .get('/seasons/:season/teams/:teamId/steps/:stepId', teamsController.getTeamStep)
         //.route('/season/:season/team/:teamId/step/:stepId/player')
         .get('/seasons/:season/teams/:teamId/steps/:stepId/players/:playerId', playersController.getPlayer)
         .get('/seasons/:season/teams/:teamId/steps/:stepId/players/:playerId/photo', playersController.getPhoto)
@@ -55,7 +57,8 @@ function getApiRoutes() {
         .delete('/seasons/:season/teams/:teamId/steps/:stepId/players/:playerId', playersController.removePlayer)
         .post('/seasons/:season/teams/:teamId/steps/:stepId/import-players', playersController.importPlayers)
         .put('/seasons/:season/teams/:teamId/steps', teamsController.addTeamStep)
-        .delete('/seasons/:season/teams/:teamId/steps/:stepId', teamsController.deleteTeamStep);
+        .delete('/seasons/:season/teams/:teamId/steps/:stepId', teamsController.deleteTeamStep)
+        .post('/user/:username', usersController.saveDetails);
 
     return apiRouter;
 }

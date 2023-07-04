@@ -36,9 +36,7 @@ function getTeamSteps(season, teamId, invert = false) {
         return teamsRepo.getTeamSteps(season, teamId, invert)
             .then((results) => {
                 //console.log("getTeamSteps manager: ", results);
-                return results.recordset.map(s => { 
-                    return Object.assign(s, {StepId: s.Id}); 
-                });
+                return results.recordset;
             })
             .catch((err) => {
                 console.error(err);
@@ -46,6 +44,22 @@ function getTeamSteps(season, teamId, invert = false) {
             });
     } else {
         return [];
+    }
+}
+
+function getTeamStep(season, teamId, teamStepId) {
+    if (teamStepId) {
+        return teamsRepo.getTeamStep(season, teamId, teamStepId)
+            .then((results) => {
+                // console.log("getTeamStep manager: ", results);
+                return results.recordset && results.recordset.length >= 1 ? results.recordset[0] : null;
+            })
+            .catch((err) => {
+                console.error(err);
+                throw 'Unexpected error!';
+            });
+    } else {
+        return null;
     }
 }
 
@@ -105,6 +119,7 @@ module.exports = {
     getTeams,
     getTeamById,
     getTeamSteps,
+    getTeamStep,
     deleteStep,
     getTeamsWithoutUser,
     getStepsWithoutPlayers

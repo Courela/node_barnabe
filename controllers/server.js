@@ -89,7 +89,7 @@ async function addUser(req, res) {
     if (username && password && teamId) {
         const exists = await usersMgr.existsUser(username);
         if (!exists) {
-            var hashPassword = generatePasswordHash(password);
+            var hashPassword = await utilsMgr.generatePasswordHash(password);
             await usersMgr.addUser(username, hashPassword, parseInt(teamId), email);
         }
         else {

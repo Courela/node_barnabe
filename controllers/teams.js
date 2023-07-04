@@ -1,5 +1,4 @@
 const teamsMgr = require('../managers/teams');
-const googleApi = require('../authentication/googleApi');
 
 async function getTeams(req, res) {
     const season = req.query.season;
@@ -56,11 +55,26 @@ async function getTeamSteps(req, res) {
     var season = parseInt(req.params.season, 10);
     var teamId = parseInt(req.params.teamId, 10);
     if (!isNaN(season) && !isNaN(teamId)) {
-           response = await teamsMgr.getTeamSteps(parseInt(req.params.season), parseInt(req.params.teamId));
+           response = await teamsMgr.getTeamSteps(season, teamId);
     }
     else {
         res.statusCode = 400;
     }
+    res.send(response);
+}
+
+async function getTeamStep(req, res) {
+    let response = '';
+    var season = parseInt(req.params.season, 10);
+    var teamId = parseInt(req.params.teamId, 10);
+    var teamStepId = parseInt(req.params.stepId, 10);
+    if (!isNaN(season) && !isNaN(teamId) && !isNaN(teamStepId)) {
+        response = await teamsMgr.getTeamStep(season, teamId, teamStepId);
+    }
+    else {
+        res.statusCode = 400;
+    }
+    console.log("getTeamStep controller response: ", response);
     res.send(response);
 }
 
@@ -77,14 +91,6 @@ async function addTeamStep(req, res) {
     else {
         res.statusCode = 400;
     }
-
-    // if (res.statusCode < 400) {
-    //     const folder = [season, teamId, stepId].join('_') + googleApi.FOLDER_EXTENSION;
-    //     googleApi.saveFile(null, folder);
-    // }
-    // //TODO Remove when saving data handled properly
-    // googleApi.saveData();
-
     res.send();
 }
 
@@ -101,10 +107,6 @@ async function deleteTeamStep(req, res) {
     else {
         res.statusCode = 400;
     }
-
-    //TODO Remove when saving data handled properly
-    //googleApi.saveData((result) => console.log(result));
-
     res.send();
 }
 
@@ -114,6 +116,7 @@ module.exports = {
     getStep,
     getSignSteps,
     getTeamSteps,
+    getTeamStep,
     addTeamStep,
     deleteTeamStep
 }
