@@ -1,4 +1,5 @@
 const teamsMgr = require('./teams');
+const utilsMgr = require('../managers/utils');
 const usersRepo = require('../repositories/users');
 
 function getUsers() {
@@ -107,6 +108,17 @@ function savePassword(username, password) {
         });
 }
 
+async function saveDetails(username, password, email) {
+    var passHash = password ? await utilsMgr.generatePasswordHash(password) : null;
+    try {
+        var result = await usersRepo.saveDetails(username, passHash, email);
+        return result.recordset[0] ? result.recordset[0] : null;
+    } catch(err) {
+        console.log(err);
+        throw 'Unexpected error!';
+    };
+}
+
 module.exports = {
     getUsers,
     addUser,
@@ -115,5 +127,6 @@ module.exports = {
     getUser,
     getUsersCount,
     getUserByEmail,
-    savePassword
+    savePassword,
+    saveDetails
 }

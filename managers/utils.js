@@ -1,10 +1,16 @@
-const sgMail = require('@sendgrid/mail')
+const bcrypt = require('bcrypt');
 const generator = require('generate-password');
-const authentication = require('../authentication/authentication');
-const utilsRepo = require('../repositories/utils');
+const sgMail = require('@sendgrid/mail');
 const usersMgr = require('./users');
+const utilsRepo = require('../repositories/utils');
 
-sgMail.setApiKey(process.env.SENDGRID_APIKEY)
+sgMail.setApiKey(process.env.SENDGRID_APIKEY);
+
+var salt = "$"+process.env.SALT_VERSION+"$"+process.env.SALT_ROUNDS+"$"+process.env.SALT_VALUE;
+
+async function generatePasswordHash(password) {
+    return await bcrypt.hash(password, salt);
+}
 
 function getRoles() {
     return utilsRepo.getRoles()
@@ -77,7 +83,7 @@ function recoverPassword(email) {
                         console.log("Send email status code:", response[0].statusCode);
                         //console.log(response[0].headers);
 
-                        authentication.generatePasswordHash(password)
+                        generatePasswordHash(password)
                             .then((hash) => {
                                 console.log("New hash for user: ", u.Username, hash);
                                 usersMgr.savePassword(u.Username, hash);
@@ -102,6 +108,7 @@ function recoverPassword(email) {
 }
 
 module.exports = {
+    generatePasswordHash,
     getRoles,
     getSeasons,
     getSteps,

@@ -13,7 +13,7 @@ function existsUser(username, callback) {
 }
 
 function getUser(username, password, callback) {
-    var q = " SELECT * FROM user " + 
+    var q = " SELECT Username, Email, TeamId, CreatedAt FROM user " + 
             " WHERE Username = " + mysql.escape(username) +
             "   AND Password = " + mysql.escape(password);
     adapter.query(q, callback);
@@ -54,6 +54,14 @@ function savePassword(username, password, callback) {
     adapter.query(q, callback);
 }
 
+function saveDetails(username, password, email, callback) {
+    var q = " UPDATE user " +
+            " SET Email = " + mysql.escape(email) +
+            (password ? ",Password = " + mysql.escape(password) : " ") +
+            " WHERE Username = " + mysql.escape(username);
+    adapter.query(q, callback);
+}
+
 module.exports = {
     getUsers,
     existsUser,
@@ -62,5 +70,6 @@ module.exports = {
     getUserById,
     getUsersCount,
     getUserByEmail,
-    savePassword
+    savePassword,
+    saveDetails
 }

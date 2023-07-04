@@ -121,6 +121,22 @@ function savePassword(username, password) {
     });
 }
 
+function saveDetails(username, password, email) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                // console.log("saveDetails response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.saveDetails(username, password, email, fn);
+        }
+        catch(err) {
+            // console.log("Rejected!");
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     getUsers,
     addUser,
@@ -129,5 +145,6 @@ module.exports = {
     getUser,
     getUsersCount,
     getUserByEmail,
-    savePassword
+    savePassword,
+    saveDetails
 }
