@@ -40,7 +40,7 @@ function addPerson (name, gender, birthdate, idCardNr, voterNr, phone, email, is
     return personRepo.addPerson(
             stringLimit(name, validations.NAME_MAX_LENGTH), 
             gender,
-            birthdate, 
+            birthdate ? new Date(birthdate) : birthdate, 
             stringLimit(idCardNr, validations.DOC_ID_MAX_LENGTH), 
             stringLimit(voterNr, validations.VOTER_NR_MAX_LENGTH),
             stringLimit(phone, validations.PHONE_MAX_LENGTH),
