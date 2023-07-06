@@ -107,8 +107,15 @@ function getPhoto(playerId, callback) {
     adapter.query(q, callback);
 }
 
-function getDocument(playerId, callback) {
+function getDocumentFilename(playerId, callback) {
     var q = " SELECT p.DocFilename " +
+            " FROM player p " + 
+            " WHERE p.Id = " + mysql.escape(playerId);
+    adapter.query(q, callback);
+}
+
+function getDocument(playerId, callback) {
+    var q = " SELECT p.Doc " +
             " FROM player p " + 
             " WHERE p.Id = " + mysql.escape(playerId);
     adapter.query(q, callback);
@@ -132,6 +139,7 @@ module.exports = {
     addPhoto,
     addDocument,
     getPhoto,
+    getDocumentFilename,
     getDocument,
     getPlayersCount
 }

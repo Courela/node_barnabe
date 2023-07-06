@@ -1,16 +1,13 @@
-//const atob = require('atob');
 const btoa = require('btoa');
 const fs = require('fs');
 
 const playersRepo = require('../repositories/players');
 const teamsMgr = require('../managers/teams');
 const personMgr = require('../managers/person');
-//const teamsMgr = require('../managers/teams');
 const googleApi = require('../authentication/googleApi');
 const validations = require('../utils/validations');
 const { stringLimit } = validations;
 
-// const STORAGE_FOLDER = './data/storage/';
 const FILE_REGEX = /^data:(.+)\/(.+);base64,/;
 
 async function getPlayers(season, teamId, stepId, roles) {
@@ -18,9 +15,7 @@ async function getPlayers(season, teamId, stepId, roles) {
     const step = teamSteps.find(s => s.StepId === stepId);
     if (step) {
         return playersRepo.getPlayers(season, teamId, stepId, roles)
-            .then((results) => {
-                //console.log("getPlayers manager: ", results);
-                
+            .then((results) => {                
                 return results.recordset.map((v) => {
                     delete v.Photo;
                     delete v.Doc;
@@ -53,16 +48,8 @@ function getPlayer(season, teamId, stepId, playerId) {
                     if (!fs.existsSync(docPath)) {
                         console.warn('Missing file: ', player.DocFilename);
                         console.log('Getting file ' + player.DocFilename);
-                        //player.DocFilename = null;
                     }
                 }
-
-                // if (player.Photo) {
-                //     player.Photo = btoa(player.Photo);
-                // }
-                // if (player.Doc) {
-                //     player.Doc = btoa(player.Doc);
-                // }
 
                 delete player.Photo;
                 delete player.Doc;
@@ -122,9 +109,7 @@ async function addPlayer(teamId, stepId, season, person, roleId, caretaker, comm
                     addPhoto(season, teamId, stepId, playerId, photo);
                 }
                 if (doc) {
-                    const filename = savePlayerDoc(doc, season, teamId, stepId, playerId);
-                    playersRepo.addDocument(playerId, filename);
-                    //addDocument(season, teamId, stepId, playerId, doc);
+                    addDocument(season, teamId, stepId, playerId, doc);
                 }
                 return playerId;
             }
@@ -190,8 +175,7 @@ async function updatePlayer(teamId, stepId, season, playerId, person, roleId, ca
         }
         if (doc) {
             const filename = savePlayerDoc(doc, season, teamId, stepId, playerId);
-            playersRepo.addDocument(playerId, filename);
-            //addDocument(season, teamId, stepId, playerId, doc);
+            playersRepo.addDocument(playerId, filename, doc);
         }
     }
     catch (err) {
@@ -284,11 +268,7 @@ function getFileExtension(doc) {
 function saveFile(filename, doc) {
     return new Promise((resolve, reject) => {
         try {
-            //const folder = [season, teamId, stepId].join('_');
             saveBuffer(filename, doc);
-            googleApi.saveFile(googleApi.STORAGE_FOLDER, filename, () => {
-                console.log("File " + filename + " saved.");
-            });
         } catch(err) {
             reject(err);
         }
@@ -314,7 +294,6 @@ function saveRawFile(filename, data) {
 function getDocumentFilename(playerId) {
     return playersRepo.getDocumentFilename(playerId)
         .then(r => { 
-            // console.log("playerMgr.getDocumentFilename: ", r);
             if (r.recordset.DocFilename) {
                 return r.recordset.DocFilename;
             }
@@ -326,42 +305,22 @@ function getDocumentFilename(playerId) {
         });
 }
 
-function getDocument(folder, filename) {
-    var docPath = googleApi.STORAGE_FOLDER + filename;
-    const mimeType = googleApi.getMimeType(filename);
-
-    let result = { Src: null, ExistsLocally: fs.existsSync(docPath) };
-    if (result.ExistsLocally) {
-        result.Src = "data:" + mimeType + ";base64," + btoa(fs.readFileSync(docPath));
-    }
-    else {
-        console.warn('Missing file: ', filename);
-        //TODO Remove when saving data handled properly
-        console.log('Restoring document '+ filename +'...');
-
-        googleApi.getFile(filename, mimeType, true, (data) => saveRawFile(filename, data));
-        result.Src = '/show_loader.gif';
-    }
-    //console.log('Photo: ' + photo.length);
-    return result;
+function getDocument(playerId) {
+    return playersRepo.getDocument(playerId)
+        .then(r => {
+            if (r.recordset && r.recordset.Doc) {
+                return btoa(r.recordset.Doc);
+            }
+            if (r.recordset && r.recordset.DocFilename) {
+                return "";
+            }
+            return null;
+        })
+        .catch((err) => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
 }
-
-// function getDocument(playerId) {
-//     return playersRepo.getDocument(playerId)
-//         .then(r => { 
-//             // if (r.recordset.Doc) {
-//             //     return btoa(r.recordset.Doc);
-//             // }
-//             if (r.recordset.DocFilename) {
-                
-//             }
-//             return null;
-//         })
-//         .catch((err) => {
-//             console.error(err);
-//             throw 'Unexpected error!';
-//         });
-// }
 
 module.exports = {
     addPlayer,

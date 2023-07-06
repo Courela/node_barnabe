@@ -1,12 +1,10 @@
 const errors = require('../errors');
-// const { settings: serverSettings } = require('../serverSettings')
 const playersMgr = require('../managers/players');
 const { isValidGender, isValidEmail, isValidPhone, isValidDate } = require('../utils/validations');
 
 async function getTeamPlayers(req, res) {
     let response = '';
     try {
-        //console.log('Route params: ', req.params);
         const { season, teamId, stepId } = req.params;
         if (season && teamId && stepId) {
             response = await playersMgr.getPlayers(
@@ -32,7 +30,6 @@ async function getTeamPlayers(req, res) {
 async function getStaff(req, res) {
     let response = '';
     try {
-        //console.log('Route params: ', req.params);
         const { season, teamId, stepId } = req.params;
         if (season && teamId && stepId) {
             response = await playersMgr.getPlayers(
@@ -53,13 +50,11 @@ async function getStaff(req, res) {
 }
 
 async function getPlayer(req, res) {
-    //console.log('GetPlayer: ', req.params);
     let response = '';
     try {
         const { teamId, stepId, season, playerId } = req.params;
         if (teamId && stepId && season && playerId) {
             response = await playersMgr.getPlayer(parseInt(season), parseInt(teamId), parseInt(stepId), parseInt(playerId));
-            //console.log(response);
             if (!response) { res.statusCode = 404 }
         } else {
             res.statusCode = 400;
@@ -94,11 +89,9 @@ async function addPlayer(req, res) {
             );
             if (playerId > 0) {
                 res.statusCode = 201;
-                //console.log('PlayerId: ' + playerId);
                 response = { Id: playerId };
             } else {
                 const result = Math.abs(playerId);
-                //console.log('Status code result: ' + result);
                 res.statusCode = result;
             }
         } else {
@@ -111,14 +104,10 @@ async function addPlayer(req, res) {
         response = err;
     }
 
-    //TODO Remove when saving data handled properly
-    //googleApi.saveData();
-
     res.send(response);
 }
 
 async function updatePlayer(req, res) {
-    // res.setTimeout(settings.PLAYER_RESPONSE_TIMEOUT);
     let response = '';
     try {
         const { teamId, stepId, season, playerId } = req.params;
@@ -140,11 +129,9 @@ async function updatePlayer(req, res) {
             );
             if (playerId > 0) {
                 res.statusCode = 200;
-                //console.log('PlayerId: ' + playerId);
                 response = { Id: playerId };
             } else {
                 const result = Math.abs(playerId);
-                //console.log('Status code result: ' + result);
                 res.statusCode = result;
             }
         } else {
@@ -156,9 +143,6 @@ async function updatePlayer(req, res) {
         errors.handleErrors(res, err);
         response = err;
     }
-    
-    //TODO Remove when saving data handled properly
-    //googleApi.saveData();
 
     res.send(response);
 }
@@ -176,9 +160,6 @@ async function removePlayer(req, res) {
     else {
         res.statusCode = 400;
     }
-
-    //TODO Remove when saving data handled properly
-    //googleApi.saveData((result) => res.json(result));
 
     res.send();
 }
@@ -202,14 +183,6 @@ async function importPlayers(req, res) {
     else {
         res.statusCode = 400;
     }
-
-    //console.log('Imported players: ', count);
-    //TODO Remove when saving data handled properly
-    // googleApi.saveData((result) => {
-    //     console.log(result); 
-    //     res.json({ imported: count, save: result }); 
-    //     res.send();
-    // });
     
     res.send();
 }
@@ -220,7 +193,6 @@ async function getPhoto(req, res) {
         const { playerId } = req.params;
         if (playerId) {
             response = await playersMgr.getPhoto(parseInt(playerId));
-            //console.log(response);
             if (!response) { res.statusCode = 404 }
         } else {
             res.statusCode = 400;
@@ -234,17 +206,13 @@ async function getPhoto(req, res) {
 }
 
 async function getDocument(req, res) {
-    // res.setTimeout(settings.PLAYER_RESPONSE_TIMEOUT);
     let response = '';
     try {
         const { playerId } = req.params;
         if (playerId) {
-            const iPlayerId = parseInt(playerId);
-            const filename = await playersMgr.getDocumentFilename(iPlayerId);
-            const folder = filename.split('_', 3).join('_');
-            response = await playersMgr.getDocument(folder, filename);
-            //console.log(response);
-            if (!response) { res.statusCode = 404 }
+            const iPlayerId = parseInt(playerId);            
+            response = await playersMgr.getDocument(iPlayerId);
+            if (!response) { res.statusCode = 204 }
         } else {
             res.statusCode = 400;
         }

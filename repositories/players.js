@@ -127,7 +127,7 @@ function addDocument(playerId, filename, doc) {
             var fn = function(r) {
                 resolve(r);
             }
-            mysqlStorage.addDocument(playerId, filename, null, fn);
+            mysqlStorage.addDocument(playerId, filename, doc, fn);
         }
         catch(err) {
             reject(err);
@@ -155,6 +155,20 @@ function getDocumentFilename(playerId) {
             var fn = function(r) {
                 resolve({ recordset: r[0], rowsAffected: [r.length] });
             }
+            mysqlStorage.getDocumentFilename(playerId, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
+function getDocument(playerId) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                resolve({ recordset: r[0], rowsAffected: [r.length] });
+            }
             mysqlStorage.getDocument(playerId, fn);
         }
         catch(err) {
@@ -174,5 +188,6 @@ module.exports = {
     addPhoto,
     addDocument,
     getPhoto,
-    getDocumentFilename
+    getDocumentFilename,
+    getDocument
 }
