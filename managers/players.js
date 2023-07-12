@@ -34,7 +34,7 @@ async function getPlayers(season, teamId, stepId, roles) {
             });
     }
     else {
-        return Promise.resolve(null);
+        return null;
     }
 }
 
