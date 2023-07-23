@@ -3,7 +3,6 @@ const btoa = require('btoa');
 const path = require('path');
 const pug = require('pug');
 const puppeteer = require('puppeteer');
-const { settings: serverSettings } = require('../serverSettings');
 const playersMgr = require('../managers/players');
 const teamsMgr = require('../managers/teams');
 const errors = require('../errors');
@@ -46,7 +45,6 @@ async function getTeamDataForTemplate(season, teamId, stepId) {
 
     var teamLogoFilename = getTeamLogoFilename(parseInt(teamId));
     const basePath = path.join(__dirname, '..', 'public' + path.sep);
-    //console.log('Base path: ', basePath);
     var teamLogo = fs.readFileSync(basePath + teamLogoFilename);
     var logo = fs.readFileSync(basePath + 'logo.png');
 
@@ -63,7 +61,6 @@ async function getTeamDataForTemplate(season, teamId, stepId) {
 }
 
 function isLocal(player) {
-    //console.log('Row:',row);
     const { Person, Caretaker } = player;
     const result = Person.LocalBorn || player.Resident || (Caretaker && Caretaker.VoterNr) ? true : (Person.VoterNr ? true : false);
     return result;
@@ -81,7 +78,6 @@ async function gameTemplate(req, res) {
         
         try {
             const html = parseTemplate(data, './views/game_sheet.pug');
-            //console.log('Base path: ', basePath);
             const src = await getPdf(html);
             
             res.send({ src: src });
@@ -216,20 +212,13 @@ function getTeamLogoFilename(teamId) {
 }
    
 async function getPdf(data) {
-    var browserFetcher = new puppeteer.BrowserFetcher({
-        path: '/tmp'
-    });
-    let revisionInfo = await browserFetcher.download(serverSettings.CHROMIUM_REVISION);
-
     const browser = await puppeteer.launch(
       {
         headless: true,
-        executablePath: revisionInfo.executablePath,
         args: ['--no-sandbox', "--disabled-setupid-sandbox"]
       }
     );
 
-    // const browser = await puppeteer.launch({ headless: true, args: [ '--no-sandbox' ] });     // run browser
     const page = await browser.newPage();         // create new tab
     await page.setContent(data);
     var teamPdf = await page.pdf({ format: 'A4', landscape: true });           // generate pdf and save it in page.pdf file
