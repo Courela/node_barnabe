@@ -66,6 +66,15 @@ function getTeamsByStep(season, stepId, callback) {
     adapter.query(q, callback);
 }
 
+function addTeam(name, shortDescription, callback) {
+    var q = " INSERT INTO team (Id, Name, ShortDescription) " + 
+            " SELECT MAX(Id) + 1, " + 
+                        mysql.escape(name) + "," +
+                        mysql.escape(shortDescription) + 
+            " FROM team ";
+    adapter.query(q, callback);
+}
+
 function addStep(season, teamId, stepId, callback) {
     var q = " INSERT INTO teamstep (TeamId, StepId, Season, CreatedAt) " + 
             " VALUES (" + mysql.escape(teamId) + "," +
@@ -120,6 +129,7 @@ module.exports = {
     getTeamMissingSteps,
     getTeamsBySeason,
     getTeamsByStep,
+    addTeam,
     addStep,
     deleteStep,
     getStepById,

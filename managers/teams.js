@@ -75,6 +75,16 @@ function getStep(stepId, season = null) {
         });
 }
 
+function addTeam(name, shortDescription) {
+    return teamsRepo.addTeam(name, shortDescription)
+        .then(result => result.rowsAffected[0])
+        .catch((err) => {
+            console.error(err);
+            const res = err.name == 'RequestError' ? 0 : -1;
+            return res;
+        });
+}
+
 function addStep(season, teamId, stepId) {
     return teamsRepo.addStep(season, teamId, stepId)
         .then(result => result.rowsAffected[0])
@@ -114,6 +124,7 @@ function getStepsWithoutPlayers(year) {
 }
 
 module.exports = {
+    addTeam,
     getStep,
     addStep,
     getTeams,

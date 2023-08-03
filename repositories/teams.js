@@ -34,6 +34,21 @@ function getTeamStep(season, teamId, teamStepId) {
     });
 }
 
+function addTeam(name, shortDescription) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                //console.log("addStep response:", r);
+                resolve({ rowsAffected: [r.affectedRows] });
+            }
+            adapter.addTeam(name, shortDescription, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 function addStep(season, teamId, stepId) {
     return new Promise((resolve, reject) => {
         try {
@@ -178,6 +193,7 @@ function getStepsWithoutPlayers(year) {
 }
 
 module.exports = {
+    addTeam,
     addStep,
     getStep,
     getTeams,

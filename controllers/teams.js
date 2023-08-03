@@ -78,6 +78,20 @@ async function getTeamStep(req, res) {
     res.send(response);
 }
 
+async function addTeam(req, res) {
+    const name = req.body.name;
+    const shortDescription = req.body.shortDescription;
+
+    if (name && shortDescription) {
+        const affectedRows = await teamsMgr.addTeam(name, shortDescription)
+            .catch(() => -1);
+        res.statusCode = affectedRows > 0 ? 201 : affectedRows < 0 ? 500 : 409;
+    } else {
+        res.statusCode = 400;
+    }
+    res.send();
+}
+
 async function addTeamStep(req, res) {
     const season = req.params.season;
     const teamId = req.params.teamId;
@@ -111,6 +125,7 @@ async function deleteTeamStep(req, res) {
 }
 
 module.exports = {
+    addTeam,
     getTeam,
     getTeams,
     getStep,
