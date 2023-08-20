@@ -230,7 +230,16 @@ async function getPdf(data) {
     const page = await browser.newPage();         // create new tab
     await page.setContent(data);
     // console.log('Controller templates: ', fs.existsSync('./views/stylesheets/style.css'));
-    await page.addStyleTag({path: './views/stylesheets/style.css'});
+    //await page.addStyleTag({path: './views/stylesheets/style.css'});
+    await page.evaluateOnNewDocument(()=>{
+        var style = document.createElement('style');
+        style.type = 'text/css';
+        style.innerHTML = 'table{border-collapse: collapse;} ' +
+            'table, th, td {border: 1px solid black;} ' +
+            'td.square {width: 30px;} ' +
+            '.bold {font-weight: bold;}'; //'.body{background: red}'; // the css content goes here
+        document.getElementsByTagName('head')[0].appendChild(style);
+      });
     var teamPdf = await page.pdf({ format: 'A4', landscape: true });           // generate pdf and save it in page.pdf file
     browser.close();                        // close browser
     
