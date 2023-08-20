@@ -229,14 +229,8 @@ async function getPdf(data) {
     // const browser = await puppeteer.launch({ headless: true, args: [ '--no-sandbox' ] });     // run browser
     const page = await browser.newPage();         // create new tab
     await page.setContent(data);
-    console.log('Controller templates: ', fs.existsSync('./stylesheets/style.css'));
-    // await page.addStyleTag({path: './stylesheets/style.css'});
-    console.log('Controller templates: ', fs.existsSync('./views/stylesheets/style.css'));
-    // await page.addStyleTag({path: './views/stylesheets/style.css'});
-    console.log('Controller templates: ', fs.existsSync('../stylesheets/style.css'));
-    // await page.addStyleTag({path: '../stylesheets/style.css'});
-    console.log('Controller templates: ', fs.existsSync('../views/stylesheets/style.css'));
-    // await page.addStyleTag({path: '../views/stylesheets/style.css'});
+    // console.log('Controller templates: ', fs.existsSync('./views/stylesheets/style.css'));
+    await page.addStyleTag({path: './views/stylesheets/style.css'});
     var teamPdf = await page.pdf({ format: 'A4', landscape: true });           // generate pdf and save it in page.pdf file
     browser.close();                        // close browser
     
