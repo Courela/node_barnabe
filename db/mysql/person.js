@@ -33,7 +33,7 @@ function updatePerson(id, name, gender, birthdate, idCardNr, voterNr, phone, ema
     var q = " UPDATE person " +
             " SET Name = " + mysql.escape(name) + "," +
             "     Gender = " + mysql.escape(gender) + "," +
-            "     Birthdate = "+ mysql.escape(birthdate) + "," +
+            "     Birthdate = "+ (birthdate ? mysql.escape(birthdate) : 'Birthdate' ) + "," +
             "     IdCardNr = " + mysql.escape(idCardNr) + "," +
             "     VoterNr = " + mysql.escape(voterNr) + "," +
             "     Phone = " + mysql.escape(phone) + "," +
