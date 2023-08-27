@@ -252,10 +252,10 @@ async function getPdf(data) {
         format: 'A4',
         landscape: true,
         margin: {
-            top: 20,
-            bottom: 20,
-            left: 20,
-            right: 20,
+            top: 18,
+            bottom: 18,
+            left: 18,
+            right: 18,
         } });           // generate pdf and save it in page.pdf file
     browser.close();                        // close browser
     
