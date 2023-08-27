@@ -1,66 +1,52 @@
 html
     head
         //- link(rel='stylesheet', href='stylesheets/style.css', type='text/css')
+        style(type='text/css').
+            .bl {
+                background-color: '#000000';
+            }
+
+            .full-width {
+                width: '1050px'
+            }
         link(rel='stylesheet', href='./stylesheets/style.css', type='text/css')
         title= title
     body
-        table(style={ "border": "1px solid black", "border-collapse": "collapse", "width": "785px"})
-            thead
+        table(style={ "border": "1px solid black", "border-collapse": "collapse", 'width': '1050px'})
+            thead(class='bl')
                 tr
-                    th(colspan="26" style={ "border": "1px solid black", 'font-size': '10px', "color": "#FFF", "background-color": "#000" })
-                        div(style={"display": "inline" }) EVOLUÇÃO DO RESULTADO
-                        div(style={"display" : "inline", "margin-left": "20px" }) EVOLUÇÃO DO RESULTADO
+                    th(colspan="26" style={ "border": "1px solid black", 'font-size': '16px' })
+                        div(style={"display": "inline", "color": "ffffff", "background-color": "000000" }) EVOLUÇÃO DO RESULTADO
+                        div(style={"display" : "inline", "color": "white", "background-color": "black", "margin-left": "20px" }) EVOLUÇÃO DO RESULTADO
             tbody
                 tr
                     td(colspan="2" style={ "border": "1px solid black"})
-                    td(colspan="24" style={ "border": "1px solid black", "text-align": "center", 'font-size': '10px' }) GOLOS
+                    td(colspan="24" style={ "border": "1px solid black", "text-align": "center", 'font-size': '16px' }) GOLOS
                 tr
-                    td(colspan="2" style={"border": "1px solid black", "font-size": "11px"}) EQUIPA
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 1º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 2º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 3º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 4º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 5º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 6º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 7º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 8º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 9º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 10º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 11º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 12º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 13º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 14º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 15º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 16º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 17º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 18º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 19º
-                    td(style={ "border": "1px solid black", "font-size": "10px", "width": '32px'}) 20º
+                    td(colspan="2" style={"border": "1px solid black", "font-size": "15px"}) EQUIPA
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 1º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 2º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 3º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 4º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 5º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 6º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 7º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 8º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 9º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 10º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 11º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 12º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 13º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 14º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 15º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 16º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 17º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 18º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 19º
+                    td(style={ "border": "1px solid black", "font-size": "14px", "width": '43px', 'text-align': 'center' }) 20º
                 tr
-                    td(rowspan="2" style={ "border": "1px solid black", "font-size": "11px"}) CASA
-                    td(style={ "border": "1px solid black", "font-size": "11px", "height": "21px"}) Nº
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                    td(style={ "border": "1px solid black"})
-                tr
-                    td(style={ "border": "1px solid black", "font-size": "11px", "height": "21px"}) Min.
+                    td(rowspan="2" style={ "border": "1px solid black", "font-size": "14px"}) CASA
+                    td(style={ "border": "1px solid black", "font-size": "15px", "height": "21px"}) Nº
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
@@ -82,8 +68,7 @@ html
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
                 tr
-                    td(rowspan="2" style={ "border": "1px solid black", "font-size": "10px"}) FORA
-                    td(style={ "border": "1px solid black", "font-size": "10px", "height": "21px"}) Nº
+                    td(style={ "border": "1px solid black", "font-size": "14px", "height": "21px"}) Min.
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
@@ -105,7 +90,8 @@ html
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
                 tr
-                    td(style={ "border": "1px solid black", "font-size": "10px", "height": "21px"}) Min.
+                    td(rowspan="2" style={ "border": "1px solid black", "font-size": "14px"}) FORA
+                    td(style={ "border": "1px solid black", "font-size": "14px", "height": "21px"}) Nº
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
@@ -126,52 +112,74 @@ html
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
-        table(style={ "border":"1px solid black", "border-collapse":"collapse", "width": "785px" })
+                tr
+                    td(style={ "border": "1px solid black", "font-size": "14px", "height": "21px"}) Min.
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+                    td(style={ "border": "1px solid black"})
+        table(style={ "border":"1px solid black", "border-collapse":"collapse", "width": "1050px" })
             thead
                 tr
-                    th(colspan="25" style={ "border": "1px solid black", "color": "#FFF", "background-color": "#000" })
-                        div(style={ "display": "inline", "font-size": "10px" }) DISCIPLINA
-                        div(style={ "display": "inline", "font-size": "10px", "margin-left": "20px" }) DISCIPLINA
-                        div(style={ "display": "inline", "font-size": "10px", "margin-left": "20px" }) DISCIPLINA
-                        div(style={ "display": "inline", "font-size": "10px", "margin-left": "20px" }) DISCIPLINA
+                    th(colspan="25" style={ "border": "1px solid black", "color": "#FFFFFF", "background-color": "#000000" })
+                        div(style={ "display": "inline", "font-size": "16px" }) DISCIPLINA
+                        div(style={ "display": "inline", "font-size": "16px", "margin-left": "20px" }) DISCIPLINA
+                        div(style={ "display": "inline", "font-size": "16px", "margin-left": "20px" }) DISCIPLINA
+                        div(style={ "display": "inline", "font-size": "16px", "margin-left": "20px" }) DISCIPLINA
             tbody
                 tr
-                    td(rowspan="2" style={ "border": "1px solid black", "font-size": "10px"}) CARTÕES
-                    td(colspan="3" style={ "border": "1px solid black", "font-size": "10px", "text-align": "center" }) 1º cartão
-                    td(colspan="3" style={ "border": "1px solid black", "font-size": "10px", "text-align": "center" }) 2º cartão
-                    td(colspan="3" style={ "border": "1px solid black", "font-size": "10px", "text-align": "center" }) 3º cartão
-                    td(colspan="3" style={ "border": "1px solid black", "font-size": "10px", "text-align": "center" }) 4º cartão
-                    td(colspan="3" style={ "border": "1px solid black", "font-size": "10px", "text-align": "center" }) 5º cartão
-                    td(colspan="3" style={ "border": "1px solid black", "font-size": "10px", "text-align": "center" }) 6º cartão
-                    td(colspan="3" style={ "border": "1px solid black", "font-size": "10px", "text-align": "center" }) 7º cartão
-                    td(colspan="3" style={ "border": "1px solid black", "font-size": "10px", "text-align": "center" }) 8º cartão
+                    td(rowspan="2" style={ "border": "1px solid black", "font-size": "15px"}) CARTÕES
+                    td(colspan="3" style={ "border": "1px solid black", "font-size": "14px", "text-align": "center" }) 1º cartão
+                    td(colspan="3" style={ "border": "1px solid black", "font-size": "14px", "text-align": "center" }) 2º cartão
+                    td(colspan="3" style={ "border": "1px solid black", "font-size": "14px", "text-align": "center" }) 3º cartão
+                    td(colspan="3" style={ "border": "1px solid black", "font-size": "14px", "text-align": "center" }) 4º cartão
+                    td(colspan="3" style={ "border": "1px solid black", "font-size": "14px", "text-align": "center" }) 5º cartão
+                    td(colspan="3" style={ "border": "1px solid black", "font-size": "14px", "text-align": "center" }) 6º cartão
+                    td(colspan="3" style={ "border": "1px solid black", "font-size": "14px", "text-align": "center" }) 7º cartão
+                    td(colspan="3" style={ "border": "1px solid black", "font-size": "14px", "text-align": "center" }) 8º cartão
                 tr
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Nº
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Min.
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '22px'}) Cor
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Nº
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Min.
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '22px'}) Cor
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Nº
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Min.
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '22px'}) Cor
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Nº
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Min.
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '22px'}) Cor
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Nº
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Min.
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '22px'}) Cor
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Nº
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Min.
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '22px'}) Cor
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Nº
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Min.
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '22px'}) Cor
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Nº
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '30px'}) Min.
-                    td(style={ "border": "1px solid black", "font-size": "8px", "width": '22px'}) Cor
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Nº
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Min.
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '33px'}) Cor
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Nº
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Min.
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '33px'}) Cor
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Nº
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Min.
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '33px'}) Cor
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Nº
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Min.
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '33px'}) Cor
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Nº
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Min.
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '33px'}) Cor
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Nº
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Min.
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '33px'}) Cor
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Nº
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Min.
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '33px'}) Cor
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Nº
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '41px'}) Min.
+                    td(style={ "border": "1px solid black", "font-size": "12px", "width": '33px'}) Cor
                 tr
-                    td(style={ "border": "1px solid black", "font-size": "11px", "height": "21px"}) CASA
+                    td(style={ "border": "1px solid black", "font-size": "15px", "height": "21px"}) CASA
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
@@ -197,7 +205,7 @@ html
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
                 tr
-                    td(style={ "border": "1px solid black", "font-size": "11px", "height": "21px"}) FORA
+                    td(style={ "border": "1px solid black", "font-size": "15px", "height": "21px"}) FORA
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
@@ -222,274 +230,274 @@ html
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
                     td(style={ "border": "1px solid black"})
-        table(style={ "border": "1px solid black", "border-collapse": "collapse", "width": "785px" })
+        table(style={ "border": "1px solid black", "border-collapse": "collapse", "width": "1050px" })
             tr
-                th(style={ "border": "1px solid black", "font-size": "10px", "color": "#FFF", "background-color": "#000"}) COMENTÁRIO AO JOGO
+                th(style={ "border": "1px solid black", "font-size": "16px", "color": "#FFFFFF", "background-color": "#000000"}) COMENTÁRIO AO JOGO
             tr
-                td(style={ "border": "1px solid black", "height": "18px" })
+                td(style={ "border": "1px solid black", "height": "29px" })
             tr
-                td(style={ "border": "1px solid black", "height": "18px" })
-        table(style={ "border": "1px solid black", "border-collapse": "collapse", "width": "785px" })
+                td(style={ "border": "1px solid black", "height": "29px" })
+        table(style={ "border": "1px solid black", "border-collapse": "collapse", "width": "1050px" })
             tr
-                th(style={ "border": "1px solid black", "font-size": "10px", "color": "#FFF", "background-color": "#000"}) RELATÓRIO DO DELEGADO DA EQUIPA VISITADA
+                th(style={ "border": "1px solid black", "font-size": "16px", "color": "#FFFFFF", "background-color": "#000000"}) RELATÓRIO DO DELEGADO DA EQUIPA VISITADA
             tr
-                td(style={ "border": "1px solid black", "height": "18px" })
+                td(style={ "border": "1px solid black", "height": "29px" })
             tr
-                td(style={ "border": "1px solid black", "height": "18px" })
+                td(style={ "border": "1px solid black", "height": "29px" })
             tr
-                td(style={ "border": "1px solid black", "height": "18px", "font-size": "9px"}) 
+                td(style={ "border": "1px solid black", "height": "29px", "font-size": "12px"}) 
                     div(style={ "display": "inline" }) NADA A ASSINALAR
-                    div(style={ "display": "inline", "margin-left": "3px", "border": "1px solid black", "color": "#FFF" }) AA
+                    div(style={ "display": "inline", "margin-left": "3px", "border": "1px solid black", "color": "#FFFFFF" }) AA
                     div(style={ "display": "inline", "margin-left": "3px" }) - ASSINATURA:
-        table(style={ "border": "1px solid black", "border-collapse": "collapse", "width": "785px" })
+        table(style={ "border": "1px solid black", "border-collapse": "collapse", "width": "1050px" })
             tr
-                th(style={ "border": "1px solid black", "font-size": "10px", "color": "#FFF", "background-color": "#000"}) RELATÓRIO DO DELEGADO DA EQUIPA VISITANTE
+                th(style={ "border": "1px solid black", "font-size": "16px", "color": "#FFFFFF", "background-color": "#000000"}) RELATÓRIO DO DELEGADO DA EQUIPA VISITANTE
             tr
-                td(style={ "border": "1px solid black", "height": "18px" })
+                td(style={ "border": "1px solid black", "height": "29px" })
             tr
-                td(style={ "border": "1px solid black", "height": "18px" })
+                td(style={ "border": "1px solid black", "height": "29px" })
             tr
-                td(style={ "border": "1px solid black", "height": "18px", "font-size": "9px"})
+                td(style={ "border": "1px solid black", "height": "29px", "font-size": "12px"})
                     div(style={ "display": "inline" }) NADA A ASSINALAR
-                    div(style={ "display": "inline", "margin-left": "3px", "border": "1px solid black", "color": "#FFF" }) AA
+                    div(style={ "display": "inline", "margin-left": "3px", "border": "1px solid black", "color": "#FFFFFF" }) AA
                     div(style={ "display": "inline", "margin-left": "3px" }) - ASSINATURA:
-        table(style={ "border": "1px solid black", "border-collapse": "collapse", "width": "785px" })
+        table(style={ "border": "1px solid black", "border-collapse": "collapse", "width": "1050px" })
             tr
-                th(style={ "border": "1px solid black", "font-size": "10px", "color": "#FFF", "background-color": "#000"}) RELATÓRIO DA MESA
+                th(style={ "border": "1px solid black", "font-size": "16px", "color": "#FFFFFF", "background-color": "#000000"}) RELATÓRIO DA MESA
             tr
-                td(style={ "border": "1px solid black", "height": "18px" })
+                td(style={ "border": "1px solid black", "height": "29px" })
             tr
-                td(style={ "border": "1px solid black", "height": "18px" })
+                td(style={ "border": "1px solid black", "height": "29px" })
             tr
-                td(style={ "border": "1px solid black", "height": "18px" })
+                td(style={ "border": "1px solid black", "height": "29px" })
             tr
-                td(style={ "border": "1px solid black", "height": "18px" })
+                td(style={ "border": "1px solid black", "height": "29px" })
             tr
-                td(style={ "border": "1px solid black", "height": "18px" })
+                td(style={ "border": "1px solid black", "height": "29px" })
             tr
-                td(style={ "border": "1px solid black", "height": "18px", "font-size": "9px"})
+                td(style={ "border": "1px solid black", "height": "29px", "font-size": "12px"})
                     div(style={ "display": "inline" }) NADA A ASSINALAR
-                    div(style={ "display": "inline", "margin-left": "3px", "border": "1px solid black", "color": "#FFF" }) AA
+                    div(style={ "display": "inline", "margin-left": "3px", "border": "1px solid black", "color": "#FFFFFF" }) AA
                     div(style={ "display": "inline", "margin-left": "3px" }) - ASSINATURA:
         div
-            img(src=logo style={ 'float': 'left', 'width': '40px' })
+            img(src=logo style={ 'float': 'left', 'width': '70px' })
             div(style={'display': 'inline', 'float': 'left' })
-                div(style={ 'margin-left': '20px', 'font-size': '11px' }) #{step} -- Jornada: ______ Local: ______________________________________________________
-                div(style={ 'margin-left': '20px', 'font-size': '11px', 'margin-top': '5px' }) Data e hora: _____/ _____/ ___________ - _____:_____
+                div(style={ 'margin-left': '20px', 'font-size': '18px' }) #{step} -- Jornada: ______ Local: ______________________________________________________
+                div(style={ 'margin-left': '20px', 'font-size': '18px', 'margin-top': '5px' }) Data e hora: _____/ _____/ ___________ - _____:_____
         div(style={ 'clear': 'both'})
             div(style={ 'height': '2px'})
             div(style={ 'display': 'inline', 'float': 'left' })
-                div(style={'height': '360px'})
-                    table(style={ 'margin-top': '3px', 'border': '1px solid black', 'border-collapse': 'collapse', 'width': '388px' })
+                div(style={'height': '500px'})
+                    table(style={ 'margin-top': '3px', 'border': '1px solid black', 'border-collapse': 'collapse', 'width': '522px' })
                         thead
                             tr 
-                                th(colspan=2 style={ 'border': '1px solid black', 'font-size': '12px'})= homeTeam
-                                th(style={ 'border': '1px solid black', 'text-align': 'center', 'word-wrap': 'break-word', 'width': '12px', 'font-size': '6px' }) Cap. Sub. G.R.
-                                th(colspan=8 style={ 'border': '1px solid black', 'font-size': '12px' }) Golos
-                                th(colspan=3 style={ 'border': '1px solid black', 'font-size': '11px'}) Cartões
+                                th(colspan=2 style={ 'border': '1px solid black', 'font-size': '16px'})= homeTeam
+                                th(style={ 'border': '1px solid black', 'text-align': 'center', 'word-wrap': 'break-word', 'width': '16px', 'font-size': '9px' }) Cap. Sub. G.R.
+                                th(colspan=8 style={ 'border': '1px solid black', 'font-size': '15px' }) Golos
+                                th(colspan=3 style={ 'border': '1px solid black', 'font-size': '14px'}) Cartões
                             tr 
-                                th(style={ 'border': '1px solid black', 'font-size': '9px', 'width': '20px' }) Nº
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) Nome
-                                th(style={ 'border': '1px solid black', 'font-size': '9px', 'width': '10px' })
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 1
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 2
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 3
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 4
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 5
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 6
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 7
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 8
-                                th(style={ 'border': '1px solid black', 'font-size': '9px', 'border-left': '2px' }) A
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) A
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) V
+                                th(style={ 'border': '1px solid black', 'font-size': '13px', 'width': '25px' }) Nº
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) Nome
+                                th(style={ 'border': '1px solid black', 'font-size': '13px', 'width': '10px' })
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 1
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 2
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 3
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 4
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 5
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 6
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 7
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 8
+                                th(style={ 'border': '1px solid black', 'font-size': '13px', 'border-left': '2px' }) A
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) A
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) V
                         tbody
                             each player in homePlayers
                                 tr  
                                     td(style={ 'border': '1px solid black' })
                                     if !player.name
-                                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' }) 
+                                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '14px', 'height': '24px' }) 
                                     else if player.isTown 
-                                        td(style={ 'background-color': '#c5e8ec', 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player.name
+                                        td(style={ 'background-color': '#c5e8ec', 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '14px', 'height': '24px' })= player.name
                                     else if !player.isLocal
-                                        td(style={ 'background-color': '#ffb3b3', 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player.name
+                                        td(style={ 'background-color': '#ffb3b3', 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '14px', 'height': '24px' })= player.name
                                     else
-                                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player.name
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px', 'border-left': '2px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                div(style={'width': '388px'})
+                                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '14px', 'height': '24px' })= player.name
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px', 'border-left': '2px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                div(style={'width': '522px'})
                     div(style={'display': 'inline', 'float': 'left'})
                         table(style={ 'margin-top': '5px', 'border': '1px solid black', 'border-collapse': 'collapse'})
                             thead
                                 tr
-                                    th(style={ 'border': '1px solid black', 'font-size': '9px'}) Função
-                                    th(style={ 'border': '1px solid black', 'font-size': '9px'}) Nome
+                                    th(style={ 'border': '1px solid black', 'font-size': '14px'}) Função
+                                    th(style={ 'border': '1px solid black', 'font-size': '14px'}) Nome
                             tbody
                                 each staff in homeStaff1
                                     tr
-                                        td(style={ 'border': '1px solid black', 'font-size': '8px'})= staff.role
-                                        td(style={ 'border': '1px solid black', 'font-size': '8px'})= staff.name
+                                        td(style={ 'border': '1px solid black', 'font-size': '13px'})= staff.role
+                                        td(style={ 'border': '1px solid black', 'font-size': '13px'})= staff.name
                     div(style={'display': 'inline', 'float': 'left'})
                         if homeStaff2.length > 0
                             table(style={ 'margin-top': '5px', 'border': '1px solid black', 'border-collapse': 'collapse'})
                                 thead
                                     tr
-                                        th(style={ 'border': '1px solid black', 'font-size': '9px'}) Função
-                                        th(style={ 'border': '1px solid black', 'font-size': '9px'}) Nome
+                                        th(style={ 'border': '1px solid black', 'font-size': '14px'}) Função
+                                        th(style={ 'border': '1px solid black', 'font-size': '14px'}) Nome
                                 tbody
                                     each staff in homeStaff2
                                         tr
-                                            td(style={ 'border': '1px solid black', 'font-size': '8px'})= staff.role
-                                            td(style={ 'border': '1px solid black', 'font-size': '8px'})= staff.name
+                                            td(style={ 'border': '1px solid black', 'font-size': '13px'})= staff.role
+                                            td(style={ 'border': '1px solid black', 'font-size': '13px'})= staff.name
                 div(style={'clear':'both', 'padding-top': '5px'})
                     table(style={'border-collapse': 'collapse', 'float': 'left'})
                         thead
                             tr
-                                th(colspan=6 style={ 'border': '1px solid black','font-size': '9px' }) Faltas
+                                th(colspan=6 style={ 'border': '1px solid black','font-size': '14px' }) Faltas
                         tbody
                             tr
-                                td(style={ 'border': '1px solid black', 'font-size': '9px' }) 1º T
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
+                                td(style={ 'border': '1px solid black', 'font-size': '14px' }) 1º T
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
                             tr
-                                td(style={ 'border': '1px solid black', 'font-size': '9px'}) 2º T
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
+                                td(style={ 'border': '1px solid black', 'font-size': '14px'}) 2º T
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
 
                     table(style={'border-collapse': 'collapse', 'float': 'left', 'margin-left': '5px'})
                         thead
                             tr
-                                th(colspan=2 style={ 'border': '1px solid black', 'font-size': '9px' }) Desconto
+                                th(colspan=2 style={ 'border': '1px solid black', 'font-size': '14px' }) Desconto
                         tbody
                             tr
-                                td(style={ 'border': '1px solid black', 'font-size': '9px'}) 1º T
-                                td(style={ 'border': '1px solid black','width': '20px'})
+                                td(style={ 'border': '1px solid black', 'font-size': '14px'}) 1º T
+                                td(style={ 'border': '1px solid black','width': '26px'})
                             tr
-                                td(style={ 'border': '1px solid black', 'font-size': '9px'}) 2º T
-                                td(style={ 'border': '1px solid black','width': '20px'})
+                                td(style={ 'border': '1px solid black', 'font-size': '14px'}) 2º T
+                                td(style={ 'border': '1px solid black','width': '26px'})
 
                     div(style={ 'float': 'left', 'border': '1px solid black', 'font-size': '12px', 'margin-left': '5px', 'width': '185px', 'height': '45px' }) Delegado:
 
             div(style={ 'display': 'inline', 'float': 'left', 'margin-left': '3px' })
-                div(style={'height': '360px'})
-                    table(style={ 'margin-top': '3px', 'border': '1px solid black', 'border-collapse': 'collapse', 'width': '388px'})
+                div(style={'height': '500px'})
+                    table(style={ 'margin-top': '3px', 'border': '1px solid black', 'border-collapse': 'collapse', 'width': '522px'})
                         thead
                             tr 
-                                th(colspan=2 style={ 'border': '1px solid black', 'font-size': '12px'})= awayTeam
-                                th(style={ 'border': '1px solid black', 'text-align': 'center', 'word-wrap': 'break-word', 'width': '12px', 'font-size': '6px' }) Cap. Sub. G.R.
-                                th(colspan=8 style={ 'border': '1px solid black', 'font-size': '12px'}) Golos
-                                th(colspan=3 style={ 'border': '1px solid black', 'font-size': '11px'}) Cartões
+                                th(colspan=2 style={ 'border': '1px solid black', 'font-size': '16px'})= awayTeam
+                                th(style={ 'border': '1px solid black', 'text-align': 'center', 'word-wrap': 'break-word', 'width': '16px', 'font-size': '9px' }) Cap. Sub. G.R.
+                                th(colspan=8 style={ 'border': '1px solid black', 'font-size': '15px'}) Golos
+                                th(colspan=3 style={ 'border': '1px solid black', 'font-size': '14px'}) Cartões
                             tr 
-                                th(style={ 'border': '1px solid black', 'font-size': '9px', 'width': '20px' }) Nº
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) Nome
-                                th(style={ 'border': '1px solid black', 'font-size': '9px', 'width': '10px' })
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 1
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 2
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 3
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 4
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 5
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 6
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 7
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) 8
-                                th(style={ 'border': '1px solid black', 'font-size': '9px', 'border-left': '2px' }) A
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) A
-                                th(style={ 'border': '1px solid black', 'font-size': '9px' }) V
+                                th(style={ 'border': '1px solid black', 'font-size': '13px', 'width': '25px' }) Nº
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) Nome
+                                th(style={ 'border': '1px solid black', 'font-size': '13px', 'width': '10px' })
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 1
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 2
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 3
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 4
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 5
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 6
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 7
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) 8
+                                th(style={ 'border': '1px solid black', 'font-size': '13px', 'border-left': '2px' }) A
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) A
+                                th(style={ 'border': '1px solid black', 'font-size': '13px' }) V
                         tbody
                             each player in awayPlayers
                                 tr  
                                     td(style={ 'border': '1px solid black' }) 
                                     if !player.name
-                                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' }) 
+                                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '14px', 'height': '24px' }) 
                                     else if player.isTown 
-                                        td(style={ 'background-color': '#c5e8ec', 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player.name
+                                        td(style={ 'background-color': '#c5e8ec', 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '14px', 'height': '24px' })= player.name
                                     else if !player.isLocal
-                                        td(style={ 'background-color': '#ffb3b3', 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player.name
+                                        td(style={ 'background-color': '#ffb3b3', 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '14px', 'height': '24px' })= player.name
                                     else
-                                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '11px', 'height': '15px' })= player.name
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px', 'border-left': '2px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
-                                    td(style={ 'border': '1px solid black','width': '12px'})
+                                        td(style={ 'border': '1px solid black','font-family': 'Arial, Helvetica, sans-serif', 'font-size': '14px', 'height': '24px' })= player.name
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px', 'border-left': '2px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
+                                    td(style={ 'border': '1px solid black','width': '20px'})
 
-                div(style={'width': '388px'})
+                div(style={'width': '522px'})
                     div(style={'display': 'inline', 'float': 'left'})
                         table(style={ 'margin-top': '5px', 'border': '1px solid black', 'border-collapse': 'collapse'})
                             thead
                                 tr
-                                    th(style={ 'border': '1px solid black', 'font-size': '9px'}) Função
-                                    th(style={ 'border': '1px solid black', 'font-size': '9px'}) Nome
+                                    th(style={ 'border': '1px solid black', 'font-size': '14px'}) Função
+                                    th(style={ 'border': '1px solid black', 'font-size': '14px'}) Nome
                             tbody
                                 each staff in awayStaff1
                                     tr
-                                        td(style={ 'border': '1px solid black', 'font-size': '8px'})= staff.role
-                                        td(style={ 'border': '1px solid black', 'font-size': '8px'})= staff.name
+                                        td(style={ 'border': '1px solid black', 'font-size': '13px'})= staff.role
+                                        td(style={ 'border': '1px solid black', 'font-size': '13px'})= staff.name
                     div(style={'display': 'inline', 'float': 'left'})
                         if awayStaff2.length > 0
                             table(style={ 'margin-top': '5px', 'border': '1px solid black', 'border-collapse': 'collapse'})
                                 thead
                                     tr
-                                        th(style={ 'border': '1px solid black', 'font-size': '9px'}) Função
-                                        th(style={ 'border': '1px solid black', 'font-size': '9px'}) Nome
+                                        th(style={ 'border': '1px solid black', 'font-size': '14px'}) Função
+                                        th(style={ 'border': '1px solid black', 'font-size': '14px'}) Nome
                                 tbody
                                     each staff in awayStaff2
                                         tr
-                                            td(style={ 'border': '1px solid black', 'font-size': '8px'})= staff.role
-                                            td(style={ 'border': '1px solid black', 'font-size': '8px'})= staff.name
+                                            td(style={ 'border': '1px solid black', 'font-size': '13px'})= staff.role
+                                            td(style={ 'border': '1px solid black', 'font-size': '13px'})= staff.name
                 div(style={'clear':'both', 'padding-top': '5px'})
                     table(style={'border': '1px solid black', 'border-collapse': 'collapse', 'float': 'left'})
                         thead
                             tr
-                                th(colspan=6 style={ 'border': '1px solid black','font-size': '9px' }) Faltas
+                                th(colspan=6 style={ 'border': '1px solid black','font-size': '14px' }) Faltas
                         tbody
                             tr
-                                td(style={ 'border': '1px solid black', 'font-size': '9px'}) 1º T
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
+                                td(style={ 'border': '1px solid black', 'font-size': '14px'}) 1º T
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
                             tr
-                                td(style={ 'border': '1px solid black', 'font-size': '9px'}) 2º T
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
-                                td(style={ 'border': '1px solid black','width': '20px'})
+                                td(style={ 'border': '1px solid black', 'font-size': '14px'}) 2º T
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
+                                td(style={ 'border': '1px solid black','width': '26px'})
 
                     table(style={'border': '1px solid black', 'border-collapse': 'collapse', 'float': 'left', 'margin-left': '5px'})
                         thead
                             tr
-                                th(colspan=2 style={ 'border': '1px solid black', 'font-size': '9px' }) Desconto
+                                th(colspan=2 style={ 'border': '1px solid black', 'font-size': '14px' }) Desconto
                         tbody
                             tr
-                                td(style={ 'border': '1px solid black', 'font-size': '9px'}) 1º T
-                                td(style={ 'border': '1px solid black','width': '20px'})
+                                td(style={ 'border': '1px solid black', 'font-size': '14px'}) 1º T
+                                td(style={ 'border': '1px solid black','width': '26px'})
                             tr
-                                td(style={ 'border': '1px solid black', 'font-size': '9px'}) 2º T
-                                td(style={ 'border': '1px solid black','width': '20px'})
+                                td(style={ 'border': '1px solid black', 'font-size': '14px'}) 2º T
+                                td(style={ 'border': '1px solid black','width': '26px'})
                     
                     div(style={ 'float': 'left', 'border': '1px solid black', 'font-size': '12px', 'margin-left': '5px', 'width': '185px', 'height': '45px' }) Delegado:
 
@@ -498,11 +506,11 @@ html
             table(style={ 'border': 'none' })
                 thead
                     tr
-                        th(style={ 'border': 'none', 'font-size': '10px'}) Resultado: 1º Tempo ______/ ______
+                        th(style={ 'border': 'none', 'font-size': '16px'}) Resultado: 1º Tempo ______/ ______
                         th(style={ 'border': 'none', 'width': '8px'})
-                        th(style={ 'border': 'none', 'font-size': '10px'}) Final ______/ ______
+                        th(style={ 'border': 'none', 'font-size': '16px'}) Final ______/ ______
                         th(style={ 'border': 'none','width': '8px'})
-                        th(style={ 'border': 'none', 'font-size': '10px'}) Mesa:
+                        th(style={ 'border': 'none', 'font-size': '16px'}) Mesa:
                         th(style={ 'border': 'none', 'border-bottom': '1px solid black', 'width': '185px'})
-                        th(style={ 'border': 'none', 'font-size': '10px', 'padding-left': '8px' }) MVP:
+                        th(style={ 'border': 'none', 'font-size': '16px', 'padding-left': '8px' }) MVP:
                         th(style={ 'border': 'none', 'border-bottom': '1px solid black','width': '185px'})
