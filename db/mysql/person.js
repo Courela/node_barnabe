@@ -32,14 +32,14 @@ function addPerson(name, gender, birthdate, idCardNr, voterNr, phone, email, isL
 function updatePerson(id, name, gender, birthdate, idCardNr, voterNr, phone, email, isLocalBorn, isLocalTown, callback) {
     var q = " UPDATE person " +
             " SET Name = " + mysql.escape(name) + "," +
-            "     Gender = " + mysql.escape(gender) + "," +
-            "     Birthdate = "+ (birthdate ? mysql.escape(birthdate) : 'Birthdate' ) + "," +
+            "     Gender = " + (gender ? mysql.escape(gender) : 'Gender') + "," +
+            "     Birthdate = "+ (birthdate ? mysql.escape(birthdate) : 'Birthdate') + "," +
             "     IdCardNr = " + mysql.escape(idCardNr) + "," +
-            "     VoterNr = " + mysql.escape(voterNr) + "," +
-            "     Phone = " + mysql.escape(phone) + "," +
-            "     Email = " + mysql.escape(email) + "," +
-            "     LocalBorn = " + mysql.escape(isLocalBorn) + "," +
-            "     LocalTown = " + mysql.escape(isLocalTown) + "," +
+            "     VoterNr = " + (voterNr ? mysql.escape(voterNr) : 'VoterNr') + "," +
+            "     Phone = " + (phone ? mysql.escape(phone) : 'Phone') + "," +
+            "     Email = " + (email? mysql.escape(email) : 'Email') + "," +
+            "     LocalBorn = " + (isLocalBorn ? mysql.escape(isLocalBorn) : 'LocalBorn') + "," +
+            "     LocalTown = " + (isLocalTown ? mysql.escape(isLocalTown) : 'LocalTown') + "," +
             "     LastUpdatedAt = CURRENT_TIMESTAMP() " +
             " WHERE Id = " + mysql.escape(id);
     //console.log("updatePerson query: ", q);
