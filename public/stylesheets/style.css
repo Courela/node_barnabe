@@ -13,3 +13,8 @@ td.square {
 .bold {
     font-weight: bold;
 }
+
+.logo {
+    float: 'left'; 
+    width: '50px';
+}

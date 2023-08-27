@@ -208,39 +208,55 @@ function getTeamLogoFilename(teamId) {
         case 15:
             result = 'ancos.jpg';
             break;
+        case 16:
+            result = 'morelena.jpg';
+            break;
     }
     return result;
 }
    
 async function getPdf(data) {
-    var browserFetcher = new puppeteer.BrowserFetcher({
-        path: '/tmp'
-    });
-    let revisionInfo = await browserFetcher.download(serverSettings.CHROMIUM_REVISION);
+    var browser;
 
-    const browser = await puppeteer.launch(
-      {
-        headless: true,
-        executablePath: revisionInfo.executablePath,
-        args: ['--no-sandbox', "--disabled-setupid-sandbox"]
-      }
-    );
+    if (process.env.NODE_ENV === 'production') {
+        var browserFetcher = new puppeteer.BrowserFetcher({
+            path: '/tmp'
+        });
+        let revisionInfo = await browserFetcher.download(serverSettings.CHROMIUM_REVISION);
 
-    // const browser = await puppeteer.launch({ headless: true, args: [ '--no-sandbox' ] });     // run browser
+        browser = await puppeteer.launch(
+        {
+            headless: true,
+            executablePath: revisionInfo.executablePath,
+            args: ['--no-sandbox', "--disabled-setupid-sandbox"]
+        }
+        );
+    } else {
+        browser = await puppeteer.launch({ headless: true, args: [ '--no-sandbox' ] });     // run browser
+    }
+
     const page = await browser.newPage();         // create new tab
     await page.setContent(data);
     // console.log('Controller templates: ', fs.existsSync('./views/stylesheets/style.css'));
     //await page.addStyleTag({path: './views/stylesheets/style.css'});
     await page.evaluateOnNewDocument(()=>{
-        var style = document.createElement('style');
-        style.type = 'text/css';
-        style.innerHTML = 'table{border-collapse: collapse;} ' +
-            'table, th, td {border: 1px solid black;} ' +
-            'td.square {width: 30px;} ' +
-            '.bold {font-weight: bold;}'; //'.body{background: red}'; // the css content goes here
+        // var style = document.createElement('style');
+        // style.type = 'text/css';
+        // style.innerHTML = 'table{border-collapse: collapse;} ' +
+        //     'table, th, td {border: 1px solid black;} ' +
+        //     'td.square {width: 30px;} ' +
+        //     '.bold {font-weight: bold;}'; //'.body{background: red}'; // the css content goes here
         document.getElementsByTagName('head')[0].appendChild(style);
       });
-    var teamPdf = await page.pdf({ format: 'A4', landscape: true });           // generate pdf and save it in page.pdf file
+    var teamPdf = await page.pdf({
+        format: 'A4',
+        landscape: true,
+        margin: {
+            top: 20,
+            bottom: 20,
+            left: 20,
+            right: 20,
+        } });           // generate pdf and save it in page.pdf file
     browser.close();                        // close browser
     
     return "data:application/pdf;base64," + btoa(teamPdf);

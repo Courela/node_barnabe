@@ -15,15 +15,15 @@ function setup() {
     console.log("Starting server...");
     if (process.env.NODE_ENV === 'production') {
         //storageAdapter.createFolders();
+
+        var browserFetcher = new puppeteer.BrowserFetcher({
+            path: '/tmp'
+        });
+        browserFetcher.download(serverSettings.CHROMIUM_REVISION)
+            .then(() => console.log("Chromium revision " + serverSettings.CHROMIUM_REVISION + " downloaded."));
     } else {
         console.log("Not production environment: ", process.env.NODE_ENV || "none");
     }
-    
-    var browserFetcher = new puppeteer.BrowserFetcher({
-        path: '/tmp'
-    });
-    browserFetcher.download(serverSettings.CHROMIUM_REVISION)
-        .then(() => console.log("Chromium revision " + serverSettings.CHROMIUM_REVISION + " downloaded."));
 }
 
 function ping(req, res) {
