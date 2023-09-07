@@ -22,7 +22,7 @@ async function getPlayers(season, teamId, stepId, roles) {
                     return Object.assign(
                         v,
                         { Person: { Id: v.PersonId, Name: v.PlayerName, Gender: v.PlayerGender, Birthdate: v.PlayerBirthdate, IdCardNr: v.PlayerIdCardNr }},
-                        { Caretaker: { Id: v.CareTakerId, Name: v.CareTakerName }},
+                        { Caretaker: { Id: v.CareTakerId, Name: v.CareTakerName, IdCardNr: v.CareTakerIdCardNr }},
                         { Role: { Id: v.RoleId, Description: v.RoleDescription }},
                         { Step: { Id: v.StepId, Season: v.Season, Gender: v.StepGender, IsCaretakerRequired: v.StepIsCareTakerRequired, MinDate: v.MinDate, MaxDate: v.MaxDate }}
                     );
