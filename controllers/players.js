@@ -74,7 +74,7 @@ async function addPlayer(req, res) {
         const { teamId, stepId, season } = req.params;
         const { Person, Caretaker, RoleId, Photo, Doc, Comments, Resident } = req.body;
 
-        if (season && teamId && stepId && RoleId && isPersonValid(Person) && isCaretakerValid(Caretaker)) {
+        if (season && teamId && stepId && RoleId && isPersonValid(Person, RoleId) && isCaretakerValid(Caretaker)) {
             const playerId = await playersMgr.addPlayer(
                 parseInt(teamId),
                 parseInt(stepId),
@@ -230,7 +230,7 @@ function isPersonValid(person, roleId) {
         const { Name, Gender, Birthdate, IdCardNr, Email, Phone } = person;
         result = Name && IdCardNr &&
             (roleId > 1 || isValidDate(Birthdate)) &&
-            isValidGender(Gender) &&
+            (roleId > 1 || isValidGender(Gender)) &&
             isValidEmail(Email) &&
             isValidPhone(Phone);
     }
