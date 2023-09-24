@@ -107,11 +107,36 @@ function recoverPassword(email) {
         });
 }
 
+function getDocuments() {
+    return utilsRepo.getDocuments()
+        .then((results) => {
+            //console.log(results);
+            return results.recordset;
+        })
+        .catch((err) => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
+function loadDocument(name, type, link) {
+    return utilsRepo.loadDocument(name, type, link)
+        .then((results) => {
+            return results.rowsAffected;
+        })
+        .catch((err) => {
+            console.error(err);
+            throw 'Unexpected error!';
+        });
+}
+
 module.exports = {
     generatePasswordHash,
     getRoles,
     getSeasons,
     getSteps,
     getPhases,
-    recoverPassword
+    recoverPassword,
+    getDocuments,
+    loadDocument
 }

@@ -1,12 +1,12 @@
 const utilsMgr = require('../managers/utils');
 const personMgr = require('../managers/person');
 
-async function getRoles (req, res) {
+async function getRoles (_, res) {
     const result = await utilsMgr.getRoles();
     res.send(result);
 }
 
-async function getSeasons (req, res) {
+async function getSeasons (_, res) {
     const result = await utilsMgr.getSeasons();
     res.send(result);
 }
@@ -18,7 +18,7 @@ async function getSeason (req, res) {
     res.send(result);
 }
 
-async function getSteps (req, res) {
+async function getSteps (_, res) {
     const result = await utilsMgr.getSteps();
     res.send(result);
 }
@@ -43,11 +43,29 @@ async function getPhases (_, res) {
     res.send(result);
 }
 
+async function getDocuments(_, res) {
+    const result = await utilsMgr.getDocuments();
+    res.send(result);
+}
+
+async function loadDocument(req, res) {
+    var result = null;
+    const { name, type, link } = req.body;
+    if (name && type && link) {
+        result = await utilsMgr.loadDocument(name, type, link);
+    } else {
+        res.statusCode = 400;
+    }
+    res.send(result);
+}
+
 module.exports = {
     getRoles,
     getSeasons,
     getSeason,
     getSteps,
     getPhases,
-    getPerson
+    getPerson,
+    getDocuments,
+    loadDocument
 }

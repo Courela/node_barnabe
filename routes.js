@@ -59,7 +59,8 @@ function getApiRoutes() {
         .post('/seasons/:season/teams/:teamId/steps/:stepId/import-players', playersController.importPlayers)
         .put('/seasons/:season/teams/:teamId/steps', teamsController.addTeamStep)
         .delete('/seasons/:season/teams/:teamId/steps/:stepId', teamsController.deleteTeamStep)
-        .post('/user/:username', usersController.saveDetails);
+        .post('/user/:username', usersController.saveDetails)
+        .get('/documents', utilsController.getDocuments);
 
     return apiRouter;
 }
@@ -84,7 +85,8 @@ function getAdminRoutes() {
         .put('/users', serverController.addUser)
         .post('/seasons/add', serverController.addSeason)
         .post('/seasons/activate', serverController.activateSeason)
-        .put('/seasons/update', serverController.updateSeason);
+        .put('/seasons/update', serverController.updateSeason)
+        .post('/documents', utilsController.loadDocument);
 
     return adminRouter;
 }

@@ -60,9 +60,40 @@ function getPhases() {
     });
 }
 
+function getDocuments() {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                //console.log("getPhases response:", r);
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.getDocuments(fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
+function loadDocument(name, type, link) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                resolve({ recordset: r, rowsAffected: [r.length] });
+            }
+            mysqlStorage.loadDocument(name, type, link, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
 module.exports = {
     getRoles,
     getSeasons,
     getSteps,
-    getPhases
+    getPhases,
+    getDocuments,
+    loadDocument
 }

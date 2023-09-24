@@ -78,6 +78,19 @@ function updateSeason(season, isActive, signUpDueDate, startDate, signUpExtraDue
     query(q, callback);
 }
 
+function getDocuments(callback) {
+    var q = " SELECT Id, Name, Link, Filename, Src FROM `document`";
+    query(q, callback);
+}
+
+function loadDocument(name, type, link, callback) {
+    var q = " INSERT INTO document (Name, Link, Filename) " + 
+            " VALUES (" + mysql.escape(type) +
+            "        ," + mysql.escape(link) +
+            "        ," + mysql.escape(name) + ") ";
+    query(q, callback);
+}
+
 function query(q, callback) {
     try {
         var fn = function(err, result) {
@@ -103,5 +116,7 @@ module.exports = {
     getPhases,
     addSeason,
     activateSeason,
-    updateSeason
+    updateSeason,
+    getDocuments,
+    loadDocument
 }
