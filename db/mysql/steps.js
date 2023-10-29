@@ -15,7 +15,7 @@ function insertMatch(season, stepId, phaseId, homeTeamId, awayTeamId, homeTeamGo
 }
 
 function getMatches(season, stepId, phaseId, callback) {
-    var q = " SELECT m.Id, m.Season, m.StepId, m.PhaseId, m.HomeTeamId, m.AwayTeamId, m.HomeTeamGoals, m.AwayTeamGoals, " +
+    var q = " SELECT m.Id, m.Season, m.StepId, m.Date, m.PhaseId, m.HomeTeamId, m.AwayTeamId, m.HomeTeamGoals, m.AwayTeamGoals, " +
             "   p.Name AS PhaseName, " +
             "   t1.ShortDescription AS HomeTeamName, t2.ShortDescription AS AwayTeamName " +
             " FROM `match` m " +
