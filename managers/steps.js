@@ -78,10 +78,12 @@ async function calculateStandings(matches) {
         homeTeam.GoalsScored = homeTeam.GoalsScored + m.HomeTeamGoals;
         homeTeam.GoalsConceded = homeTeam.GoalsConceded + m.AwayTeamGoals;
         homeTeam.Avg = homeTeam.GoalsScored - homeTeam.GoalsConceded;
+        homeTeam.Played++;
 
         awayTeam.GoalsScored = awayTeam.GoalsScored + m.AwayTeamGoals;
         awayTeam.GoalsConceded = awayTeam.GoalsConceded + m.HomeTeamGoals;
         awayTeam.Avg = awayTeam.GoalsScored - awayTeam.GoalsConceded;
+        awayTeam.Played++;
     };
 
     return assignPositions(standings);
@@ -101,6 +103,7 @@ function getTeamObj(team) {
         TeamId: team.Id,
         TeamName: team.ShortDescription,
         Points: 0,
+        Played: 0,
         GoalsScored: 0,
         GoalsConceded: 0,
         Avg: 0
