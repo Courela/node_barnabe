@@ -34,20 +34,41 @@ async function getMatches(req, res) {
 }
 
 async function addMatch(req, res) {
-    const { season, stepId } = req.params;
-    const { phase: phaseId, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = req.body;
+    var { season, stepId } = req.params;
+    var { date, phase: phaseId, group, matchday, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = req.body;
     
     var result;
     try {
-        result = await stepsMgr.insertMatch(
-            parseInt(season, 10),
-            parseInt(stepId, 10), 
-            parseInt(phaseId, 10), 
-            parseInt(homeTeamId, 10), 
-            parseInt(awayTeamId, 10), 
-            parseInt(homeTeamGoals, 10), 
-            parseInt(awayTeamGoals, 10));
-        console.log('Match added: ', req.params, req.body);
+        season = parseInt(season, 10);
+        stepId = parseInt(stepId, 10);
+        date = date.substring(0, 10);
+        phaseId = parseInt(phaseId, 10);
+        homeTeamId = parseInt(homeTeamId, 10);
+        awayTeamId = parseInt(awayTeamId, 10);
+        
+        var match = await stepsMgr.getMatch(season, stepId, date, phaseId, homeTeamId, awayTeamId);
+        if (!match || match.length == 0) {
+            result = await stepsMgr.insertMatch(
+                season,
+                stepId,
+                date,
+                phaseId, 
+                group,
+                matchday,
+                homeTeamId, 
+                awayTeamId, 
+                parseInt(homeTeamGoals, 10), 
+                parseInt(awayTeamGoals, 10));
+            if (typeof result === 'boolean') {
+                console.log('Match added: ', req.params, req.body);
+            } else {
+                console.warn(result);
+                res.statusCode = 400;
+            }
+        } else {
+            result = errors.createErrorData('Duplicated match', 'Jogo já existe.');
+            res.statusCode = 409;
+        }
     } catch (err) {
         errors.handleErrors(res, err);
         result = err;

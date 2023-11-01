@@ -1,6 +1,6 @@
 const mysqlStorage = require("../db/mysql/steps")
 
-function insertMatch(season, stepId, phaseId, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals) {
+function insertMatch(season, stepId, date, phaseId, group, matchday, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
@@ -10,7 +10,7 @@ function insertMatch(season, stepId, phaseId, homeTeamId, awayTeamId, homeTeamGo
                     reject(r);
                 }
             }
-            mysqlStorage.insertMatch(season, stepId, phaseId, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals, fn);
+            mysqlStorage.insertMatch(season, stepId, date, phaseId, group, matchday, homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals, fn);
         }
         catch(err) {
             reject(err);
@@ -29,6 +29,24 @@ function getMatches(season, stepId, phaseId) {
                 }
             }
             mysqlStorage.getMatches(season, stepId, phaseId, fn);
+        }
+        catch(err) {
+            reject(err);
+        }
+    });
+}
+
+function getMatch(season, stepId, date, phaseId , homeTeamId, awayTeamId) {
+    return new Promise((resolve, reject) => {
+        try {
+            var fn = function(r) {
+                if (r && r.length !== undefined) {
+                    resolve({ recordset: r , rowsAffected: r.length });
+                } else {
+                    reject(r);
+                }
+            }
+            mysqlStorage.getMatch(season, stepId, date, phaseId , homeTeamId, awayTeamId, fn);
         }
         catch(err) {
             reject(err);
@@ -57,5 +75,6 @@ function removeMatch(matchId, season, stepId) {
 module.exports = {
     insertMatch,
     getMatches,
+    getMatch,
     removeMatch
 }

@@ -10,6 +10,11 @@ function handleErrors(res, err) {
     res.statusCode = statusCode;
 }
 
+function createErrorData(error, localizedError) {
+    return { error: error, localizedError: localizedError };
+}
+
 module.exports = {
-    handleErrors
+    handleErrors,
+    createErrorData
 }
