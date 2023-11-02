@@ -66,7 +66,7 @@ async function addMatch(req, res) {
                 res.statusCode = 400;
             }
         } else {
-            result = errors.createErrorData('Duplicated match', 'Jogo já existe.');
+            result = errors.createErrorData('ERR_001', 'Duplicated match');
             res.statusCode = 409;
         }
     } catch (err) {

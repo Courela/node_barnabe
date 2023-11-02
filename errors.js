@@ -10,8 +10,8 @@ function handleErrors(res, err) {
     res.statusCode = statusCode;
 }
 
-function createErrorData(error, localizedError) {
-    return { error: error, localizedError: localizedError };
+function createErrorData(errorCode, errorMessage, errorMessageIds) {
+    return { code: errorCode, error: errorMessage, ids: errorMessageIds };
 }
 
 module.exports = {

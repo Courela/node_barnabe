@@ -29,8 +29,9 @@ async function validateTeamStep(season, teamId, stepId) {
     var teamStep = steps.find(s => s.StepId === stepId);
     if (!teamStep) {
         return errors.createErrorData(
+            'ERR_002',
             'Season ' + season + ': no step with id ' + stepId + ' found for team with id ' + teamId,
-            'Escalão inexistente.');
+            [ season, stepId, teamId ]);
     }
     return true;
 }
