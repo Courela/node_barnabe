@@ -18,7 +18,7 @@ function insertMatch(season, stepId, date, phaseId, group, matchday, homeTeamId,
 }
 
 function getMatches(season, stepId, phaseId, callback) {
-    var q = " SELECT m.Id, m.Season, m.StepId, m.Date, m.PhaseId, m.HomeTeamId, m.AwayTeamId, m.HomeTeamGoals, m.AwayTeamGoals, " +
+    var q = " SELECT m.Id, m.Season, m.StepId, m.Date, m.PhaseId, m.Group, m.Matchday, m.HomeTeamId, m.AwayTeamId, m.HomeTeamGoals, m.AwayTeamGoals, " +
             "   p.Name AS PhaseName, " +
             "   t1.ShortDescription AS HomeTeamName, t2.ShortDescription AS AwayTeamName " +
             " FROM `match` m " +
@@ -32,7 +32,7 @@ function getMatches(season, stepId, phaseId, callback) {
 }
 
 function getMatch(season, stepId, date, phaseId , homeTeamId, awayTeamId, callback) {
-    var q = " SELECT m.Id, m.Season, m.StepId, m.Date, m.PhaseId, m.HomeTeamId, m.AwayTeamId, m.HomeTeamGoals, m.AwayTeamGoals, " +
+    var q = " SELECT m.Id, m.Season, m.StepId, m.Date, m.PhaseId, m.Group, m.Matchday, m.HomeTeamId, m.AwayTeamId, m.HomeTeamGoals, m.AwayTeamGoals, " +
             "   p.Name AS PhaseName, " +
             "   t1.ShortDescription AS HomeTeamName, t2.ShortDescription AS AwayTeamName " +
             " FROM `match` m " +

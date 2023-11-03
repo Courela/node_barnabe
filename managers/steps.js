@@ -65,21 +65,21 @@ function removeMatch(matchId, season, stepId) {
             //console.error(err);
             throw err;
         });
-    }
+}
     
-    async function getStandings(season, stepId, phaseId) {
-        var result = await stepsRepo.getMatches(season, stepId, phaseId)
-            .then(async (matches) => {
-                if (!matches || !matches.recordset) {
-                    throw 'Unexpected error!';
-                }
-                
-                return await calculateStandings(matches.recordset);
-            })
-            .catch((err) => {
-                //console.error(err);
-                throw err;
-            });
+async function getStandings(season, stepId, phaseId) {
+    var result = await stepsRepo.getMatches(season, stepId, phaseId)
+        .then(async (matches) => {
+            if (!matches || !matches.recordset) {
+                throw 'Unexpected error!';
+            }
+            
+            return await calculateStandings(matches.recordset);
+        })
+        .catch((err) => {
+            //console.error(err);
+            throw err;
+        });
     return result;
 }
 
@@ -88,16 +88,16 @@ async function calculateStandings(matches) {
     for (let index = 0; index < matches.length; index++) {
         const m = matches[index];
         
-        var homeTeam = standings.find(t => t.TeamId === m.HomeTeamId);
-        var awayTeam = standings.find(t => t.TeamId === m.AwayTeamId);
+        var homeTeam = standings.find(t => t.TeamId === m.HomeTeamId && (!m.Group || t.Group === m.Group));
+        var awayTeam = standings.find(t => t.TeamId === m.AwayTeamId && (!m.Group || t.Group === m.Group));
         if (!homeTeam) {
             var team = await teamsMgr.getTeamById(m.HomeTeamId);
-            homeTeam = getTeamObj(team);
+            homeTeam = getTeamObj(team, m.Group);
             standings.push(homeTeam);
         }
         if (!awayTeam) {
             var team = await teamsMgr.getTeamById(m.AwayTeamId);
-            awayTeam = getTeamObj(team);
+            awayTeam = getTeamObj(team, m.Group);
             standings.push(awayTeam);
         }
         
@@ -132,17 +132,19 @@ function assignPositions(standings) {
     return result;
 }
 
-function getTeamObj(team) {
+function getTeamObj(team, group) {
     return {
         TeamId: team.Id,
         TeamName: team.ShortDescription,
+        Group: group ? group : null,
         Points: 0,
         Played: 0,
         GoalsScored: 0,
         GoalsConceded: 0,
         Avg: 0
-    }
+    };
 }
+
 module.exports = {
     insertMatch,
     getMatches,
