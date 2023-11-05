@@ -45,8 +45,8 @@ function getMatches(season, stepId, phaseId) {
         });
 }
 
-function getMatch(season, stepId, date, phaseId, homeTeamId, awayTeamId) {
-    return stepsRepo.getMatch(season, stepId, date, phaseId != 99 ? phaseId : null, homeTeamId, awayTeamId)
+function getMatch(season, stepId, date, phaseId, group, homeTeamId, awayTeamId) {
+    return stepsRepo.getMatch(season, stepId, date, phaseId != 99 ? phaseId : null, group ? group : null, homeTeamId, awayTeamId)
         .then((results) => results.recordset)
         .catch((err) => {
             //console.error(err);

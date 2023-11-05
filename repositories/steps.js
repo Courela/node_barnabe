@@ -36,7 +36,7 @@ function getMatches(season, stepId, phaseId) {
     });
 }
 
-function getMatch(season, stepId, date, phaseId , homeTeamId, awayTeamId) {
+function getMatch(season, stepId, date, phaseId, group, homeTeamId, awayTeamId) {
     return new Promise((resolve, reject) => {
         try {
             var fn = function(r) {
@@ -46,7 +46,7 @@ function getMatch(season, stepId, date, phaseId , homeTeamId, awayTeamId) {
                     reject(r);
                 }
             }
-            mysqlStorage.getMatch(season, stepId, date, phaseId , homeTeamId, awayTeamId, fn);
+            mysqlStorage.getMatch(season, stepId, date, phaseId, group, homeTeamId, awayTeamId, fn);
         }
         catch(err) {
             reject(err);

@@ -46,7 +46,7 @@ async function addMatch(req, res) {
         homeTeamId = parseInt(homeTeamId, 10);
         awayTeamId = parseInt(awayTeamId, 10);
         
-        var match = await stepsMgr.getMatch(season, stepId, date, phaseId, homeTeamId, awayTeamId);
+        var match = await stepsMgr.getMatch(season, stepId, date, phaseId, group, homeTeamId, awayTeamId);
         if (!match || match.length == 0) {
             result = await stepsMgr.insertMatch(
                 season,

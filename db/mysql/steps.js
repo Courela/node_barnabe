@@ -31,7 +31,7 @@ function getMatches(season, stepId, phaseId, callback) {
     adapter.query(q, callback);
 }
 
-function getMatch(season, stepId, date, phaseId , homeTeamId, awayTeamId, callback) {
+function getMatch(season, stepId, date, phaseId, group, homeTeamId, awayTeamId, callback) {
     var q = " SELECT m.Id, m.Season, m.StepId, m.Date, m.PhaseId, m.Group, m.Matchday, m.HomeTeamId, m.AwayTeamId, m.HomeTeamGoals, m.AwayTeamGoals, " +
             "   p.Name AS PhaseName, " +
             "   t1.ShortDescription AS HomeTeamName, t2.ShortDescription AS AwayTeamName " +
@@ -43,8 +43,10 @@ function getMatch(season, stepId, date, phaseId , homeTeamId, awayTeamId, callba
             "   AND m.StepId = " + mysql.escape(stepId) +
             "   AND m.Date = " + mysql.escape(date) +
             "   AND m.PhaseId = COALESCE(" + mysql.escape(phaseId) + ",m.PhaseId)" +
+            "   AND m.Group = COALESCE(" + mysql.escape(group) + ",m.Group)" +
             "   AND m.HomeTeamId = " + mysql.escape(homeTeamId) +
             "   AND m.AwayTeamId = " + mysql.escape(awayTeamId);
+    console.log("Query:", q);
     adapter.query(q, callback);
 }
 
